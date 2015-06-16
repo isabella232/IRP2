@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import re
 from lxml import etree
 import json
+import requests
 
 DEBUG = True
 app = Flask(__name__)
@@ -53,28 +54,18 @@ def parse2(inputs):
     # parse query and fetch html result
     query = "+".join(inputs.split())
     # TODO: advanced search support
-    url = "http://search.archives.gov/query.html?qt="+query+"&col=1arch&col=social&qc=1arch&qc=social"
-    res = urllib2.urlopen(url)
-    html = res.read()
-    soup = BeautifulSoup(html)
-
-    # Result number
-    num = soup.find("div",class_="result-count")
-    if num!= None:
-        counts = num.contents[0]
-        print counts
-        length = len(counts.split(",")[0].split())
-        if length == 4:
-            count = counts.split()[1]
-        else:
-            count = counts.split()[0]
-    else:
-        count = 0
+    url = "https://catalog.archives.gov/api/v1/?q="+query
+    res = requests.get(url)
+    parsed = res.json()
+    num = parsed["opaResponse"]["results"]["total"]
 
     # pack the result
     result = {}
     result["url"] = url
-    result["count"] = count
+    if num!= None:
+        result["count"] = num
+    else:
+        result["count"] = 0
 
     return result
 

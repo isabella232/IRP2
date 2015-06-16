@@ -1,27 +1,49 @@
 {% extends "layout.html" %}
 {% block body %}
     <h3>Result for <b>"{{ query }}"</b> :</h3>
-    <div style="border:1px solid black; border-radius: 25px;overflow:auto;margin:auto;position:relative;width:690px;">
+    <div style="border:1px solid black; border-radius: 25px;overflow:auto;margin:auto;position:relative;width:700px;">
         <div class="result" style="border:1px solid black; border-radius: 25px; width:320px; padding:1em 1em 1em 1em;float:left;height:120px;margin:10px 10px 10px 10px;">
+            <div style="float: right; margin: 0.5el; font-size: smaller">
+              <a href="http://www.ushmm.org/research/research-in-collections/overview">
+                <img height="56" src="static/logo-ushmm.png">
+                <br />learn more
+              </a>
+            </div>
             <p><b>United States Holocaust Memorial Museum</b></p>
-            <p>{{ museum['count'] }} results</p>
-            <p><a href = "{{museum['url']}}" target="_blank">View them</a></p>
+            <p><a href = "{{museum['url']}}" target="_blank">{{ museum['count'] }} results</a></p>
         </div>
         <div class="result" style="border:1px solid black; border-radius: 25px; width:320px; padding:1em 1em 1em 1em;float:left;height:120px;margin:10px 10px 10px 10px;">
+            <div style="float: right; margin: 0.5el; font-size: smaller">
+              <a href="http://www.archives.gov/research/">
+                <img height="56" src="static/nara_blue430.png">
+                <img src="static/logo-nara.png">
+                <br />learn more
+              </a>
+            </div>
             <p><b>National Archives</b></p>
-            <p>{{ arch['count'] }} results</p>
-            <p><a href = "{{arch['url']}}" target="_blank">View them</a></p>
+            <p><a href = "{{arch['url']}}" target="_blank">{{ arch['count'] }} results</a> in National Archives Catalog</p>
+            <p><a href = "{{arch['url']}}" target="_blank">{{ arch['count'] }} results</a> on fold3.com</p>
         </div>
         <div class="result" style="border:1px solid black; border-radius: 25px; width:320px; padding:1em 1em 1em 1em;float:left;height:120px;margin:10px 10px 10px 10px;">
-            <p style="margin-bottom:0px"><b>State Archives in Belgium</b></p>
-            <a href = "{{ url_for('adsearch') }}" target="_blank">Advanced Search</a>
-            <p>{{ bel['count'] }} results</p>
-            <p>You can send them email for the records</p>
+            <div style="float: right; margin: 0.5el; font-size: smaller">
+              <a href="http://arch.arch.be/index.php?l=en">
+                <img height="56" src="static/logo-state-archives-belgium.png">
+                <br />learn more
+              </a>
+            </div>
+            <p><b>State Archives in Belgium</b></p>
+            <p>{{ bel['count'] }} results, see <a href = "{{ url_for('adsearch') }}" target="_blank">Advanced Search</a></p>
+            <p>You can email them for the records.</p>
         </div>
         <div class="result" style="border:1px solid black; border-radius: 25px; width:320px; padding:1em 1em 1em 1em;float:left;height:120px;margin:10px 10px 10px 10px;">
+            <div style="float: right; margin: 0.5el; font-size: smaller">
+              <a href="http://www.getty.edu/museum/research/provenance/index.html">
+                <img src="static/getty.jpg">
+                <br />learn more
+              </a>
+            </div>
             <p><b>The Getty Research Institute</b></p>
-            <p>{{ getty['count'] }} results</p>
-            <p><a href = "{{getty['url']}}" target="_blank">View them</a></p>
+            <p><a href = "{{getty['url']}}" target="_blank">{{ getty['count'] }} results</a></p>
         </div>
     </div>
 {% endblock %}
