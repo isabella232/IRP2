@@ -61,7 +61,30 @@ def parse2(inputs):
 
     # pack the result
     result = {}
-    result["url"] = url
+    result["url"] = "http://search.archives.gov/query.html?qt="+query
+    if num!= None:
+        result["count"] = num
+    else:
+        result["count"] = 0
+
+    return result
+
+# for Fold3 Holocaust Era Assets (National Archives)
+# input a string and return a dictionary
+def parseF3(inputs):
+    # parse query and fetch html result
+    query = " ".join(inputs.split())
+    # TODO: advanced search support
+    data = {'engine':'solr'}
+    data["query_terms"] = '{"terms":[{"type":"category","values":{"value":114}},{"type":"keyword","values":{"value":"'+query+'"}}],"index":0}'
+    url = "http://www.fold3.com/js_getbasicfacets.php"
+    res = requests.post(url, data=data)
+    parsed = res.json()
+    num = parsed["recCount"]
+
+    # pack the result
+    result = {}
+    result["url"] = "http://www.fold3.com/s.php#cat=114&query="+query
     if num!= None:
         result["count"] = num
     else:
@@ -206,9 +229,10 @@ def search():
     session["inputs"] = inputs
     result1 = parse1(inputs)
     result2 = parse2(inputs)
+    resultF3 = parseF3(inputs)
     result3 = parse3(inputs)
     result4 = parse4(inputs)
-    return render_template("search.html",museum = result1,arch = result2,bel=result3,getty=result4, query=inputs)
+    return render_template("search.html",museum = result1,arch = result2,fold3=resultF3,bel=result3,getty=result4, query=inputs)
 
 @app.route('/adsearch', methods=['GET','POST'])
 def adsearch():

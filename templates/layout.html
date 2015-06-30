@@ -162,11 +162,11 @@
             <p>All descriptions within the Portal are provided in English. As you click through the Portal to affiliated websites, the descriptions are written in the national language of each institution, and in some instances, are available in English, as well.</p>
             </div>
             </div><br />
-                <form method=POST action="{{ url_for('search') }}">
+                <h3><form method=POST action="{{ url_for('search') }}">
                 Search:
                 <input type="text" class="text" name="search"/>
                 <input type="submit" value="search"/>
-                </form>
+                </form></h3>
 
                 {% block body %}{% endblock %}
             <br/>
