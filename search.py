@@ -257,8 +257,11 @@ def parseGettyAS(inputs):
     # <span class="hitcount" name="DatabaseSearched" starweb_type="Conditional">
     # 69
     # </span> records retrieved
-    numTxt = soup.select('span[name="DatabaseSearched"]')[0].string
-    num = int(numTxt)
+    spanList = soup.select('span[name="DatabaseSearched"]')
+    num = None
+    if len(spanList)>0:
+        numTxt = spanList[0].string
+        num = int(numTxt)
 
     # pack the result
     result = {}
@@ -270,8 +273,6 @@ def parseGettyAS(inputs):
 
     return result
 
-
-
 @app.route('/')
 def render_index_page():
     return render_template('layout.html')
@@ -280,12 +281,21 @@ def render_index_page():
 def search():
     inputs = request.form["search"]
     session["inputs"] = inputs
-    result1 = parse1(inputs)
-    result2 = parse2(inputs)
-    resultF3 = parseF3(inputs)
-    resultGettyAS = parseGettyAS(inputs)
-    result3 = parse3(inputs)
+    from multiprocessing.pool import ThreadPool
+    pool = ThreadPool(processes=6)
+    async_result1 = pool.apply_async(parse1, (inputs,))
+    async_result2 = pool.apply_async(parse2, (inputs,))
+    async_resultF3 = pool.apply_async(parseF3, (inputs,))
+    async_resultGettyAS = pool.apply_async(parseGettyAS, (inputs,))
+    async_result3 = pool.apply_async(parse3, (inputs,))
+    async_result1 = pool.apply_async(parse1, (inputs,))
     result4 = parse4(inputs)
+
+    result1 = async_result1.get()
+    result2 = async_result2.get()
+    resultF3 = async_resultF3.get()
+    resultGettyAS = async_resultGettyAS.get()
+    result3 = async_result3.get()
     return render_template("search.html",museum = result1,arch = result2,fold3=resultF3,bel=result3,getty=result4,gettyas=resultGettyAS, query=inputs)
 
 @app.route('/adsearch', methods=['GET','POST'])
