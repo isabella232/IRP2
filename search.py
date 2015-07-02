@@ -92,6 +92,8 @@ def parseF3(inputs):
 
     return result
 
+
+
 # belgium
 def getresult(nodes):
     result = {}
@@ -218,6 +220,57 @@ def parse4(inputs):
     return result
 
 
+# Getty Research Institute - German Arts Sales Catalogs
+# input a string and return a dictionary
+def parseGettyAS(inputs):
+    # parse query and fetch html result
+    query = " ".join(inputs.split())
+    session = requests.session()
+    r = session.get("http://piprod.getty.edu/starweb/pi/servlet.starweb?path=pi/pi.web#?")
+    # obtain input values for __websessionID and __sessionNumber
+    soup = BeautifulSoup(r.text)
+
+    # Result number
+    #websessionID = soup.find_all("input",name="__websessionID")[0].value
+    #sessionNumber = soup.find_all("input",name="__sessionNumber")[0].value
+    websessionID = soup.select('input[name="__websessionID"]')[0]['value']
+    sessionNumber = soup.select('input[name="__sessionNumber"]')[0]['value']
+
+    data = {}
+    data['__websessionID'] = websessionID
+    data['__sessionNumber'] = str(sessionNumber)
+    data['__pageid'] = 'SalesCatSearch'
+    data['__hiddenstyle'] = 'A'
+    data['__numberstyle'] = 'A'
+    data['__dirtyFlag'] = 'Clean'
+    data['__action'] = '611'
+    data['Keywords'] = query
+    data['Operators'] = 'AND'
+    data['NameType'] = 'BUYER%2CSELLER'
+    data['__jsModel'] = 'New'
+
+    url = "http://piprod.getty.edu/starweb/pi/servlet.starweb"
+    r = session.post(url, data=data)
+    soup = BeautifulSoup(r.text)
+
+    #Sale Catalog Contents:  69 results from
+    # <span class="hitcount" name="DatabaseSearched" starweb_type="Conditional">
+    # 69
+    # </span> records retrieved
+    numTxt = soup.select('span[name="DatabaseSearched"]')[0].string
+    num = int(numTxt)
+
+    # pack the result
+    result = {}
+    result["url"] = "http://piprod.getty.edu/starweb/pi/servlet.starweb?path=pi/pi.web"
+    if num != None:
+        result["count"] = num
+    else:
+        result["count"] = 0
+
+    return result
+
+
 
 @app.route('/')
 def render_index_page():
@@ -230,9 +283,10 @@ def search():
     result1 = parse1(inputs)
     result2 = parse2(inputs)
     resultF3 = parseF3(inputs)
+    resultGettyAS = parseGettyAS(inputs)
     result3 = parse3(inputs)
     result4 = parse4(inputs)
-    return render_template("search.html",museum = result1,arch = result2,fold3=resultF3,bel=result3,getty=result4, query=inputs)
+    return render_template("search.html",museum = result1,arch = result2,fold3=resultF3,bel=result3,getty=result4,gettyas=resultGettyAS, query=inputs)
 
 @app.route('/adsearch', methods=['GET','POST'])
 def adsearch():
