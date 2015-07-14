@@ -30,7 +30,7 @@ def parse1(inputs):
     url = "http://www.errproject.org/jeudepaume/card_search.php?Query=" + query
     res = urllib2.urlopen(url)
     html = res.read()
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, "lxml")
 
     # Result number
     num = soup.find("div",class_="num")
@@ -203,7 +203,7 @@ def parse4(inputs):
     url = "http://www.getty.edu/Search/SearchServlet?qt="+query
     res = urllib2.urlopen(url)
     html = res.read()
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, "lxml")
 
     # Result number
     table = soup.find_all("table")[2]
@@ -228,7 +228,7 @@ def parseGettyAS(inputs):
     session = requests.session()
     r = session.get("http://piprod.getty.edu/starweb/pi/servlet.starweb?path=pi/pi.web#?")
     # obtain input values for __websessionID and __sessionNumber
-    soup = BeautifulSoup(r.text)
+    soup = BeautifulSoup(r.text, "lxml")
 
     # Result number
     #websessionID = soup.find_all("input",name="__websessionID")[0].value
@@ -251,7 +251,7 @@ def parseGettyAS(inputs):
 
     url = "http://piprod.getty.edu/starweb/pi/servlet.starweb"
     r = session.post(url, data=data)
-    soup = BeautifulSoup(r.text)
+    soup = BeautifulSoup(r.text, "lxml")
 
     #Sale Catalog Contents:  69 results from
     # <span class="hitcount" name="DatabaseSearched" starweb_type="Conditional">
