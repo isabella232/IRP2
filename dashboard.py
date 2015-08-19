@@ -1,14 +1,13 @@
 __author__ = 'gordon'
 from flask import *
 from contextlib import closing
-import belgium, fold3, gettyas, gettyri, nara, ushmm
+from archives.core import searchAllParallel
+from archives.core import archivesList
 
 DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-
-mycollections = [ BelgiumFindingAid(), GettyRI(), GettyAS(), USHMM(), Fold3(), NARACatalog() ]
 
 @app.route('/')
 def render_index_page():
@@ -18,15 +17,8 @@ def render_index_page():
 def search():
     inputs = request.form["search"]
     session["inputs"] = inputs
-    from multiprocessing.pool import ThreadPool
-    pool = ThreadPool(processes=6)
-    async_results = []
-    for col in mycollections:
-        async_results.append(pool.apply_async(col.keywordResultsCount, (inputs,)))
-    results = []
-    for res in async_results:
-        results.append(res.get())
-    return render_template("search.html", museum = result1,arch = result2,fold3=resultF3,bel=result3,getty=result4,gettyas=resultGettyAS, query=inputs)
+    results = searchAllParallel(inputs)
+    return render_template("search.html", results=results, archivesList=archivesList, query=inputs)
 
 @app.route('/adsearch', methods=['GET','POST'])
 def adsearch():

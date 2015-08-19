@@ -1,21 +1,25 @@
 __author__ = 'gregjan'
-import collections
+from collection import Collection
 from lxml import etree
+import re
 
-class BelgiumFindingAid(collections.Collection):
-    collection_info_url = 'http://www.archives.gov/research/holocaust/international-resources/belgium.html'
-    logo_file = 'logo-state-archives-belgium.png'
-    inst_key = "State Archives in Belgium"
-    fullname = "Holocaust Assets Finding Aid"
+class BelgiumFindingAid(Collection):
 
-def keywordResultsCount(inputs):
-    result = {}
-    tree = etree.parse("bel.xml")
-    inventory = tree.getroot()
-    nodes = ftext(inventory,inputs)
-    print nodes
-    result["count"] = len(nodes)
-    return result
+    def keywordResultsCount(self, inputs):
+        self.inputs = inputs
+        result = {}
+        tree = etree.parse("bel.xml")
+        inventory = tree.getroot()
+        nodes = ftext(inventory,inputs)
+        num = len(nodes)
+
+        # TODO link to url within dashboard
+        self.results_url = ""
+        if num!= None:
+            self.results_count = num
+        else:
+            self.results_count = 0
+        return self
 
 # belgium
 def getresult(nodes):

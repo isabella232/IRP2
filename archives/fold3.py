@@ -1,15 +1,10 @@
-import collections
+from collection import Collection
 import requests
 
-class Fold3(collections.Collection):
-    collection_info_url = 'fold3.com'
-    logo_file = 'logo-nara.png'
-    inst_key = 'nara'
-    fullname = 'Fold3 Holocaust Era Assets'
-    researcher_hints = ''
-    description_lang = 'en'
+class Fold3(Collection):
 
     def keywordResultsCount(self, inputs):
+        self.inputs = inputs
         query = " ".join(inputs.split())
         data = {'engine':'solr'}
         data["query_terms"] = '{"terms":[{"type":"category","values":{"value":114}},{"type":"keyword","values":{"value":"'+query+'"}}],"index":0}'
@@ -18,11 +13,9 @@ class Fold3(collections.Collection):
         parsed = res.json()
         num = parsed["recCount"]
 
-        result = {}
-        result["url"] = "http://www.fold3.com/s.php#cat=114&query="+query
+        self.results_url = "http://www.fold3.com/s.php#cat=114&query="+query
         if num!= None:
-            result["count"] = num
+            self.results_count = num
         else:
-            result["count"] = 0
-
-        return result
+            self.results_count = 0
+        return self
