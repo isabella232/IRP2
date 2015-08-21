@@ -66,6 +66,7 @@ archivesList = [
         ]
     },
 ]
+archivesList.sort(key=lambda inst: inst['name'])
 
 def searchAllParallel(inputs):
     from multiprocessing.pool import ThreadPool
@@ -79,7 +80,8 @@ def searchAllParallel(inputs):
             collClass = getattr(module, classname)
             collObject = collClass()
             async_results.append(pool.apply_async(collObject.keywordResultsCount, (inputs,)))
-    results = []
+    results = {}
     for res in async_results:
-        results.append(res.get().emit())
+        result_dict = res.get().emit()
+        results[result_dict['class']] = result_dict
     return results

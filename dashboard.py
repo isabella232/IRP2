@@ -3,11 +3,20 @@ from flask import *
 from contextlib import closing
 from archives.core import searchAllParallel
 from archives.core import archivesList
+import logging, logging.handlers
 
 DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
+LOG_FILENAME = '/tmp/LHARP.log'
+app.logger.setLevel(logging.DEBUG)
+handler = logging.handlers.RotatingFileHandler(
+    LOG_FILENAME,
+    maxBytes=1024 * 1024 * 100,
+    backupCount=20
+    )
+app.logger.addHandler(handler)
 
 @app.route('/')
 def render_index_page():
@@ -18,6 +27,8 @@ def search():
     inputs = request.form["search"]
     session["inputs"] = inputs
     results = searchAllParallel(inputs)
+    app.logger.debug("results: \n"+json.dumps(results))
+    app.logger.debug("archivesList: \n"+json.dumps(archivesList))
     return render_template("search.html", results=results, archivesList=archivesList, query=inputs)
 
 @app.route('/adsearch', methods=['GET','POST'])
