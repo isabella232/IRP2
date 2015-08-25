@@ -1,6 +1,5 @@
 __author__ = 'gordon'
 from flask import *
-from contextlib import closing
 from archives.core import searchAllParallel
 from archives.core import archivesList
 import logging, logging.handlers
