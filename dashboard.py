@@ -6,7 +6,7 @@ from lxml import etree
 from archives.belgium import *
 import logging, logging.handlers
 
-DEBUG = True
+DEBUG = False
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
