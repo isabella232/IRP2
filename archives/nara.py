@@ -12,7 +12,7 @@ class NARACatalog(Collection):
         parsed = res.json()
         num = parsed["opaResponse"]["results"]["total"]
 
-        self.results_url = "http://search.archives.gov/query.html?qt="+query
+        self.results_url = "https://catalog.archives.gov/search?q="+query
         if num!= None:
             self.results_count = num
         else:

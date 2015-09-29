@@ -79,9 +79,12 @@ def searchAllParallel(inputs):
             module = sys.modules[__name__]
             collClass = getattr(module, classname)
             collObject = collClass()
-            async_results.append(pool.apply_async(collObject.keywordResultsCount, (inputs,)))
+            handle = pool.apply_async(collObject.keywordResultsCount, (inputs,))
+            async_results.append(handle)
     results = {}
     for res in async_results:
-        result_dict = res.get().emit()
-        results[result_dict['class']] = result_dict
+        resultcoll = res.get(timeout=5)
+        if resultcoll != None:
+            result_dict = resultcoll.emit()
+            results[result_dict['class']] = result_dict
     return results

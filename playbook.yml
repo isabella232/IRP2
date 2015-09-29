@@ -1,0 +1,20 @@
+---
+- hosts: all
+  tasks:
+    - name: Install OS packages
+      apt: pkg={{ item }} state=latest
+      with_items:
+        - python-pip
+        - libxml2-dev
+        - libxslt-dev
+        - python-dev
+        - libz-dev
+    - name: Install Python packages
+      shell: "pip install {{ item }}"
+      with_items:
+        - flask
+        - lxml
+        - BeautifulSoup4
+  handlers:
+    - name: restart Nginx
+      service: name=ntpd state=restarted

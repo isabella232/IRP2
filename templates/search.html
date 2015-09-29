@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
     <h3>Result for <b>"{{ query }}"</b> :</h3>
-    <div style="border:1px solid black; border-radius: 25px;overflow:auto;margin:auto;position:relative;width:692px;">
+    <div style="border:1px solid black; border-radius: 25px;overflow:auto;margin:auto;position:relative;width:700px;">
       {% for inst in archivesList %}
       <div class="result" style="border:1px solid black; border-radius: 25px; width:320px; padding:1em 1em 1em 1em;float:left;height:120px;margin:10px 10px 10px 10px;">
         <div style="float: right; margin: 0.5el; font-size: smaller">
@@ -13,7 +13,7 @@
         <p><b>{{ inst.name }}</b></p>
         {% for coll in inst.collections %}
         {% if results[coll.class] %}
-        <p><a href = "{{ coll.results_url }}" target="_blank">{{ results[coll.class].results_count }} results in {{ coll.name }}</a></p>
+        <p><a href="{{ results[coll.class].results_url }}" target="_blank">{{ results[coll.class].results_count }} results in {{ coll.name }}</a></p>
         {% endif %}
         {% endfor %}
       </div>

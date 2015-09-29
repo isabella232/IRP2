@@ -1,5 +1,5 @@
 from collection import Collection
-import requests
+import requests, json
 
 class Fold3(Collection):
 
@@ -7,9 +7,13 @@ class Fold3(Collection):
         self.inputs = inputs
         query = " ".join(inputs.split())
         data = {'engine':'solr'}
-        data["query_terms"] = '{"terms":[{"type":"category","values":{"value":114}},{"type":"keyword","values":{"value":"'+query+'"}}],"index":0}'
-        url = "http://www.fold3.com/js_getbasicfacets.php"
-        res = requests.post(url, data=data)
+        q = '{"terms":[{"type":"category","values":{"value":114}},{"type":"keyword","values":{"value":"'+query+'"}}],"index":0}'
+        data["query_terms"] = q
+        url = "http://www.fold3.com/js_getresults.php"
+        res = requests.get(url, params=data)
+        #print "results: \n"+res.text
+        #print "URL: "+url
+        #print "Post Data: "+json.dumps(data)
         parsed = res.json()
         num = parsed["recCount"]
 

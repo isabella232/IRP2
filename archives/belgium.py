@@ -14,12 +14,18 @@ class BelgiumFindingAid(Collection):
         num = len(nodes)
 
         # TODO link to url within dashboard
-        self.results_url = ""
+        self.results_url = "/adsearch?inputs="+inputs
         if num!= None:
             self.results_count = num
         else:
             self.results_count = 0
         return self
+
+def findresult(inputs):
+    tree = etree.parse("bel.xml")
+    inventory = tree.getroot()
+    nodes = ftext(inventory,inputs)
+    return getresult(nodes)
 
 # belgium
 def getresult(nodes):
