@@ -83,7 +83,10 @@ def searchAllParallel(inputs):
             async_results.append(handle)
     results = {}
     for res in async_results:
-        resultcoll = res.get(timeout=5)
+        try:
+            resultcoll = res.get(timeout=10)
+        except TimeoutError:
+            pass
         if resultcoll != None:
             result_dict = resultcoll.emit()
             results[result_dict['class']] = result_dict
