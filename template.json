@@ -1,0 +1,33 @@
+{
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "region": "us-east-1",
+      "availability_zone": "us-east-1c",
+      "source_ami": "ami-7b6cb610",
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ami_name": "L-HARP Demonstration {{isotime \"2006-01-02\"}}",
+      "tags": {
+        "OS_Version": "Ubuntu",
+        "Release": "Vivid 15.04"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+    "type": "shell",
+    "inline": [
+      "sudo apt-get update",
+      "sudo apt-get -y upgrade",
+      "sudo apt-get install -y ansible"]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_file": "playbook.yml",
+      "group_vars": "/home/jansen/Dropbox/UMD-DCIC/Amazon/group_vars",
+      "inventory_groups": "LHARP",
+      "inventory_file": "/home/jansen/Dropbox/UMD-DCIC/Amazon/hosts"
+    }
+  ]
+}
