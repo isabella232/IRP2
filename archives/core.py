@@ -4,10 +4,15 @@ from gettyas import GettyAS
 from gettyri import GettyRI
 from nara import NARACatalog
 from ushmm import USHMM
-import sys
+from austria import AustriaFindingAid
+from uk import UKFindingAid
+from berlin import BerlinFindingAid
+from netherlands import NetherlandsFindingAid
+from bs4 import BeautifulSoup 
+import sys 
 
 archivesList = [
-    {
+     {
         'name': 'State Archives in Belgium',
         'logo': 'logo-state-archives-belgium.png',
         'info_url': 'http://www.archives.gov/research/holocaust/international-resources/belgium.html',
@@ -42,7 +47,7 @@ archivesList = [
         'info_url': 'http://www.ushmm.org/research/research-in-collections/overview',
         'collections': [
             {
-                'name': 'USHMM Catalog',
+                'name': 'Jeu de Paume',
                 'class': USHMM.__name__,
                 'lang': 'en'
             }
@@ -65,13 +70,67 @@ archivesList = [
             }
         ]
     },
+
+    {
+        'name': 'State Archives in Austria',
+        'logo': 'austria.png',
+        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/austria.html',
+        'collections': [
+            {
+                'name': 'Holocaust Assets Finding Aid',
+                'class': AustriaFindingAid.__name__,
+                'lang': 'en'
+            },
+        ]
+    },
+
+    {
+        'name': 'State Archives in UK',
+        'logo': 'austria.png',
+        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/uk.html',
+        'collections': [
+            {
+                'name': 'Holocaust Assets Finding Aid',
+                'class': UKFindingAid.__name__,
+                'lang': 'en'
+            },
+        ]
+    },
+
+    {
+        'name': 'State Archives in Berlin',
+        'logo': 'logo-bundesarchiv.png',
+        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/berlin.html',
+        'collections': [
+            {
+                'name': 'Holocaust Assets Finding Aid',
+                'class': BerlinFindingAid.__name__,
+                'lang': 'en'
+            },
+        ]
+    },
+
+    {
+        'name': 'State Archives in the Netherlands',
+        'logo': 'logo-dhm.png',
+        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/netherlands.html',
+        'collections': [
+            {
+                'name': 'Holocaust Assets Finding Aid',
+                'class': NetherlandsFindingAid.__name__,
+                'lang': 'en'
+            },
+        ]
+    },
 ]
 archivesList.sort(key=lambda inst: inst['name'])
+
 
 def searchAllParallel(inputs):
     from multiprocessing.pool import ThreadPool
     pool = ThreadPool(processes=8)
     async_results = []
+
     for inst in archivesList:
         for coll in inst['collections']:
             classname = coll['class']
@@ -91,3 +150,4 @@ def searchAllParallel(inputs):
             result_dict = resultcoll.emit()
             results[result_dict['class']] = result_dict
     return results
+

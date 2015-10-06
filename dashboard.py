@@ -1,12 +1,12 @@
+
 __author__ = 'gordon'
 from flask import *
 from archives.core import searchAllParallel
 from archives.core import archivesList
-from lxml import etree
-from archives.belgium import *
+from bs4 import BeautifulSoup 
 import logging, logging.handlers
 
-DEBUG = False
+DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
@@ -28,19 +28,19 @@ def search():
     inputs = request.form["search"]
     session["inputs"] = inputs
     results = searchAllParallel(inputs)
-    # app.logger.debug("results: \n"+json.dumps(results))
-    # app.logger.debug("archivesList: \n"+json.dumps(archivesList))
+    app.logger.debug("results: \n"+json.dumps(results))
+    app.logger.debug("archivesList: \n"+json.dumps(archivesList))
     return render_template("search.html", results=results, archivesList=archivesList, query=inputs)
 
 @app.route('/adsearch', methods=['GET','POST'])
 def adsearch():
-    if request.form.get("inputs") != None:
-        session["inputs"] = request.form.get("inputs")
     if "inputs" in session:
         inputs = session["inputs"]
-        result = findresult(inputs)
+        tree = etree.parse("bel.xml")
+        inventory = tree.getroot()
+        result = getresult(ftext(inventory,inputs))
         return render_template('adsearch.html',results=result)
-    else:
+    else: 
         return render_template('adsearch.html')
 
 @app.route('/advsearch', methods=['GET','POST'])
@@ -92,4 +92,4 @@ def detail():
 
 
 if __name__ == '__main__':
-    app.run("0.0.0.0")
+    app.run()

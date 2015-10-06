@@ -1,9 +1,10 @@
+__author__ = 'Anuj'
 from collection import Collection
-from bs4 import BeautifulSoup 
+from bs4 import BeautifulSoup
 import requests
 import json
 
-class NARACatalog(Collection):
+class BerlinFindingAid(Collection):
 
     def keywordResultsCount(self, inputs):
         self.inputs = inputs
@@ -13,7 +14,7 @@ class NARACatalog(Collection):
         parsed = res.json()
         num = parsed["opaResponse"]["results"]["total"]
 
-        self.results_url = "https://catalog.archives.gov/search?q="+query
+        self.results_url = "http://search.archives.gov/query.html?qt="+query
         if num!= None:
             self.results_count = num
         else:
