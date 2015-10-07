@@ -1,5 +1,6 @@
 ---
 - hosts: all
+  sudo: yes
   tasks:
     - name: Install OS packages
       apt: pkg={{ item }} state=latest
@@ -9,12 +10,14 @@
         - libxslt-dev
         - python-dev
         - libz-dev
+        - git
     - name: Install Python packages
       shell: "pip install {{ item }}"
       with_items:
         - flask
         - lxml
         - BeautifulSoup4
+    - git: repo=https://github.com/UMD-DCIC/LHARP.git dest=/home/ubuntu/LHARP version=master update=yes
   handlers:
     - name: restart Nginx
       service: name=ntpd state=restarted
