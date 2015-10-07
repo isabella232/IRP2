@@ -3,7 +3,7 @@
   sudo: yes
   tasks:
     - name: Install OS packages
-      apt: pkg={{ item }} state=latest
+      apt: pkg={{ item }} state=latest update_cache=no
       with_items:
         - python-pip
         - libxml2-dev
@@ -18,6 +18,9 @@
         - lxml
         - BeautifulSoup4
     - git: repo=https://github.com/UMD-DCIC/LHARP.git dest=/home/ubuntu/LHARP version=master update=yes
+    - command: python dashboard.py &
+      args:
+        chdir: /vagrant
   handlers:
     - name: restart Nginx
       service: name=ntpd state=restarted

@@ -3,7 +3,8 @@ __author__ = 'gordon'
 from flask import *
 from archives.core import searchAllParallel
 from archives.core import archivesList
-from bs4 import BeautifulSoup 
+from lxml import etree
+from archives.belgium import *
 import logging, logging.handlers
 
 DEBUG = True
@@ -34,13 +35,13 @@ def search():
 
 @app.route('/adsearch', methods=['GET','POST'])
 def adsearch():
+    if request.form.get("inputs") != None:
+        session["inputs"] = request.form.get("inputs")
     if "inputs" in session:
         inputs = session["inputs"]
-        tree = etree.parse("bel.xml")
-        inventory = tree.getroot()
-        result = getresult(ftext(inventory,inputs))
+        result = findresult(inputs)
         return render_template('adsearch.html',results=result)
-    else: 
+    else:
         return render_template('adsearch.html')
 
 @app.route('/advsearch', methods=['GET','POST'])
@@ -92,4 +93,4 @@ def detail():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run("0.0.0.0")

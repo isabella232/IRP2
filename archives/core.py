@@ -8,8 +8,8 @@ from austria import AustriaFindingAid
 from uk import UKFindingAid
 from berlin import BerlinFindingAid
 from netherlands import NetherlandsFindingAid
-from bs4 import BeautifulSoup 
-import sys 
+from bs4 import BeautifulSoup
+import sys
 
 archivesList = [
      {
@@ -143,11 +143,11 @@ def searchAllParallel(inputs):
     results = {}
     for res in async_results:
         try:
-            resultcoll = res.get(timeout=10)
-        except TimeoutError:
+            resultcoll = res.get(timeout=15)
+        except:
+            resultcoll = None
             pass
         if resultcoll != None:
             result_dict = resultcoll.emit()
             results[result_dict['class']] = result_dict
     return results
-
