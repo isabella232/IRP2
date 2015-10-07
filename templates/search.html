@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block body %}
     <h3>Result for <b>"{{ query }}"</b> :</h3>
-    <div style="border:1px solid black; border-radius: 25px;overflow:auto;margin:auto;position:relative;width:700px;">
+    <div style="border:1px solid black; border-radius: 25px;overflow:auto;margin:auto;position:relative;width:692px;height:650px">
       {% for inst in archivesList %}
-      <div class="result" style="border:1px solid black; border-radius: 25px; width:320px; padding:1em 1em 1em 1em;float:left;height:120px;margin:10px 10px 10px 10px;">
+      <div class="result" style="border:1px solid black;border-radius:25px;width:320px;height:170px;padding:2em 2em 2em 2em;margin-left:10px;margin-top:10px;float:left;">
         <div style="float: right; margin: 0.5el; font-size: smaller">
-          <a href="{{ inst.url }}">
+          <a href="{{ inst.info_url }}">
             <img height="56" src="static/{{ inst.logo }}">
               <br />learn more
           </a>
@@ -17,6 +17,7 @@
         {% endif %}
         {% endfor %}
       </div>
+
       {% endfor %}
     </div>
 {% endblock %}
