@@ -1,6 +1,6 @@
 __author__ = 'gregjan'
 from collection import Collection
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup 
 from lxml import etree
 import re
 
@@ -14,18 +14,14 @@ class BelgiumFindingAid(Collection):
         nodes = ftext(inventory,inputs)
         num = len(nodes)
 
-        self.results_url = "/adsearch?inputs="+inputs
+        # TODO link to url within dashboard
+        self.results_url = ""
         if num!= None:
             self.results_count = num
         else:
             self.results_count = 0
         return self
 
-def findresult(inputs):
-    tree = etree.parse("bel.xml")
-    inventory = tree.getroot()
-    nodes = ftext(inventory,inputs)
-    return getresult(nodes)
 
 # belgium
 def getresult(nodes):

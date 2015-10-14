@@ -9,14 +9,14 @@ class AustriaFindingAid(Collection):
     def keywordResultsCount(self, inputs):
         self.inputs = inputs
         query = "+".join(inputs.split())
-        url = "https://catalog.archives.gov/api/v1/?q="+query
-        res = requests.get(url)
-        parsed = res.json()
-        num = parsed["opaResponse"]["results"]["total"]
+        url = "http://www.kunstrestitution.at/catalogue.html?Query="+query
+        html = requests.get(url).text
+        soup = BeautifulSoup(html, "lxml")
 
-        self.results_url = "http://search.archives.gov/query.html?qt="+query
-        if num!= None:
-            self.results_count = num
-        else:
-            self.results_count = 0
+        results = soup.find_all("div", class_="item")
+        count = results.__len__()
+
+        self.results_url = url
+        self.results_count = count
+
         return self

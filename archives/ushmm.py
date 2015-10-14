@@ -12,14 +12,11 @@ class USHMM(Collection):
         html = requests.get(url).text
         soup = BeautifulSoup(html, "lxml")
 
-        num = soup.find("div",class_="num")
-        if num!= None:
-            counts = num.contents[0]
-            count = counts.split()[5]
-        else:
-            count = 0
+        results = soup.find_all("tr", class_="results")
+        count = results.__len__()
 
         self.results_url = url
         self.results_count = count
 
         return self
+

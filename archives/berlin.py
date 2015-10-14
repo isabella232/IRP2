@@ -9,14 +9,18 @@ class BerlinFindingAid(Collection):
     def keywordResultsCount(self, inputs):
         self.inputs = inputs
         query = "+".join(inputs.split())
-        url = "https://catalog.archives.gov/api/v1/?q="+query
-        res = requests.get(url)
-        parsed = res.json()
-        num = parsed["opaResponse"]["results"]["total"]
+        url = "http://www.lostart.de/Content/051_ProvenienzRaubkunst/DE/AuktionInfo.html?Query="+query
+        html = requests.get(url).text
+        soup = BeautifulSoup(html, "lxml")
 
-        self.results_url = "http://search.archives.gov/query.html?qt="+query
+        num = soup.find("div",class_="num")
         if num!= None:
-            self.results_count = num
+            counts = num.contents[0]
+            count = counts.split()[5]
         else:
-            self.results_count = 0
+            count = 0
+
+        self.results_url = url
+        self.results_count = count
+
         return self

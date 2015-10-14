@@ -9,15 +9,17 @@ class NetherlandsFindingAid(Collection):
     def keywordResultsCount(self, inputs):
         self.inputs = inputs
         query = "+".join(inputs.split())
-        url = "https://catalog.archives.gov/api/v1/?q="+query
-        res = requests.get(url)
-        parsed = res.json()
-        num = parsed["opaResponse"]["results"]["total"]
 
-        self.results_url = "http://search.archives.gov/query.html?qt="+query
-        if num!= None:
-            self.results_count = num
-        else:
-            self.results_count = 0
+        url = "http://www.archieven.nl/nl/result-modonly?miview=inv2&mivast=298&mizig=210&miadt=298&micode=093a&milang=nl?Query=" + query
+        html = requests.get(url).text
+        soup = BeautifulSoup(html, "lxml")
+
+        results = soup.find_all("tr", class_="results")
+        count = results.__len__()
+
+        self.results_url = url
+        self.results_count = count
+
         return self
+
 
