@@ -23,6 +23,7 @@
             background: url(http://www.archives.gov/global-images/layout/gradient-page-bg.jpg) repeat-x left bottom #e2e9f6;}
         div {display:block;}
         input.text {width:200px; margin-left:20px}
+        #searchbox {width: auto}
         .container {width:960px;margin:auto;border-left: #a4abb3 1px dotted;border-right: #a4abb3 1px dotted;padding:0;}
         .header img {margin-right:10px}
         .col-md-4 {width: 192px;padding: 30px 20px 0px 20px;font-size: 0.75em;background-color: #f9f7f4;  margin-bottom: -99999px;
@@ -70,6 +71,10 @@
             padding: 8px 10px;
             font-size: .9em;
             }
+        fieldset {
+            margin: 1em;
+            font-size: smaller;
+        }
         #bottomBanner {
             background-color: rgb(91, 102, 134);
             line-height: 24px;
@@ -163,8 +168,14 @@
             </div>
             </div><br />
                 <h3><form method=POST action="{{ url_for('search') }}">
-                Search:
-                <input type="text" class="text" name="search"/>
+                Search: <input id="searchbox" type="text" class="text" name="general"{% if inputs is defined %} value="{{ inputs.general }}"{% endif %}/><br />
+                <fieldset><legend>Some collections also support these fields:</legend>
+                Years from <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
+                to <input type="text" class="text" name="endYear" placeholder="E.G. 1955"{% if inputs is defined %} value="{{ inputs.endYear }}"{% endif %}/><br />
+                Artist/Creator <input type="text" class="text" name="artist"{% if inputs is defined %} value="{{ inputs.artist }}"{% endif %}/><br />
+                Owner <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />
+                Location <input type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/>
+                </fieldset>
                 <input type="submit" value="search"/>
                 </form></h3>
 

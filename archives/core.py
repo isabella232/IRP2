@@ -9,7 +9,7 @@ from uk import UKFindingAid
 from berlin import BerlinFindingAid
 from netherlands import NetherlandsFindingAid
 from bs4 import BeautifulSoup
-import sys
+import sys, logging
 
 archivesList = [
      {
@@ -46,11 +46,7 @@ archivesList = [
         'logo': 'logo-ushmm.png',
         'info_url': 'http://www.ushmm.org/research/research-in-collections/overview',
         'collections': [
-            {
-                'name': 'Jeu de Paume',
-                'class': USHMM.__name__,
-                'lang': 'en'
-            }
+            USHMM.info
         ]
     },
     {
@@ -63,11 +59,7 @@ archivesList = [
                 'class': NARACatalog.__name__,
                 'lang': 'en'
             },
-            {
-                'name': 'Fold3 Holocaust Era Assets',
-                'class': Fold3.__name__,
-                'lang': 'en'
-            }
+            Fold3.info
         ]
     },
 
@@ -126,11 +118,12 @@ archivesList = [
 archivesList.sort(key=lambda inst: inst['name'])
 
 
-def searchAllParallel(inputs):
+def searchAll(rawinputs):
+    async = True
     from multiprocessing.pool import ThreadPool
     pool = ThreadPool(processes=8)
-    async_results = []
-
+    async_handles = []
+    results = {}
     for inst in archivesList:
         for coll in inst['collections']:
             classname = coll['class']
@@ -138,16 +131,32 @@ def searchAllParallel(inputs):
             module = sys.modules[__name__]
             collClass = getattr(module, classname)
             collObject = collClass()
-            handle = pool.apply_async(collObject.keywordResultsCount, (inputs,))
-            async_results.append(handle)
-    results = {}
-    for res in async_results:
-        try:
-            resultcoll = res.get(timeout=50)
-        except:
-            resultcoll = None
-            pass
-        if resultcoll != None:
-            result_dict = resultcoll.emit()
-            results[result_dict['class']] = result_dict
+
+            # NOTE: info.fields indicate advanced search support
+            if hasattr(collObject, 'info'):
+                if 'fields' in collObject.info:
+                    inputs = rawinputs
+                else:
+                    inputs = rawinputs['general']
+            else:
+                inputs = rawinputs['general']
+
+            if async:
+                handle = pool.apply_async(collObject.keywordResultsCount, (inputs,))
+                async_handles.append(handle)
+            else:
+                resultcoll = collObject.keywordResultsCount(inputs)
+                result_dict = resultcoll.emit()
+                results[result_dict['class']] = result_dict
+    if async:
+        for res in async_handles:
+            try:
+                resultcoll = res.get(timeout=15)
+            except Exception, e:
+                logging.exception(e)
+                resultcoll = None
+                pass
+            if resultcoll != None:
+                result_dict = resultcoll.emit()
+                results[result_dict['class']] = result_dict
     return results

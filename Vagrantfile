@@ -10,7 +10,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "base"
+  config.vm.provider "virtualbox" do |vb|
+    config.vm.box = "trusty64"
+  end
+  config.vm.provider "libvirt" do |vb|
+    config.vm.box = "naelyn/ubuntu-trusty64-libvirt"
+  end
 
   config.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbook.yml"

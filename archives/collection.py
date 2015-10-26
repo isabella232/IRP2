@@ -17,3 +17,15 @@ class Collection(object):
         # Results are stored in instance variables.
         # Returns self.
         pass
+
+    def mapParameters(self, inputs):
+        # Creates a dictionary of parameters for a collection search.
+        # Can be used for POST or GET requests as appropriate.
+        # Uses self.info['fields'], which is a dict that maps the keys in our inputs
+        # to the parameter names in a collection search form.
+        result = {}
+        fields = self.info['fields']
+        for key in inputs:
+            if key in fields:
+                result[fields[key]] = inputs[key]
+        return result

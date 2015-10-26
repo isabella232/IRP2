@@ -3,12 +3,13 @@
   sudo: yes
   tasks:
     - name: Install OS packages
-      apt: pkg={{ item }} state=latest update_cache=no
+      apt: pkg={{ item }} state=latest update_cache=yes
       with_items:
         - python-pip
         - libxml2-dev
         - libxslt-dev
         - python-dev
+        - python-lxml
         - libz-dev
         - git
     - name: Install Python packages
