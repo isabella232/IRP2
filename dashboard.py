@@ -11,7 +11,7 @@ DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-LOG_FILENAME = '/tmp/LHARP.log'
+LOG_FILENAME = 'F:/Anuj/StudyWork/Marciano Asstship/LHARP-clean/LHARP.log'
 app.logger.setLevel(logging.DEBUG)
 handler = logging.handlers.RotatingFileHandler(
     LOG_FILENAME,
@@ -93,4 +93,4 @@ def detail():
 
 
 if __name__ == '__main__':
-    app.run("0.0.0.0")
+    app.run("127.0.0.1")

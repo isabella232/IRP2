@@ -10,15 +10,19 @@ class NetherlandsFindingAid(Collection):
         self.inputs = inputs
         query = "+".join(inputs.split())
 
-        url = "http://www.archieven.nl/nl/result-modonly?miview=inv2&mivast=298&mizig=210&miadt=298&micode=093a&milang=nl?Query=" + query
+        url = "http://www.archieven.nl/nl/zoeken?mizig=0&miview=lst&milang=nl&micols=1&mires=0&mizk_alle="+query
         html = requests.get(url).text
         soup = BeautifulSoup(html, "lxml")
 
-        results = soup.find_all("tr", class_="results")
-        count = results.__len__()
+        spanList = soup.select('span.mi_hits_hits_count')
+        num = None
+        s = spanList[0].string
+
+        if len(s)>0:
+            num = int(s)
 
         self.results_url = url
-        self.results_count = count
+        self.results_count = num
 
         return self
 

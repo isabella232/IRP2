@@ -143,7 +143,7 @@ def searchAllParallel(inputs):
     results = {}
     for res in async_results:
         try:
-            resultcoll = res.get(timeout=15)
+            resultcoll = res.get(timeout=50)
         except:
             resultcoll = None
             pass

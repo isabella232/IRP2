@@ -8,15 +8,34 @@ class AustriaFindingAid(Collection):
 
     def keywordResultsCount(self, inputs):
         self.inputs = inputs
-        query = "+".join(inputs.split())
-        url = "http://www.kunstrestitution.at/catalogue.html?Query="+query
-        html = requests.get(url).text
-        soup = BeautifulSoup(html, "lxml")
+        session = requests.session()
+        data = {}
+        data['search'] = inputs
 
-        results = soup.find_all("div", class_="item")
-        count = results.__len__()
+        url = "http://www.kunstrestitution.at/catalogue_detailsearch.html"
+        r = session.post(url,data = data)
+        soup = BeautifulSoup(r.text, "lxml")
+
+        spanList = soup.select('span.total')
+        num = None
+        s = spanList[0].string
+
+        newString = s[s.find("(")+1:s.find(")")]
+
+        if len(newString)>0:
+            num = int(newString)
 
         self.results_url = url
-        self.results_count = count
+
+        if num!= None:
+            self.results_count = num
+        else:
+            self.results_count = 0
+
+        #results = soup.find_all("div",class_="item")
+        #count = results.__len__()
+
+        #self.results_url = url
+        #self.results_count = count
 
         return self
