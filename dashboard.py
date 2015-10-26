@@ -5,13 +5,14 @@ from archives.core import searchAll
 from archives.core import archivesList
 from lxml import etree
 from archives.belgium import *
-import logging, logging.handlers
+import os, logging, logging.handlers
 
 DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-LOG_FILENAME = 'F:/Anuj/StudyWork/Marciano Asstship/LHARP-clean/LHARP.log'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+LOG_FILENAME = BASE_DIR+'/LHARP.log'
 app.logger.setLevel(logging.DEBUG)
 handler = logging.handlers.RotatingFileHandler(
     LOG_FILENAME,
@@ -93,4 +94,4 @@ def detail():
 
 
 if __name__ == '__main__':
-    app.run("127.0.0.1")
+    app.run("0.0.0.0")

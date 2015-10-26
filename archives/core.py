@@ -69,7 +69,7 @@ archivesList = [
         'info_url': 'http://www.archives.gov/research/holocaust/international-resources/austria.html',
         'collections': [
             {
-                'name': 'Holocaust Assets Finding Aid',
+                'name': 'Art Database of the National Fund',
                 'class': AustriaFindingAid.__name__,
                 'lang': 'en'
             },
@@ -77,12 +77,12 @@ archivesList = [
     },
 
     {
-        'name': 'State Archives in UK',
+        'name': 'National Archives of the UK',
         'logo': 'austria.png',
         'info_url': 'http://www.archives.gov/research/holocaust/international-resources/uk.html',
         'collections': [
             {
-                'name': 'Holocaust Assets Finding Aid',
+                'name': 'The National Archives',
                 'class': UKFindingAid.__name__,
                 'lang': 'en'
             },
@@ -90,12 +90,12 @@ archivesList = [
     },
 
     {
-        'name': 'State Archives in Berlin',
+        'name': 'Koordinierungsstelle Magdeburg',
         'logo': 'logo-bundesarchiv.png',
         'info_url': 'http://www.archives.gov/research/holocaust/international-resources/berlin.html',
         'collections': [
             {
-                'name': 'Holocaust Assets Finding Aid',
+                'name': 'Lost Art Internet Database',
                 'class': BerlinFindingAid.__name__,
                 'lang': 'en'
             },
@@ -108,7 +108,7 @@ archivesList = [
         'info_url': 'http://www.archives.gov/research/holocaust/international-resources/netherlands.html',
         'collections': [
             {
-                'name': 'Holocaust Assets Finding Aid',
+                'name': 'Archives and Collections',
                 'class': NetherlandsFindingAid.__name__,
                 'lang': 'en'
             },
