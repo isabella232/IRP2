@@ -1,3 +1,4 @@
+from dummy import Dummy
 from belgium import BelgiumFindingAid
 from fold3 import Fold3
 from gettyas import GettyAS
@@ -118,8 +119,10 @@ archivesList = [
 archivesList.sort(key=lambda inst: inst['name'])
 
 
-def searchAll(rawinputs):
-    async = True
+# asyncSearch - Set to False for serial searches and better error reporting
+# dummySearch - Set to True for offline development work w/o searches
+def searchAll(rawinputs, asyncSearch=True, dummySearch=False):
+    """Search all known collections for the given input dictionary."""
     from multiprocessing.pool import ThreadPool
     pool = ThreadPool(processes=8)
     async_handles = []
@@ -132,23 +135,31 @@ def searchAll(rawinputs):
             collClass = getattr(module, classname)
             collObject = collClass()
 
-            # NOTE: info.fields indicate advanced search support
+            if dummySearch: # use dummy collection that does no search..
+                collObject = Dummy()
+                collObject.setClassName(classname)
+
+            # NOTE: presence of info.fields indicates advanced search support
             if hasattr(collObject, 'info'):
                 if 'fields' in collObject.info:
                     inputs = rawinputs
                 else:
-                    inputs = rawinputs['general']
+                    inputs = ''
+                    for key in rawinputs:
+                        inputs += ' '+rawinputs[key]
             else:
-                inputs = rawinputs['general']
+                inputs = ''
+                for key in rawinputs:
+                    inputs += ' '+rawinputs[key]
 
-            if async:
+            if asyncSearch:
                 handle = pool.apply_async(collObject.keywordResultsCount, (inputs,))
                 async_handles.append(handle)
             else:
                 resultcoll = collObject.keywordResultsCount(inputs)
                 result_dict = resultcoll.emit()
                 results[result_dict['class']] = result_dict
-    if async:
+    if asyncSearch:
         for res in async_handles:
             try:
                 resultcoll = res.get(timeout=15)

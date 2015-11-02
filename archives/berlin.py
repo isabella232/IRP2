@@ -25,10 +25,14 @@ class BerlinFindingAid(Collection):
         results = soup.find("div", {"id" : "id67734"})
         results_1 = results.find("table", {"summary" : "suche0"})
 
-        captionResults = results_1.find("caption")
-        string1 = captionResults.string
+        if results_1 is not None:
+            captionResults = results_1.find("caption")
+            string1 = captionResults.string
+            self.results_count = int(string1.split()[0])
+        else:
+            self.results_count = 0
 
         self.results_url = url
-        self.results_count =  int(string1.split()[0])
+
 
         return self

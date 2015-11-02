@@ -14,7 +14,7 @@
         {% for coll in inst.collections %}
         {% if results[coll.class] %}
         <p><a href="{{ results[coll.class].results_url }}" target="_blank">{{ results[coll.class].results_count }} results in {{ coll.name }}</a><br />
-        {% if coll.fields is defined %}fields: {% for field in coll.fields %}{{ field }} {% endfor %}{% endif %}
+        {% if coll.fields is defined %}fields: {% for field in coll.fields %}{% if field in inputs and inputs[field].strip() != '' %}<span class="active-field">{{ field }}</span> {% else %}<span class="inactive-field">{{ field }}</span> {% endif %} {% endfor %}{% endif %}
         </p>
         {% endif %}
         {% endfor %}

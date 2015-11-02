@@ -11,7 +11,6 @@ class Fold3(Collection):
             'general': 'keyword',
             'startYear': 'start',
             'endYear': 'end'
-            #'location': 's_place'
         } # NOTE: field mapping done locally for Fold3
     }
 
@@ -24,6 +23,7 @@ class Fold3(Collection):
         if 'startYear' in inputs and inputs['startYear'].strip() != '':
             date_clause = ',{"type":"date","values":{"name":"year","start":"'+inputs['startYear']+'","end":"'+inputs['endYear']+'","showMissing":false}}'
 
+        keywords = inputs['general']+" "+inputs['location']+" "+inputs['artist']
         # NOTE: Holocaust Assets return no results for Berlin or Paris, useless field
         # location_clause = ''
         # if 'location' in inputs and inputs['location'].strip() != '':
@@ -32,7 +32,7 @@ class Fold3(Collection):
         # NOTE: category 114 is "Holocaust Collection"
         q = ('{"terms":['
         '{"type":"category","values":{"value":114}},'
-        '{"type":"keyword","values":{"value":"'+inputs['general']+'"}}')
+        '{"type":"keyword","values":{"value":"'+ keywords +'"}}')
         q += date_clause
         #q += location_clause
         q += '],"index":0}'
@@ -43,11 +43,9 @@ class Fold3(Collection):
         parsed = res.json()
         num = parsed["recCount"]
 
-        self.results_url = "http://www.fold3.com/s.php#cat=114&query="+inputs['general']
+        self.results_url = "http://www.fold3.com/s.php#cat=114&query="+keywords.replace(' ','+')
         if 'startYear' in inputs and inputs['startYear'].strip() != '':
             self.results_url += "&dr_year="+inputs['startYear']+"&dr_year2="+inputs['endYear']
-        if 'location' in inputs and inputs['location'].strip() != '':
-            self.results_url += "&s_place="+inputs['location']
         if num!= None:
             self.results_count = num
         else:

@@ -75,6 +75,13 @@
             margin: 1em;
             font-size: smaller;
         }
+        .active-field {
+            color: green;
+            font-weight: bold;
+        }
+        .inactive-field {
+            color: gray;
+        }
         #bottomBanner {
             background-color: rgb(91, 102, 134);
             line-height: 24px;
@@ -148,6 +155,14 @@
 	            <li><a href="http://www.archives.gov/research/holocaust/international-resources/other-resources.html">Other Resources</a></li>
                 <li><a href="http://www.archives.gov/research/holocaust">Holocaust-Era Assets Main Page</a></li>
             </ul>
+
+            <h3>Portal Phases</h3>
+            <ul>
+              <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5001/">Phase 1</a></li>
+              <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5002/">Phase 2</a></li>
+              <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5003/">Phase 3</a></li>
+              <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5004/">Phase 4</a></li>
+            </ul>
         </div>
         <div class="col-xs-8 col-md-8">
             <div style="padding:0em; margin-bottom:0px; margin-top:-25px; border:1px solid #E4E5E6; border-bottom-color:#C2C3C4; border-left-color:#C2C3C4; border-right-color:#C2C3C4;border-top-color:#C2C3C4; background-color:#F4F6F7; background-image:url(http://www.archives.gov/global-images/layout/boxed-1-bg.gif); background-repeat:repeat-x; padding:.5em; font-size:.7em; float:right; position:relative;">
@@ -168,15 +183,15 @@
             </div>
             </div><br />
                 <h3><form method=POST action="{{ url_for('search') }}">
-                Search: <input id="searchbox" type="text" class="text" name="general"{% if inputs is defined %} value="{{ inputs.general }}"{% endif %}/><br />
+                Search: <input id="searchbox" type="text" class="text" name="general"{% if inputs is defined %} value="{{ inputs.general }}"{% endif %}/>
+                &nbsp;&nbsp;<input type="submit" value="search"/><br />
                 <fieldset><legend>Some collections also support these fields:</legend>
                 Years from <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
                 to <input type="text" class="text" name="endYear" placeholder="E.G. 1955"{% if inputs is defined %} value="{{ inputs.endYear }}"{% endif %}/><br />
                 Artist/Creator <input type="text" class="text" name="artist"{% if inputs is defined %} value="{{ inputs.artist }}"{% endif %}/><br />
-                Owner <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />
+                <!-- Owner <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />-->
                 Location <input type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/>
                 </fieldset>
-                <input type="submit" value="search"/>
                 </form></h3>
 
                 {% block body %}{% endblock %}
