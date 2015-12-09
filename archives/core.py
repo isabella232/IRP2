@@ -146,11 +146,19 @@ def searchAll(rawinputs, asyncSearch=True, dummySearch=False):
                 else:
                     inputs = ''
                     for key in rawinputs:
-                        inputs += ' '+rawinputs[key]
+                        if(len(rawinputs[key].strip()) > 0):
+                            if( len(inputs) > 0 ):
+                                inputs += ' '+rawinputs[key]
+                            else:
+                                inputs += rawinputs[key]
             else:
                 inputs = ''
                 for key in rawinputs:
-                    inputs += ' '+rawinputs[key]
+                    if(len(rawinputs[key].strip()) > 0):
+                        if( len(inputs) > 0 ):
+                            inputs += ' '+rawinputs[key]
+                        else:
+                            inputs += rawinputs[key]
 
             if asyncSearch:
                 handle = pool.apply_async(collObject.keywordResultsCount, (inputs,))

@@ -8,10 +8,11 @@ class BelgiumFindingAid(Collection):
 
     def keywordResultsCount(self, inputs):
         self.inputs = inputs
-        result = {}
         tree = etree.parse("bel.xml")
         inventory = tree.getroot()
-        nodes = ftext(inventory,inputs)
+        nodes = ftext(inventory,inputs.strip())
+        print("|"+str(inputs)+"|")
+        print( len(nodes) )
         num = len(nodes)
 
         self.results_url = "/adsearch?general="+inputs
