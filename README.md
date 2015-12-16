@@ -1,4 +1,4 @@
-# Enhanced Digital Access Portal Project (eDAPP)
+# International Research Portal Project (IRP2)
 
 This application delivers a research dashboard that assists users in conducting provenance-based discovery of looted Holocaust assets. It queries and aggregates results from many collecting institutions, giving the user an overview of available records and collections for further research.
 
