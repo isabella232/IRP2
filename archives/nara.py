@@ -1,7 +1,5 @@
 from collection import Collection
-from bs4 import BeautifulSoup 
 import requests
-import json
 from textblob import TextBlob
 
 class NARACatalog(Collection):

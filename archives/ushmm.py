@@ -71,4 +71,3 @@ class USHMM(Collection):
         self.results_count = count
 
         return self
-

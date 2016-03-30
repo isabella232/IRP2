@@ -9,8 +9,8 @@ from austria import AustriaFindingAid
 from uk import UKFindingAid
 from berlin import BerlinFindingAid
 from netherlands import NetherlandsFindingAid
-from bs4 import BeautifulSoup
-import sys,logging
+import sys
+import logging
 
 archivesList = [
      {

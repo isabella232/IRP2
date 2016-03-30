@@ -3,7 +3,6 @@ from collection import Collection
 from bs4 import BeautifulSoup
 import requests
 from textblob import TextBlob
-import json
 
 class NetherlandsFindingAid(Collection):
 
@@ -51,5 +50,3 @@ class NetherlandsFindingAid(Collection):
 
 
         return self
-
-
