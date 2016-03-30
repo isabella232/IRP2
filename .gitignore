@@ -47,3 +47,7 @@ Temporary Items
 
 # Vagrant machine files
 .vagrant
+
+# Directories for IDEs
+.idea
+.project

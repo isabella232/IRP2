@@ -29,7 +29,7 @@ def render_index_page():
 def search():
     inputs = request.form
     session["inputs"] = inputs
-    results = searchAll(inputs, asyncSearch=True)
+    results = searchAll(inputs, asyncSearch=False)
     #app.logger.debug("results: \n"+json.dumps(results))
     #app.logger.debug("archivesList: \n"+json.dumps(archivesList))
     return render_template("search.html", results=results, archivesList=archivesList, inputs=inputs)

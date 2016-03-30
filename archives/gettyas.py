@@ -2,12 +2,18 @@ __author__ = 'gregjan'
 from collection import Collection
 from bs4 import BeautifulSoup
 import requests
+from textblob import TextBlob
 
 class GettyAS(Collection):
 
     def keywordResultsCount(self, inputs):
         self.inputs = inputs
-        query = " ".join(inputs.split())
+        #query = " ".join(inputs.split())
+        query = inputs.split(' ')
+        x=len(query)
+
+
+
         session = requests.session()
         r = session.get("http://piprod.getty.edu/starweb/pi/servlet.starweb?path=pi/pi.web#?")
         # obtain input values for __websessionID and __sessionNumber
@@ -34,6 +40,7 @@ class GettyAS(Collection):
 
         url = "http://piprod.getty.edu/starweb/pi/servlet.starweb"
         r = session.post(url, data=data)
+        #print 'gettyas:'+ str(data['Keywords'])
         soup = BeautifulSoup(r.text, "lxml")
 
         #Sale Catalog Contents:  69 results from
@@ -45,6 +52,10 @@ class GettyAS(Collection):
         if len(spanList)>0:
             numTxt = spanList[0].string
             num = int(numTxt)
+        if (x>1)  :
+         self.result_search_term = query[1]
+        else:
+          self.result_search_term = query[0]
 
         self.results_url = "http://piprod.getty.edu/starweb/pi/servlet.starweb?path=pi/pi.web"
         if num!= None:

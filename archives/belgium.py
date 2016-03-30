@@ -2,7 +2,10 @@ __author__ = 'gregjan'
 from collection import Collection
 from bs4 import BeautifulSoup
 from lxml import etree
+from textblob import TextBlob
 import re
+
+#cathch translation api exception
 
 class BelgiumFindingAid(Collection):
 
@@ -11,11 +14,36 @@ class BelgiumFindingAid(Collection):
         tree = etree.parse("bel.xml")
         inventory = tree.getroot()
         nodes = ftext(inventory,inputs.strip())
-        print("|"+str(inputs)+"|")
+        print 'belgium : '
+
+        inputs = inputs.split(' ')
+        #print inputs[1]
+        print (len(inputs))
+        try:
+         if (len(inputs)>1):
+             blob = TextBlob(inputs[1])
+             if (inputs[0]=='German'):
+                 inputs_german = blob.translate(to="de")
+                 self.result_search_term = str(inputs_german)
+                 self.results_url = "/adsearch?general="+str(inputs_german)
+             elif (inputs[0]=='French') :
+                 inputs_french = blob.translate(to="fr")
+                 self.result_search_term = str(inputs_french)
+                 self.results_url = "/adsearch?general="+str(inputs_french)
+         else:
+            self.results_url = "/adsearch?general="+inputs[0]
+            self.result_search_term = str(inputs[0])
+
+        except:
+             pass
+
+        #print("|"+str(inputs)+"|")
         print( len(nodes) )
         num = len(nodes)
 
-        self.results_url = "/adsearch?general="+inputs
+
+
+        #self.results_url = "/adsearch?general="+inputs[0]
         if num!= None:
             self.results_count = num
         else:
