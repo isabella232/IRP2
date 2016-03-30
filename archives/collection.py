@@ -2,13 +2,14 @@ class Collection(object):
     results_count = None
     results_url = None
     inputs = None
-
+    result_search_term = None
     def emit(self):
         result = {
             'class': type(self).__name__,
             'results_count': self.results_count,
             'results_url': self.results_url,
-            'inputs': self.inputs
+            'inputs': self.inputs,
+            'result_search_term': self.result_search_term
         }
         return result
 

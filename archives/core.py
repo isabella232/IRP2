@@ -10,7 +10,7 @@ from uk import UKFindingAid
 from berlin import BerlinFindingAid
 from netherlands import NetherlandsFindingAid
 from bs4 import BeautifulSoup
-import sys, logging
+import sys,logging
 
 archivesList = [
      {
@@ -121,7 +121,7 @@ archivesList.sort(key=lambda inst: inst['name'])
 
 # asyncSearch - Set to False for serial searches and better error reporting
 # dummySearch - Set to True for offline development work w/o searches
-def searchAll(rawinputs, asyncSearch=True, dummySearch=False):
+def searchAll(rawinputs, asyncSearch=False, dummySearch=False):
     """Search all known collections for the given input dictionary."""
     from multiprocessing.pool import ThreadPool
     pool = ThreadPool(processes=8)
@@ -130,7 +130,7 @@ def searchAll(rawinputs, asyncSearch=True, dummySearch=False):
     for inst in archivesList:
         for coll in inst['collections']:
             classname = coll['class']
-            import sys
+
             module = sys.modules[__name__]
             collClass = getattr(module, classname)
             collObject = collClass()
