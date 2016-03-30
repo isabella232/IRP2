@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LOG_FILENAME = BASE_DIR+'/LHARP.log'
+LOG_FILENAME = BASE_DIR+'/IRP2.log'
 app.logger.setLevel(logging.DEBUG)
 handler = logging.handlers.RotatingFileHandler(
     LOG_FILENAME,

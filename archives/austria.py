@@ -1,9 +1,7 @@
 __author__ = 'anuj'
 from collection import Collection
-from bs4 import BeautifulSoup 
+from bs4 import BeautifulSoup
 import requests
-import json
-import goslate
 from textblob import TextBlob
 
 class AustriaFindingAid(Collection):
