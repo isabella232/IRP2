@@ -39,7 +39,7 @@ class UKFindingAid(Collection):
 
         #url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+query+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
         try:
-         html = requests.get(url,timeout=0.001).text
+         html = requests.get(url).text
 
         except:
          url = "https://www.google.com/webhp?hl=en"
