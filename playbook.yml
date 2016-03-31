@@ -24,8 +24,10 @@
         - lxml
         - BeautifulSoup4
         - TextBlob
-    - git: repo=https://github.com/UMD-DCIC/IRP2.git dest=/home/ubuntu/IRP2 version=master update=yes
+    - copy: src=. dest=~/ mode=0755
       become: no
+    #- git: repo=https://github.com/UMD-DCIC/IRP2.git dest=/home/ubuntu/IRP2 version=master update=yes
+    #  become: no
     - command: killall python
       become: no
       ignore_errors: yes
