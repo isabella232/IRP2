@@ -2,6 +2,9 @@ __author__ = 'Anuj'
 from collection import Collection
 from bs4 import BeautifulSoup
 import requests
+import re
+import json
+import goslate
 from textblob import TextBlob
 
 
@@ -71,6 +74,7 @@ class BerlinFindingAid(Collection):
             string1 = captionResults.string
             #print 'berlin_string1 : ' + str(string1)
             self.results_count = int(string1.split()[0])
+            print self.results_count
         else:
             self.results_count = 0
 

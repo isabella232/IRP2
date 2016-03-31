@@ -38,7 +38,14 @@ class UKFindingAid(Collection):
 
 
         #url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+query+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
-        html = requests.get(url).text
+        try:
+         html = requests.get(url,timeout=0.001).text
+
+        except:
+         url = "https://www.google.com/webhp?hl=en"
+         html = requests.get(url).text
+         print "Timeout error. Please try again later."
+         pass
         soup = BeautifulSoup(html, "lxml")
 
         results = soup.find_all("li", class_="tna-result")
