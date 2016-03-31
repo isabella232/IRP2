@@ -1,6 +1,7 @@
 __author__ = 'anuj'
 from collection import Collection
 import requests
+from bs4 import BeautifulSoup
 from textblob import TextBlob
 
 class UKFindingAid(Collection):

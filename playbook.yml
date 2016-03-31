@@ -25,11 +25,14 @@
         - BeautifulSoup4
         - TextBlob
     - git: repo=https://github.com/UMD-DCIC/IRP2.git dest=/home/ubuntu/IRP2 version=master update=yes
+      become: no
     - command: killall python
+      become: no
       ignore_errors: yes
-    - command: nohup python dashboard.py &
-      args:
-        chdir: /home/ubuntu/IRP2
+#    - command: nohup python dashboard.py &
+#      become: no
+#      args:
+#        chdir: /home/ubuntu/IRP2
   handlers:
     - name: restart Nginx
       service: name=ntpd state=restarted
