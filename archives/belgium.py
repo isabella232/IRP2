@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 __author__ = 'gregjan'
 from collection import Collection
 from bs4 import BeautifulSoup
@@ -19,23 +20,31 @@ class BelgiumFindingAid(Collection):
         inputs = inputs.split(' ')
         #print inputs[1]
         print (len(inputs))
-        try:
-         if (len(inputs)>1):
+
+        if (len(inputs)>1):
+           try:
              blob = TextBlob(inputs[1])
              if (inputs[0]=='German'):
                  inputs_german = blob.translate(to="de")
-                 self.result_search_term = str(inputs_german)
+                 inputs_german = unicode( inputs_german, "utf-8" )
                  self.results_url = "/adsearch?general="+str(inputs_german)
+                 self.result_search_term = str(inputs_german)
+                 self.result_search_term = self.result_search_term.encode('utf-8')
              elif (inputs[0]=='French') :
                  inputs_french = blob.translate(to="fr")
-                 self.result_search_term = str(inputs_french)
+                 inputs_french = unicode( inputs_french, "utf-8" )
                  self.results_url = "/adsearch?general="+str(inputs_french)
-         else:
+                 self.result_search_term = str(inputs_french)
+                 self.result_search_term = self.result_search_term.encode('utf-8')
+           except:
+              self.results_url = "/adsearch?general="+inputs[1]
+              self.result_search_term = str(inputs[1])
+
+        else:
             self.results_url = "/adsearch?general="+inputs[0]
             self.result_search_term = str(inputs[0])
 
-        except:
-             pass
+
 
         #print("|"+str(inputs)+"|")
         print( len(nodes) )

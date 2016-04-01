@@ -6,6 +6,10 @@ from archives.core import archivesList
 from lxml import etree
 from archives.belgium import *
 import os, logging, logging.handlers
+import sys
+
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 DEBUG = True
 app = Flask(__name__)

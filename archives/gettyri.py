@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 __author__ = 'gregjan'
 from collection import Collection
 from bs4 import BeautifulSoup
@@ -23,17 +24,22 @@ class GettyRI(Collection):
             blob = TextBlob(query[1])
             if (query[0]=='German'):
                 query_german = blob.translate(to="de")
+                query_german = unicode( query_german, "utf-8" )
                 url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_german)
                 self.results_url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_german)
                 self.result_search_term = str(query_german)
+                self.result_search_term = self.result_search_term.encode('utf-8')
 
             elif (query[0]=='French') :
                 query_french = blob.translate(to="fr")
+                query_french = unicode( query_french, "utf-8" )
                 url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_french)
                 self.results_url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_french)
                 self.result_search_term = str(query_french)
+                self.result_search_term = self.result_search_term.encode('utf-8')
          except:
-             url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query[0])
+             url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query[1])
+             self.result_search_term = str(query[1])
              pass
         else:
           url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query[0])

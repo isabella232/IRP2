@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 __author__ = 'Anuj'
 from collection import Collection
 from bs4 import BeautifulSoup
@@ -32,14 +33,19 @@ class BerlinFindingAid(Collection):
             blob = TextBlob(query[1])
             if (query[0]=='German'):
                 query_german = blob.translate(to="de")
+                query_german = unicode( query_german, "utf-8" )
                 self.result_search_term = str(query_german)
+                self.result_search_term = self.result_search_term.encode('utf-8')
                 url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+str(query_german)+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
             elif (query[0]=='French') :
                 query_french = blob.translate(to="fr")
+                query_french = unicode( query_french, "utf-8" )
                 self.result_search_term = str(query_french)
+                self.result_search_term = self.result_search_term.encode('utf-8')
                 url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+str(query_french)+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
          except:
-            url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+query[0]+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+            url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+query[1]+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+            self.result_search_term = str(query[1])
             pass
 
         else:

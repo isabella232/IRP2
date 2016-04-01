@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from collection import Collection
 import requests, json
 from textblob import TextBlob
@@ -55,17 +56,21 @@ class Fold3(Collection):
          if 'German' in inputs:
             blob = TextBlob(keywords)
             keywords = str(blob.translate(to="de"))
+            keywords = unicode( keywords, "utf-8" )
             print keywords
             self.result_search_term = keywords
-
+            self.result_search_term = self.result_search_term.encode('utf-8')
 
          elif 'French' in inputs:
             blob = TextBlob(keywords)
             keywords = str(blob.translate(to="fr"))
+            keywords = unicode( keywords, "utf-8" )
             print keywords
             self.result_search_term = keywords
+            self.result_search_term = self.result_search_term.encode('utf-8')
         except:
             keywords = inputs['general']+" "+inputs['location']+" "+inputs['artist']
+            self.result_search_term = keywords
             pass
         # NOTE: Holocaust Assets return no results for Berlin or Paris, useless field
         # location_clause = ''
