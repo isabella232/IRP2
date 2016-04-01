@@ -17,7 +17,7 @@ class BerlinFindingAid(Collection):
         print self.inputs
         print inputs
 
-        query = inputs.split(' ')
+        query = inputs.split(' ',1)
         x=len(query)
         print x
         #print query[1]
@@ -43,6 +43,12 @@ class BerlinFindingAid(Collection):
                 self.result_search_term = str(query_french)
                 self.result_search_term = self.result_search_term.encode('utf-8')
                 url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+str(query_french)+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+            else:
+                query1 = " "+inputs
+                query1 = query1.split(' ',1)
+                url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+query1[1]+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+                self.result_search_term = str(query1[1])
+
          except:
             url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+query[1]+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
             self.result_search_term = str(query[1])

@@ -9,7 +9,7 @@ class GettyAS(Collection):
     def keywordResultsCount(self, inputs):
         self.inputs = inputs
         #query = " ".join(inputs.split())
-        query = inputs.split(' ')
+        query = inputs.split(' ',1)
         x=len(query)
 
 
@@ -53,7 +53,13 @@ class GettyAS(Collection):
             numTxt = spanList[0].string
             num = int(numTxt)
         if (x>1)  :
-         self.result_search_term = query[1]
+         if ((str(query[0])=='French')|(str(query[0])=='German')):
+          self.result_search_term = query[1]
+         else:
+            query1 = " "+ inputs
+            query1 = query1.split(' ',1)
+            self.result_search_term = query1[1]
+
         else:
           self.result_search_term = query[0]
 

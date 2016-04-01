@@ -15,7 +15,7 @@ class AustriaFindingAid(Collection):
         print 'austria'
         #print data['search'].split(' ')
 
-        data['search'] = data['search'].split(' ')
+        data['search'] = data['search'].split(' ',1)
         print data['search'][0]
 
         x = len(data['search'])
@@ -33,7 +33,14 @@ class AustriaFindingAid(Collection):
              data['search'] = str(blob.translate(to="fr"))
              self.result_search_term = str(data['search'])
         #print (gs.translate(data['search'], 'de'))
+           else:
+               data['search']= " "+inputs
+               data['search'] = data['search'].split(' ',1)
+               data['search']=str(data['search'][1])
+               self.result_search_term = str(data['search'][1])
+
          except:
+             self.result_search_term = str(data['search'][1])
              pass
         else:
             data['search']=str(data['search'][0])

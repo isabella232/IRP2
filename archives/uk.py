@@ -11,7 +11,7 @@ class UKFindingAid(Collection):
         self.inputs = inputs
         #query = "+".join(inputs.split())
 
-        query = inputs.split(' ')
+        query = inputs.split(' ',1)
         x=len(query)
         print x
 
@@ -33,6 +33,12 @@ class UKFindingAid(Collection):
                 url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+str(query_french)+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
                 self.result_search_term = str(query_french)
                 self.result_search_term = self.result_search_term.encode('utf-8')
+            else:
+                query1 = " "+ inputs
+                query1 = query1.split(' ',1)
+                url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+query1[1]+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
+                self.result_search_term = str(query1[1])
+
          except:
             url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+query[1]+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
             self.result_search_term = str(query[1])

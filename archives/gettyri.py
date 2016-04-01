@@ -15,7 +15,7 @@ class GettyRI(Collection):
         self.inputs = inputs
         #query = "+".join(inputs.split())
 
-        query = inputs.split(' ')
+        query = inputs.split(' ',1)
         x=len(query)
         print x
 
@@ -37,7 +37,16 @@ class GettyRI(Collection):
                 self.results_url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_french)
                 self.result_search_term = str(query_french)
                 self.result_search_term = self.result_search_term.encode('utf-8')
+            else:
+                query1 = " "+inputs
+                query1 = query1.split(' ',1)
+                url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query1[1])
+                self.result_search_term = str(query1[1])
+
+
          except:
+             #query1 = " "+inputs
+             #query1 = query1.split(' ',1)
              url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query[1])
              self.result_search_term = str(query[1])
              pass

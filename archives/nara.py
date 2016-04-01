@@ -9,7 +9,7 @@ class NARACatalog(Collection):
         self.inputs = inputs
         #query = "+".join(inputs.split())
 
-        query = inputs.split(' ')
+        query = inputs.split(' ',1)
         x=len(query)
         print x
 
@@ -31,6 +31,15 @@ class NARACatalog(Collection):
                 self.results_url = "https://catalog.archives.gov/search?q="+str(query_french)
                 self.result_search_term = str(query_french)
                 self.result_search_term = self.result_search_term.encode('utf-8')
+
+            else :
+                query1 = " "+ inputs
+                query1 = query1.split(' ',1)
+                url = "https://catalog.archives.gov/api/v1/?q="+str(query1[1])
+                self.results_url = "https://catalog.archives.gov/search?q="+query1[1]
+                self.result_search_term = query1[1]
+
+
           except:
               url = "https://catalog.archives.gov/api/v1/?q="+str(query[1])
               self.results_url = "https://catalog.archives.gov/search?q="+query[1]

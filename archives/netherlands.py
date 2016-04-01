@@ -13,7 +13,7 @@ class NetherlandsFindingAid(Collection):
 
         #query = "+".join(inputs.split())
 
-        query = inputs.split(' ')
+        query = inputs.split(' ',1)
         x=len(query)
         print x
 
@@ -32,6 +32,11 @@ class NetherlandsFindingAid(Collection):
                 url = "http://www.archieven.nl/nl/zoeken?mizig=0&miview=lst&milang=nl&micols=1&mires=0&mizk_alle="+str(query_french)
                 self.result_search_term = str(query_french)
                 self.result_search_term = self.result_search_term.encode('utf-8')
+            else:
+                query1 = " "+ inputs
+                query1 = query1.split(' ',1)
+                url = "http://www.archieven.nl/nl/zoeken?mizig=0&miview=lst&milang=nl&micols=1&mires=0&mizk_alle="+query1[1]
+                self.result_search_term = query1[1]
 
          except:
              url = "http://www.archieven.nl/nl/zoeken?mizig=0&miview=lst&milang=nl&micols=1&mires=0&mizk_alle="+query[1]
