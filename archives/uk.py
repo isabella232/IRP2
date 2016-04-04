@@ -45,23 +45,21 @@ class UKFindingAid(Collection):
             pass
 
         else:
-             url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+query[0]+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
-             self.result_search_term = str(query[0])
+            url = "http://discovery.nationalarchives.gov.uk/results/r?_q="
+            +query[0]
+            +"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
+            self.result_search_term = str(query[0])
 
-
-        #url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+query+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
         try:
-         html = requests.get(url).text
-
+            html = requests.get(url, timeout=8).text
+            soup = BeautifulSoup(html, "lxml")
+            results = soup.find_all("li", class_="tna-result")
+            count = results.__len__()
         except:
-         url = "https://www.google.com/webhp?hl=en"
-         html = requests.get(url).text
-         print "Timeout error. Please try again later."
-         pass
-        soup = BeautifulSoup(html, "lxml")
+            message = "Cannot contact site"
+            print "Timeout error. Please try again later."
+            pass
 
-        results = soup.find_all("li", class_="tna-result")
-        count = results.__len__()
 
         self.results_url = url
         self.results_count = count
