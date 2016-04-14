@@ -8,9 +8,6 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-  <script type="text/javascript" src="./lib/translate.js"></script>
-    <script type="text/javascript" src="./lib/languages.js"></script>
-
 <script type="text/javascript">
   var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
   $(function() {
@@ -207,7 +204,8 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
     <h3>This is {{ session['_uname'] }}'s profile page<h3></form>
   </div>
 {%endif%}
-
+{%block logout%}
+{%endblock%}
     <div class="row" style="margin:auto;overflow:hidden;height:auto;">
         <div class="col-xs-4 col-md-4">
             <h3>International Research Portal for Records Related to Nazi-Era Cultural Property</h3>
@@ -278,16 +276,12 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
                 <h3><form method="GET" action="{{ url_for('search') }}">
                 Search: <input id="searchbox" type="text" class="text" name="general"{% if inputs is defined %} value="{{ inputs.general }}"{% endif %}/>
                 &nbsp;&nbsp;<input type="submit" value="search"/><br />
-                    Languagaes :  French <input type="checkbox" name="French" value="French" checked="checked">
-                <!--Translate <input type="checkbox" name="translate"{% if inputs is defined %} value="{{ inputs.translate }}"{% endif %} checked="checked">-->
-                German <input type="checkbox" name="German" value="German" checked="checked">
-                    <fieldset><legend>Some collections also support these fields:</legend>
+                <fieldset><legend>Some collections also support these fields:</legend>
                 Years from <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
                 to <input type="text" class="text" name="endYear" placeholder="E.G. 1955"{% if inputs is defined %} value="{{ inputs.endYear }}"{% endif %}/><br />
                 Artist/Creator <input type="text" class="text" name="artist"{% if inputs is defined %} value="{{ inputs.artist }}"{% endif %}/><br />
                 <!-- Owner <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />-->
-                Location <input type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/><br />
-
+                Location <input type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/>
                 </fieldset>
                 </form></h3>
 {%if session%}
