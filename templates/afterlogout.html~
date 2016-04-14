@@ -1,8 +1,0 @@
-{%extends "layout.html" %}
-{%block logout%}
-	<div id="msg" class="success">
-<h2>Logout successful</h2>
-<p>You have successfully logged out.</p>
-<p>For security reasons, it is recommended to exit your web browser.</p>
-</div>
-{%endblock%}
