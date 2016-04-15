@@ -8,6 +8,7 @@ from urllib.parse import quote_plus
 
 class NetherlandsFindingAid(Collection):
 
+
     def keywordResultsCount(self, **kwargs):
         keywords = self.add_unsupported_fields_to_keywords(kwargs)
         keywords = quote_plus(keywords)
@@ -24,6 +25,7 @@ class NetherlandsFindingAid(Collection):
             num = int(s)
         except:
             pass
+
         self.results_url = url
         self.results_count = num
         return self

@@ -3,8 +3,10 @@ from archives.collection import Collection
 import requests
 from urllib.parse import quote_plus
 
+<<<<<<< 3c33295f8b6bbbbb17d7d8d84fc7f24d9ad8e053
 
 class NARACatalog(Collection):
+
 
     def keywordResultsCount(self, **kwargs):
         keywords = self.add_unsupported_fields_to_keywords(kwargs)

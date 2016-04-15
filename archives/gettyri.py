@@ -11,6 +11,7 @@ class GettyRI(Collection):
     result_search_term = None
     inputs = None
 
+
     def keywordResultsCount(self, **kwargs):
         keywords = self.add_unsupported_fields_to_keywords(kwargs)
         keywords = quote_plus(keywords)
