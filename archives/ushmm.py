@@ -29,6 +29,17 @@ class USHMM(Collection):
         try:
 
          if 'German'in params:
+          try:
+            g = params['Solr__Query']
+            z1 = str(g)
+            blob = TextBlob(z1)
+            params['Solr__Query']=str(blob.translate(to="de"))
+            #params['Solr__Query'] = unicode( params['Solr__Query'], "utf-8" )
+            print params
+            self.result_search_term = params['Solr__Query']
+            #self.result_search_term = self.result_search_term.encode('utf-8')
+            print self.result_search_term
+          except:
             g = params['Solr__Query']
             z1 = str(g)
             blob = TextBlob(z1)
@@ -41,6 +52,17 @@ class USHMM(Collection):
 
 
          if 'French' in params:
+          try:
+            g = params['Solr__Query']
+            z1 = str(g)
+            blob = TextBlob(z1)
+            params['Solr__Query']=str(blob.translate(to="fr"))
+            #params['Solr__Query'] = unicode( params['Solr__Query'], "utf-8" )
+            print params
+            self.result_search_term = params['Solr__Query']
+            #self.result_search_term = self.result_search_term.encode('utf-8')
+            print self.result_search_term
+          except:
             g = params['Solr__Query']
             z1 = str(g)
             blob = TextBlob(z1)
@@ -50,6 +72,7 @@ class USHMM(Collection):
             self.result_search_term = params['Solr__Query']
             self.result_search_term = self.result_search_term.encode('utf-8')
             print self.result_search_term
+
         except:
             self.result_search_term = params['Solr__Query']
             pass

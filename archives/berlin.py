@@ -18,6 +18,8 @@ class BerlinFindingAid(Collection):
 
         query = inputs.split(' ',1)
         x=len(query)
+        print 'berlin'
+        print query[0]
         print x
         #print query[1]
 
@@ -30,18 +32,40 @@ class BerlinFindingAid(Collection):
         if (x>1):
          try:
             blob = TextBlob(query[1])
+
             if (query[0]=='German'):
-                query_german = blob.translate(to="de")
-                query_german = unicode( query_german, "utf-8" )
-                self.result_search_term = str(query_german)
-                self.result_search_term = self.result_search_term.encode('utf-8')
-                url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+str(query_german)+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+                try:
+                 query_german = blob.translate(to="de")
+                 #query_german = unicode( query_german, "utf-8" )
+                 self.result_search_term = str(query_german)
+                 print 'berlin german : '+str(self.result_search_term)
+                 #self.result_search_term = self.result_search_term.encode('utf-8')
+                 url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+str(query_german)+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+                except:
+                 query_german = blob.translate(to="de")
+                 query_german = unicode( query_german, "utf-8" )
+                 self.result_search_term = str(query_german)
+                 print 'berlin german : '+str(self.result_search_term)
+                 self.result_search_term = self.result_search_term.encode('utf-8')
+                 url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+str(query_german)+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+
             elif (query[0]=='French') :
-                query_french = blob.translate(to="fr")
-                query_french = unicode( query_french, "utf-8" )
-                self.result_search_term = str(query_french)
-                self.result_search_term = self.result_search_term.encode('utf-8')
-                url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+str(query_french)+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+
+               try:
+                 query_french = blob.translate(to="fr")
+                 #query_german = unicode( query_german, "utf-8" )
+                 self.result_search_term = str(query_french)
+                 print 'berlin german : '+str(self.result_search_term)
+                 #self.result_search_term = self.result_search_term.encode('utf-8')
+                 url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+str(query_french)+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+               except:
+                 query_french = blob.translate(to="fr")
+                 query_french = unicode( query_french, "utf-8" )
+                 self.result_search_term = str(query_french)
+                 print 'berlin german : '+str(self.result_search_term)
+                 self.result_search_term = self.result_search_term.encode('utf-8')
+                 url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?resourceId=4424&input_=4046&pageLocale=de&simpel="+str(query_french)+"&type=Simpel&type.HASH=a367122406f8d243ac08&suche_typ=MeldungSimpel&suche_typ.HASH=e2ace3636225271222d5&suchen=Suchen"
+
             else:
                 query1 = " "+inputs
                 query1 = query1.split(' ',1)
@@ -83,8 +107,17 @@ class BerlinFindingAid(Collection):
             captionResults = results_1.find("caption")
             #print 'berlin_captionResults : ' + str(captionResults)
             string1 = captionResults.string
+            print string1
+            x1 = string1.split()[0]
+            try:
+             self.results_count = int(string1.split()[0])
+            except Exception as e:
+              self.results_count = 0
+              print 'berlin' + str(e)
             #print 'berlin_string1 : ' + str(string1)
-            self.results_count = int(string1.split()[0])
+            #self.results_count = int(string1.split()[0])
+
+
             print self.results_count
         else:
             self.results_count = 0

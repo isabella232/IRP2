@@ -38,6 +38,14 @@ class Fold3(Collection):
         keywords = inputs['general']+" "+inputs['location']+" "+inputs['artist']
         try:
          if 'German' in inputs:
+           try:
+            blob = TextBlob(keywords)
+            keywords = str(blob.translate(to="de"))
+            #keywords = unicode( keywords, "utf-8" )
+            print keywords
+            self.result_search_term = keywords
+            #self.result_search_term = self.result_search_term.encode('utf-8')
+           except:
             blob = TextBlob(keywords)
             keywords = str(blob.translate(to="de"))
             keywords = unicode( keywords, "utf-8" )
@@ -45,7 +53,16 @@ class Fold3(Collection):
             self.result_search_term = keywords
             self.result_search_term = self.result_search_term.encode('utf-8')
 
+
          elif 'French' in inputs:
+           try:
+            blob = TextBlob(keywords)
+            keywords = str(blob.translate(to="fr"))
+            #keywords = unicode( keywords, "utf-8" )
+            print keywords
+            self.result_search_term = keywords
+            #self.result_search_term = self.result_search_term.encode('utf-8')
+           except:
             blob = TextBlob(keywords)
             keywords = str(blob.translate(to="fr"))
             keywords = unicode( keywords, "utf-8" )

@@ -10,13 +10,24 @@ class NARACatalog(Collection):
         #query = "+".join(inputs.split())
 
         query = inputs.split(' ',1)
+        print 'nara'
         x=len(query)
         print x
+        #print query[1]
 
         if (x>1):
           try:
             blob = TextBlob(query[1])
+
             if (query[0]=='German'):
+               try:
+                query_german = blob.translate(to="de")
+                #query_german = unicode( query_german, "utf-8" )
+                url = "https://catalog.archives.gov/api/v1/?q="+str(query_german)
+                self.results_url = "https://catalog.archives.gov/search?q="+str(query_german)
+                self.result_search_term = str(query_german)
+                #self.result_search_term = self.result_search_term.encode('utf-8')
+               except:
                 query_german = blob.translate(to="de")
                 query_german = unicode( query_german, "utf-8" )
                 url = "https://catalog.archives.gov/api/v1/?q="+str(query_german)
@@ -25,6 +36,14 @@ class NARACatalog(Collection):
                 self.result_search_term = self.result_search_term.encode('utf-8')
 
             elif (query[0]=='French') :
+              try:
+                query_french = blob.translate(to="fr")
+                #query_french = unicode( query_french, "utf-8" )
+                url = "https://catalog.archives.gov/api/v1/?q="+str(query_french)
+                self.results_url = "https://catalog.archives.gov/search?q="+str(query_french)
+                self.result_search_term = str(query_french)
+                #self.result_search_term = self.result_search_term.encode('utf-8')
+              except:
                 query_french = blob.translate(to="fr")
                 query_french = unicode( query_french, "utf-8" )
                 url = "https://catalog.archives.gov/api/v1/?q="+str(query_french)
@@ -40,10 +59,11 @@ class NARACatalog(Collection):
                 self.result_search_term = query1[1]
 
 
-          except:
+          except Exception as e:
               url = "https://catalog.archives.gov/api/v1/?q="+str(query[1])
               self.results_url = "https://catalog.archives.gov/search?q="+query[1]
               self.result_search_term = query[1]
+              print str (e)
               pass
         else:
           url = "https://catalog.archives.gov/api/v1/?q="+str(query[0])

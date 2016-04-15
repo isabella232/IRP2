@@ -18,30 +18,49 @@ class UKFindingAid(Collection):
         if (x>1):
 
          try:
-
             blob = TextBlob(query[1])
+            print 'uk try'
             if (query[0]=='German'):
+              try:
+                query_german = blob.translate(to="de")
+                print query_german
+                #query_german = unicode( query_german, "utf-8" )
+                url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+str(query_german)+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
+                self.result_search_term = str(query_german)
+                #self.result_search_term = self.result_search_term.encode('utf-8')
+              except:
                 query_german = blob.translate(to="de")
                 query_german = unicode( query_german, "utf-8" )
                 url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+str(query_german)+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
                 self.result_search_term = str(query_german)
                 self.result_search_term = self.result_search_term.encode('utf-8')
 
+
             elif (query[0]=='French') :
+              try:
+                query_french = blob.translate(to="fr")
+                #query_french = unicode( query_french, "utf-8" )
+                url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+str(query_french)+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
+                self.result_search_term = str(query_french)
+                #self.result_search_term = self.result_search_term.encode('utf-8')
+              except:
                 query_french = blob.translate(to="fr")
                 query_french = unicode( query_french, "utf-8" )
                 url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+str(query_french)+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
                 self.result_search_term = str(query_french)
                 self.result_search_term = self.result_search_term.encode('utf-8')
+
             else:
                 query1 = " "+ inputs
                 query1 = query1.split(' ',1)
                 url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+query1[1]+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
                 self.result_search_term = str(query1[1])
 
-         except:
+        except Exception as e:
             url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+query[1]+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
             self.result_search_term = str(query[1])
+            print 'uk'
+            print str(e)
             pass
 
         else:
@@ -56,9 +75,12 @@ class UKFindingAid(Collection):
             results = soup.find_all("li", class_="tna-result")
             count = results.__len__()
         except:
-            message = "Cannot contact site"
-            print "Timeout error. Please try again later."
+            url = "https://www.google.com/webhp?hl=en"
+            html = requests.get(url).text
+            print("Timeout error. Please try again later.")
             pass
+
+        soup = BeautifulSoup(html, "lxml")
 
 
         self.results_url = url
