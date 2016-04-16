@@ -17,8 +17,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.box = "naelyn/ubuntu-trusty64-libvirt"
   end
 
+  config.vm.define "machine"
   config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "playbook.yml"
+      ansible.playbook = "ansible/playbook.yml"
+      ansible.groups = { "irp2" => ["machine"] }
   end
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs

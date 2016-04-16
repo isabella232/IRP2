@@ -13,17 +13,14 @@ class UKFindingAid(Collection):
 
         query = inputs.split(' ',1)
         x=len(query)
-        print x
 
         if (x>1):
 
          try:
             blob = TextBlob(query[1])
-            print 'uk try'
             if (query[0]=='German'):
               try:
                 query_german = blob.translate(to="de")
-                print query_german
                 #query_german = unicode( query_german, "utf-8" )
                 url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+str(query_german)+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
                 self.result_search_term = str(query_german)
@@ -59,8 +56,6 @@ class UKFindingAid(Collection):
         except Exception as e:
             url = "http://discovery.nationalarchives.gov.uk/results/r?_q="+query[1]+"&_sd=&_ed=&discoveryCustomSearch=true&_col=200&_dt=LA&_hb=tna"
             self.result_search_term = str(query[1])
-            print 'uk'
-            print str(e)
             pass
 
         else:
@@ -82,8 +77,6 @@ class UKFindingAid(Collection):
 
         soup = BeautifulSoup(html, "lxml")
 
-
         self.results_url = url
         self.results_count = count
-
         return self

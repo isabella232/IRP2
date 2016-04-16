@@ -1,5 +1,7 @@
 flask
+requests
 lxml
+libyaml
 BeautifulSoup4
 TextBlob
 Werkzeug

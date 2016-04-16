@@ -9,14 +9,11 @@ class NetherlandsFindingAid(Collection):
 
     def keywordResultsCount(self, inputs):
         self.inputs = inputs
-        print 'netherlands : '+ inputs
 
         #query = "+".join(inputs.split())
 
         query = inputs.split(' ',1)
         x=len(query)
-        print query
-        print x
 
         if (x>1):
          try:
@@ -60,8 +57,7 @@ class NetherlandsFindingAid(Collection):
              self.result_search_term = str(query[1])
 
         else:
-          #print query[0]
-          
+
           url = "http://www.archieven.nl/nl/zoeken?mizig=0&miview=lst&milang=nl&micols=1&mires=0&mizk_alle="+query[0]
           self.result_search_term = query[0]
 
@@ -73,21 +69,12 @@ class NetherlandsFindingAid(Collection):
         num = None
         s = spanList[0].string
 
-
-
         if len(s)>0:
-
-            try :
+            try:
                 num = int(s)
             except:
                 num = 0
 
-
-
-
-
         self.results_url = url
         self.results_count = num
-
-
         return self

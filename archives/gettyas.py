@@ -40,7 +40,6 @@ class GettyAS(Collection):
 
         url = "http://piprod.getty.edu/starweb/pi/servlet.starweb"
         r = session.post(url, data=data)
-        #print 'gettyas:'+ str(data['Keywords'])
         soup = BeautifulSoup(r.text, "lxml")
 
         #Sale Catalog Contents:  69 results from

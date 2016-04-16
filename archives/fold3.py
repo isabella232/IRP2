@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from archives.collection import Collection
-import requests, json
+import requests
+import json
 from textblob import TextBlob
+
 
 class Fold3(Collection):
 
@@ -42,14 +44,12 @@ class Fold3(Collection):
             blob = TextBlob(keywords)
             keywords = str(blob.translate(to="de"))
             #keywords = unicode( keywords, "utf-8" )
-            print keywords
             self.result_search_term = keywords
             #self.result_search_term = self.result_search_term.encode('utf-8')
            except:
             blob = TextBlob(keywords)
             keywords = str(blob.translate(to="de"))
             keywords = unicode( keywords, "utf-8" )
-            print keywords
             self.result_search_term = keywords
             self.result_search_term = self.result_search_term.encode('utf-8')
 
@@ -59,14 +59,12 @@ class Fold3(Collection):
             blob = TextBlob(keywords)
             keywords = str(blob.translate(to="fr"))
             #keywords = unicode( keywords, "utf-8" )
-            print keywords
             self.result_search_term = keywords
             #self.result_search_term = self.result_search_term.encode('utf-8')
            except:
             blob = TextBlob(keywords)
             keywords = str(blob.translate(to="fr"))
             keywords = unicode( keywords, "utf-8" )
-            print keywords
             self.result_search_term = keywords
             self.result_search_term = self.result_search_term.encode('utf-8')
         except:
@@ -86,20 +84,10 @@ class Fold3(Collection):
         #q += location_clause
         q += '],"index":0}'
         z = json.loads(q)
-        #z1 = z["terms"]
-
-        #Translation doesn't work
-        # print z1[1]['values']['value']
-
-
-
-
 
         data["query_terms"] = q
 
         url = "http://www.fold3.com/js_getresults.php"
-        #print data
-        #print data["query_terms"]
         res = requests.post(url, params=data)
         parsed = res.json()
         num = parsed["recCount"]

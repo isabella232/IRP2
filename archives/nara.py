@@ -3,6 +3,7 @@ from archives.collection import Collection
 import requests
 from textblob import TextBlob
 
+
 class NARACatalog(Collection):
 
     def keywordResultsCount(self, inputs):
@@ -10,10 +11,7 @@ class NARACatalog(Collection):
         #query = "+".join(inputs.split())
 
         query = inputs.split(' ',1)
-        print 'nara'
         x=len(query)
-        print x
-        #print query[1]
 
         if (x>1):
           try:
@@ -63,7 +61,6 @@ class NARACatalog(Collection):
               url = "https://catalog.archives.gov/api/v1/?q="+str(query[1])
               self.results_url = "https://catalog.archives.gov/search?q="+query[1]
               self.result_search_term = query[1]
-              print str (e)
               pass
         else:
           url = "https://catalog.archives.gov/api/v1/?q="+str(query[0])

@@ -12,15 +12,10 @@ class AustriaFindingAid(Collection):
         data = {}
         z = []
         data['search'] = inputs
-        print 'austria'
-        #print data['search'].split(' ')
-
-        data['search'] = data['search'].split(' ',1)
-        print data['search'][0]
-
+        data['search'] = data['search'].split(' ', 1)
         x = len(data['search'])
 
-        if (x>1):
+        if (x > 1):
         #Translate to Dutch
          try:
            if(data['search'][0]=='German') :
@@ -32,7 +27,6 @@ class AustriaFindingAid(Collection):
              blob = TextBlob(data['search'][1])
              data['search'] = str(blob.translate(to="fr"))
              self.result_search_term = str(data['search'])
-        #print (gs.translate(data['search'], 'de'))
            else:
                data['search']= " "+inputs
                data['search'] = data['search'].split(' ',1)
@@ -44,8 +38,6 @@ class AustriaFindingAid(Collection):
              pass
         else:
             data['search']=str(data['search'][0])
-            print 'data (no translation): ' + str(data)
-            print data
         url = "http://www.kunstrestitution.at/catalogue_detailsearch.html"
 
         '''
@@ -53,31 +45,22 @@ class AustriaFindingAid(Collection):
         soup = BeautifulSoup(html, "lxml")
         '''
 
-        r = session.post(url,data = data)
+        r = session.post(url, data=data)
         soup = BeautifulSoup(r.text, "lxml")
-
-        #print soup
-
         spanList = soup.select('span.total')
         num = None
         s = spanList[0].string
 
         newString = s[s.find("(")+1:s.find(")")]
 
-        if len(newString)>0:
+        if len(newString) > 0:
             num = int(newString)
 
         self.results_url = url
 
-        if num!= None:
+        if num is not None:
             self.results_count = num
         else:
             self.results_count = 0
-
-        #results = soup.find_all("div",class_="item")
-        #count = results.__len__()
-
-        #self.results_url = url
-        #self.results_count = count
 
         return self

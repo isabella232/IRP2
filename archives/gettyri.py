@@ -23,12 +23,10 @@ class GettyRI(Collection):
 
          try:
             blob = TextBlob(query[1])
-            #print 'blob : '+ str(blob)
             if (query[0]=='German'):
              try :
                 query_german = blob.translate(to="de")
                 #query_german = unicode( query_german, "utf-8" )
-                print 'German gettyri'+ str(query_german)
                 url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_german)
 
                 self.results_url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_german)
@@ -37,7 +35,6 @@ class GettyRI(Collection):
              except:
                 query_german = blob.translate(to="de")
                 query_german = unicode( query_german, "utf-8" )
-                print 'German gettyri'+ str(query_german)
                 url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_german)
 
                 self.results_url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_german)
@@ -51,8 +48,6 @@ class GettyRI(Collection):
                 #query_french = unicode( query_french, "utf-8" )
                 url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_french)
                 self.results_url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_french)
-                print ' French gettyri '
-                print self.results_url
                 self.result_search_term = str(query_french)
                 #self.result_search_term = self.result_search_term.encode('utf-8')
              except:
@@ -60,8 +55,6 @@ class GettyRI(Collection):
                 query_french = unicode( query_french, "utf-8" )
                 url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_french)
                 self.results_url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query_french)
-                print ' French gettyri '
-                print self.results_url
                 self.result_search_term = str(query_french)
                 self.result_search_term = self.result_search_term.encode('utf-8')
 
@@ -70,7 +63,6 @@ class GettyRI(Collection):
                 query1 = query1.split(' ',1)
                 url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query1[1])
                 self.result_search_term = str(query1[1])
-
 
          except:
              #query1 = " "+inputs
@@ -82,7 +74,6 @@ class GettyRI(Collection):
           url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query[0])
           self.results_url = "http://www.getty.edu/Search/SearchServlet?qt="+str(query[0])
           self.result_search_term = str(query[0])
-
 
         #url = "http://www.getty.edu/Search/SearchServlet?qt="+query
         html = requests.get(url).text
