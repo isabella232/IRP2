@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from collection import Collection
+from archives.collection import Collection
 import requests
 from textblob import TextBlob
 

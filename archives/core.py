@@ -1,22 +1,23 @@
-from dummy import Dummy
-from belgium import BelgiumFindingAid
-from fold3 import Fold3
-from gettyas import GettyAS
-from gettyri import GettyRI
-from nara import NARACatalog
-from ushmm import USHMM
-from austria import AustriaFindingAid
-from uk import UKFindingAid
-from berlin import BerlinFindingAid
-from netherlands import NetherlandsFindingAid
+from archives.dummy import Dummy
+from archives.belgium import BelgiumFindingAid
+from archives.fold3 import Fold3
+from archives.gettyas import GettyAS
+from archives.gettyri import GettyRI
+from archives.nara import NARACatalog
+from archives.ushmm import USHMM
+from archives.austria import AustriaFindingAid
+from archives.uk import UKFindingAid
+from archives.berlin import BerlinFindingAid
+from archives.netherlands import NetherlandsFindingAid
 import sys
 import logging
 
 archivesList = [
-     {
+    {
         'name': 'State Archives in Belgium',
         'logo': 'logo-state-archives-belgium.png',
-        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/belgium.html',
+        'info_url': "http://www.archives.gov/research/holocaust/international-resources/"
+                    "belgium.html",
         'collections': [
             {
                 'name': 'Holocaust Assets Finding Aid',
@@ -63,11 +64,11 @@ archivesList = [
             Fold3.info
         ]
     },
-
     {
         'name': 'State Archives in Austria',
         'logo': 'austria.png',
-        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/austria.html',
+        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/'
+                    'austria.html',
         'collections': [
             {
                 'name': 'Art Database of the National Fund',
@@ -76,7 +77,6 @@ archivesList = [
             },
         ]
     },
-
     {
         'name': 'National Archives of the UK',
         'logo': 'austria.png',
@@ -93,7 +93,8 @@ archivesList = [
     {
         'name': 'Koordinierungsstelle Magdeburg',
         'logo': 'logo-bundesarchiv.png',
-        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/berlin.html',
+        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/'
+                    'berlin.html',
         'collections': [
             {
                 'name': 'Lost Art Internet Database',
@@ -102,11 +103,11 @@ archivesList = [
             },
         ]
     },
-
     {
         'name': 'State Archives in the Netherlands',
         'logo': 'logo-dhm.png',
-        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/netherlands.html',
+        'info_url': 'http://www.archives.gov/research/holocaust/international-resources/'
+                    'netherlands.html',
         'collections': [
             {
                 'name': 'Archives and Collections',
@@ -135,7 +136,7 @@ def searchAll(rawinputs, asyncSearch=False, dummySearch=False):
             collClass = getattr(module, classname)
             collObject = collClass()
 
-            if dummySearch: # use dummy collection that does no search..
+            if dummySearch:  # use dummy collection that does no search..
                 collObject = Dummy()
                 collObject.setClassName(classname)
 
@@ -147,7 +148,7 @@ def searchAll(rawinputs, asyncSearch=False, dummySearch=False):
                     inputs = ''
                     for key in rawinputs:
                         if(len(rawinputs[key].strip()) > 0):
-                            if( len(inputs) > 0 ):
+                            if(len(inputs) > 0):
                                 inputs += ' '+rawinputs[key]
                             else:
                                 inputs += rawinputs[key]
@@ -155,7 +156,7 @@ def searchAll(rawinputs, asyncSearch=False, dummySearch=False):
                 inputs = ''
                 for key in rawinputs:
                     if(len(rawinputs[key].strip()) > 0):
-                        if( len(inputs) > 0 ):
+                        if(len(inputs) > 0):
                             inputs += ' '+rawinputs[key]
                         else:
                             inputs += rawinputs[key]
@@ -171,11 +172,11 @@ def searchAll(rawinputs, asyncSearch=False, dummySearch=False):
         for res in async_handles:
             try:
                 resultcoll = res.get(timeout=15)
-            except Exception, e:
+            except Exception as e:
                 logging.exception(e)
                 resultcoll = None
                 pass
-            if resultcoll != None:
+            if resultcoll is not None:
                 result_dict = resultcoll.emit()
                 results[result_dict['class']] = result_dict
     return results

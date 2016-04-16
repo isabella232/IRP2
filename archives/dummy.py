@@ -1,5 +1,5 @@
-__author__ = 'jansen'
-from collection import Collection
+from archives.collection import Collection
+
 
 class Dummy(Collection):
 

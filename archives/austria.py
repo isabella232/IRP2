@@ -1,5 +1,5 @@
 __author__ = 'anuj'
-from collection import Collection
+from archives.collection import Collection
 from bs4 import BeautifulSoup
 import requests
 from textblob import TextBlob

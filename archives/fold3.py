@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from collection import Collection
+from archives.collection import Collection
 import requests, json
 from textblob import TextBlob
 
@@ -18,24 +18,10 @@ class Fold3(Collection):
 
     def keywordResultsCount(self, inputs):
         self.inputs = inputs['general']
-        print 'fold3'
-
-
-
-        #print 'fold3 : '+ inputs
-        #print 'fold3 : '+ self.inputs
-
-
-
-        # query = " ".join(inputs.split())
-        data = {'engine':'solr'}
-
+        data = {'engine': 'solr'}
         date_clause = ''
         if 'startYear' in inputs and inputs['startYear'].strip() != '':
-            date_clause = ',{"type":"date","values":{"name":"year","start":"'+inputs['startYear']+'","end":"'+inputs['endYear']+'","showMissing":false}}'
-       # print inputs['general']
-
-
+            date_clause = ',{"type":"date","values":{"name":"year","start":"'+inputs['startYear']+'", "end":"'+inputs['endYear']+'","showMissing":false}}'
 
         '''
         if 'German' in inputs:
@@ -50,8 +36,6 @@ class Fold3(Collection):
             keywords = inputs['general']+" "+inputs['location']+" "+inputs['artist']
         '''
         keywords = inputs['general']+" "+inputs['location']+" "+inputs['artist']
-        #print 'keywords'
-        #print keywords
         try:
          if 'German' in inputs:
             blob = TextBlob(keywords)
@@ -79,12 +63,11 @@ class Fold3(Collection):
 
         # NOTE: category 114 is "Holocaust Collection"
         q = ('{"terms":['
-        '{"type":"category","values":{"value":114}},'
-        '{"type":"keyword","values":{"value":"'+ keywords +'"}}')
+             '{"type":"category","values":{"value":114}},'
+             '{"type":"keyword","values":{"value":"' + keywords + '"}}')
         q += date_clause
         #q += location_clause
         q += '],"index":0}'
-        #print q
         z = json.loads(q)
         #z1 = z["terms"]
 

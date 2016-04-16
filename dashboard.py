@@ -1,241 +1,225 @@
-__author__ = 'gordon'
-from flask import *
+import os
+import logging
+import sqlite3
+import json
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask_extended import Flask
+from flask import request, session, g, redirect, url_for, render_template, flash
 from archives.core import searchAll
 from archives.core import archivesList
 from lxml import etree
-from archives.belgium import *
-import os, logging, logging.handlers
-import sys
+from archives import belgium
 
-reload(sys)
-sys.setdefaultencoding("utf-8")
-import psycopg2 as psycopg2
-import time
-from werkzeug import generate_password_hash, check_password_hash
-import datetime
 
-DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-LOG_FILENAME = BASE_DIR+'/IRP2.log'
 app.logger.setLevel(logging.DEBUG)
 handler = logging.handlers.RotatingFileHandler(
-    LOG_FILENAME,
+    os.path.join(app.instance_path, 'irp2.log'),
     maxBytes=1024 * 1024 * 100,
-    backupCount=20
-    )
+    backupCount=20)
 app.logger.addHandler(handler)
 app.config.update(dict(
-    DATABASE=os.path.join('postgresql://postgres:karishma@localhost', 'postgres'),
+    DATABASE=os.path.join(app.instance_path, 'irp2.db'),
+    # DATABASE=os.path.join('postgresql://postgres:karishma@localhost', 'postgres'),
     DEBUG=True,
-    USERNAME='postgres',
-    PASSWORD='karishma'
+    USERNAME='admin',
+    PASSWORD='default',
+    SECRET_KEY='INSECURE_DEVELOPMENT_KEY'
 ))
-
+config_yaml = os.path.join(app.instance_path, 'config.yaml')
+if os.path.isfile(config_yaml):
+    app.config.from_yaml(config_yaml)
 
 
 def connect_db():
     """Connects to the specific database."""
-    #rv = psycopg2.connect(database="irp2_user", user="postgres", password="karishma", host="127.0.0.1", port="5432")
-    rv = psycopg2.connect(app.config['DATABASE'])
+    rv = sqlite3.connect(app.config['DATABASE'])
+    rv.row_factory = sqlite3.Row
     return rv
+
 
 def get_db():
     """Opens a new database connection if there is none yet for the
     current application context.
     """
-    if not hasattr(g,'psycopg2'):
-        g.psycopg2 = connect_db()
-    return g.psycopg2
+    if not hasattr(g, 'dbconn'):
+        g.dbconn = connect_db()
+    return g.dbconn
+
+
+def init_db():
+    db = get_db()
+    with app.open_resource('irp2_schema.sql', mode='r') as f:
+        db.cursor().executescript(f.read())
+    db.commit()
+
+
+@app.cli.command('initdb')
+def initdb_command():
+    """Initializes the database."""
+    init_db()
+    print('Initialized the database.')
+
 
 @app.teardown_appcontext
 def close_db(error):
     """Closes the database again at the end of the request."""
-    if hasattr(g, 'psycopg2'):
-        g.psycopg2.close()
+    if hasattr(g, 'dbconn'):
+        g.dbconn.close()
 
 
 @app.route('/')
 def render_index_page():
     return render_template('layout.html')
 
+
 @app.route('/showLogin')
 def showLogin():
-   return render_template('login.html')
+    return render_template('login.html')
 
-@app.route('/toregister',methods=['POST','GET'])
+
+@app.route('/toregister', methods=['POST', 'GET'])
 def login():
- print "In Python Register!"
- db = get_db()
- # read the posted values from the UI
- _name = request.form['usernamesignup']
- _email = request.form['emailsignup']
- _password = request.form['passwordsignup']
- #validate the received values
- if _name and _email and _password:
-     cur = psycopg2.extensions.cursor(db);
-     #db.execute("INSERT INTO login_info values("+ _name+ "," +_password+","+ _email+");")	
-     ''' cur1 = psycopg2.extensions.cursor(db);
-     cur1.execute("SELECT username FROM login_users_info WHERE email_id = '"+ _email +"');")
-     if cur1.fetchall > 0 :
-     	flash('This Email id already a user');
-	cur1.close()
-	return redirect(url_for('showLogin'))
-     else :'''	
-     _password = generate_password_hash(_password)	
-     cur.execute("INSERT INTO login_users_info(username, password, email_id, registered_on) values('"+ _name+ "', '" +_password+"', '"+ _email+"', '"+unicode(datetime.datetime.utcnow())+"');")	
-     db.commit()
-     '''cur1.close()'''
-     cur.close()
-     flash('User created successfully !')
-     return redirect(url_for('showLogin'))  
- else:
-     return json.dumps({'html':'<span>Enter the required fields</span>'})
-
-
+    db = get_db()
+    # read the posted values from the UI
+    _name = request.form['usernamesignup']
+    _email = request.form['emailsignup']
+    _password = request.form['passwordsignup']
+    # validate the received values
+    if _name and _email and _password:
+        cur = db.execute("""SELECT username FROM user_profile
+                        WHERE email_id = ?;""", [_email])
+        if len(cur.fetchall) > 0:
+            flash('This Email is already a user')
+            return redirect(url_for('showLogin'))
+        else:
+            _password = generate_password_hash(_password)
+            db.execute("""INSERT INTO user_profile(username, password, email_id, registered_on)
+                           values(?, ?, ?, date('now'));""",
+                       [_name, _password, _email])
+            db.commit()
+            flash('User created successfully !')
+            return redirect(url_for('showLogin'))
+    else:
+        return json.dumps({'html': '<span>Enter the required fields</span>'})
 
 
 @app.route('/tologin', methods=['GET', 'POST'])
 def tologin():
-  db = get_db()
-  _uname = request.form['username']
-  _password = request.form['password']
-  cur = psycopg2.extensions.cursor(db);
-  cur.execute("SELECT * FROM login_users_info WHERE username = '"+_uname+"' OR email_id = '"+_uname+"' AND password = '"+_password+"' LIMIT 1;")
-  row = cur.fetchone()
-  user = row[0]
-  print user + '\n'
-  pwd = row[1]
-  print pwd + '\n'
-  print _password 
-  print check_password_hash(pwd,_password)	
-  if  _uname == user and check_password_hash(pwd,_password) :
- 	cur.close()
-	session['_uname'] = _uname
-	return redirect(url_for('profile'))
-	
-  else :
-	cur.close()
-	return json.dumps({'html':'<span>Incorrect credentials. PLease try again.. </span>'})  
+    db = get_db()
+    _uname = request.form['username']
+    _password = request.form['password']
+    cur = db.execute("""
+        SELECT username, password, email_id, registered_on FROM user_profile
+        WHERE ( username = ? OR email_id = ? )
+        AND password = ?
+        LIMIT 1;""", [_uname, _uname, _password])
+    row = cur.fetchone()
+    if _uname == row.username and check_password_hash(row.password, _password):
+        session['_uname'] = _uname
+        return redirect(url_for('profile'))
+    else:
+        return json.dumps({'html': '<span>Incorrect credentials. PLease try again.. </span>'})
 
-  
-  
- #  error = None
-  #  if request.method == 'POST':
-   #     if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-    #        error = 'Invalid Credentials. Please try again.'
-     #   else:
-      #      return redirect(url_for('login.html'))
-#    return render_template('loginSuccess.html', error=error)
-@app.route('/profile',methods=['GET','POST'])
+
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
-  if '_uname' not in session:
-	return redirect(url_for('showLogin'))
-  return render_template('layout.html')
+    if '_uname' not in session:
+        return redirect(url_for('showLogin'))
+    return render_template('layout.html')
+
 
 @app.route('/logout')
 def signout():
-  if '_uname' not in session:
-    return redirect(url_for('showLogin'))
-  session.pop('_uname', None)
-  return render_template('afterlogout.html')
+    if '_uname' not in session:
+        return redirect(url_for('showLogin'))
+    session.pop('_uname', None)
+    return render_template('afterlogout.html')
 
-@app.route('/search', methods=['GET','POST'])
+
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
-    	inputs = request.form
+        inputs = request.form
     if request.method == 'GET':
-    	inputs = request.args
+        inputs = request.args
     session["inputs"] = inputs
     results = searchAll(inputs, asyncSearch=False)
-    #app.logger.debug("results: \n"+json.dumps(results))
-    #app.logger.debug("archivesList: \n"+json.dumps(archivesList))
     return render_template("search.html", results=results, archivesList=archivesList, inputs=inputs)
 
 
-@app.route('/saveSearch',methods=['GET','POST'])
+@app.route('/saveSearch', methods=['GET', 'POST'])
 def saveSearch():
-  #inputs = request.form
-  inputs = session["inputs"]
-  _uname = session["_uname"]
-  results = searchAll(inputs, asyncSearch=True)	
-  #return json.dumps(inputs["general"])
-  #if _uname not in session:
-  #return render_template("searchafterlogin.html")
-  #else:
-  db = get_db()
-  cur = psycopg2.extensions.cursor(db);
-  #format = "%a %b %d %H:%M:%S %Y"
-  ts = datetime.datetime.utcnow()
-  #print('_uname')
-  cur.execute("INSERT INTO save_search(username, searched_on, search_key, search_results) values('"+ _uname+ "','"+unicode(ts) +"','"+json.dumps(inputs) +"', '"+json.dumps(results)+"');")	
-  db.commit()
-  cur.close()
-  flash('Search saved  successfully !')
-  return render_template("searchsaved.html")
-  
-  	
+    inputs = session["inputs"]
+    _uname = session["_uname"]
+    results = searchAll(inputs, asyncSearch=True)
+    db = get_db()
+    db.execute("""INSERT INTO save_search(username, searched_on, search_key, search_results)
+                   values(?, date('now'), ?, ?);""",
+               [_uname, json.dumps(inputs), json.dumps(results)])
+    db.commit()
+    flash('Search saved  successfully !')
+    return render_template("searchsaved.html")
 
-@app.route('/adsearch', methods=['GET','POST'])
+
+@app.route('/adsearch', methods=['GET', 'POST'])
 def adsearch():
     if request.form.get("search") != None:
         session["inputs"] = request.form
     if "inputs" in session:
         inputs = session["inputs"]
-        result = findresult(inputs)
-        return render_template('adsearch.html',results=result)
+        result = belgium.findresult(inputs)
+        return render_template('adsearch.html', results=result)
     else:
         return render_template('adsearch.html')
 
 
-@app.route('/advsearch', methods=['GET','POST'])
+@app.route('/advsearch', methods=['GET', 'POST'])
 def advsearch():
-    tree = etree.parse("bel.xml")
+    tree = etree.parse("archives/belgium.xml")
     inventory = tree.getroot()
     session.clear()
     # initial
     result = set(inventory.iter())
     title = request.form.get("title")
     if title != "":
-        title_r = ftitle(inventory,title)
+        title_r = belgium.ftitle(inventory, title)
         result = result & title_r
 
     date = request.form["date"]
     if date != "":
-        date_r = fdate(inventory,date)
+        date_r = belgium.fdate(inventory, date)
         result = result & date_r
 
     type = request.form["type"]
     if type != "":
-        type_r = ftype(inventory,type)
+        type_r = belgium.ftype(inventory, type)
         result = result & type_r
 
     series = request.form["series"]
     if series != "":
-        series_r = fseries(inventory,series)
+        series_r = belgium.fseries(inventory, series)
         result = result & series_r
 
     text = request.form["text"]
     if text != "":
-        text_r = ftext(inventory,text)
+        text_r = belgium.ftext(inventory, text)
         result = result & text_r
 
     name = request.form["name"]
     if name != "":
-        name_r = fname(inventory,name)
+        name_r = belgium.fname(inventory, name)
         result = result & name_r
 
+    ls = belgium.getresult(result)
+    return render_template('adsearch.html', results=ls)
 
-    ls = getresult(result)
-    print ls
-    return render_template('adsearch.html',results=ls)
 
-@app.route('/detail', methods=['GET','POST'])
+@app.route('/detail', methods=['GET', 'POST'])
 def detail():
     result = request.args.get("detail")
-    return render_template('detail.html',results = result)
+    return render_template('detail.html', results=result)
 
 
 if __name__ == '__main__':

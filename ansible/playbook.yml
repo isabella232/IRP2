@@ -1,6 +1,6 @@
 ---
 - hosts: irp2
-  sudo: yes
+  become: yes
   tasks:
     - name: Install OS packages
       apt: pkg={{ item }} state=latest update_cache=yes
@@ -8,7 +8,7 @@
         - python-pip
         - libxml2-dev
         - libxslt-dev
-        - python-dev
+        - python3-dev
         - python-lxml
         - libz-dev
         - git
@@ -17,24 +17,21 @@
     - name: Configure Nginx Proxy
       template: src=nginx-irp2.conf.j2 dest=/etc/nginx/conf.d/irp2.conf
     - service: name=nginx state=restarted enabled=yes
-    - name: Install Python packages
-      shell: "pip install {{ item }}"
-      with_items:
-        - flask
-        - lxml
-        - BeautifulSoup4
-        - TextBlob
-    - copy: src=. dest=~/ mode=0755
+
+    - name: Deploy application code
+      copy: src=../.. dest=~/ mode=0755
       become: no
-    #- git: repo=https://github.com/UMD-DCIC/IRP2.git dest=/home/ubuntu/IRP2 version=master update=yes
-    #  become: no
-    - command: killall python
+      tags: code
+
+    - name: Install Python packages
+      pip: requirements=~/IRP2/requirements.txt virtualenv=~/irp2venv virtualenv_python=python3.4
+      become: no
+
+    - name: Stop existing application
+      command: killall python
       become: no
       ignore_errors: yes
-#    - command: nohup python dashboard.py &
-#      become: no
-#      args:
-#        chdir: /home/ubuntu/IRP2
+
   handlers:
     - name: restart Nginx
       service: name=ntpd state=restarted

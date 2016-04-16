@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'Anuj'
-from collection import Collection
+from archives.collection import Collection
 from bs4 import BeautifulSoup
 import requests
 import re
