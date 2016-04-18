@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
     {% if results.translated_terms %}
-      <p>Translations: {% for term in results.translated_terms %}{{ term }}{% endfor %}</p>
+      <p>Translations: {% for term in results.translated_terms %}{{ term }} &nbsp;&nbsp;{% endfor %}</p>
     {% endif %}
 
     <!--<h3>Result for <b>"{{ inputs.general }}"</b> :</h3>-->

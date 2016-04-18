@@ -18,7 +18,7 @@ class USHMM(Collection):
     }
 
     def keywordResultsCount(self, **kwargs):
-        params = self.mapParameters(kwargs, join_with=' ', term_suffix='~')
+        params = self.mapParameters(kwargs, join_with=' OR ')
         url = "http://www.errproject.org/jeudepaume/card_advanced_search.php"
         r = requests.get(url, params=params)
         html = r.text
