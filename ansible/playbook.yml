@@ -2,15 +2,19 @@
 - hosts: irp2
   become: yes
   tasks:
-    - name: Install OS packages
+    - name: Update apt cache
+      apt: update_cache=yes
+    - name: Install packages
       apt: pkg={{ item }} state=latest
       with_items:
         - python3
         - python3-dev
+        - python-dev
+        - python-virtualenv
         - python-pip
         - libxml2-dev
         - libxslt-dev
-        - python-lxml
+        - python3-lxml
         - libz-dev
         - git
         - nginx
@@ -19,8 +23,27 @@
       template: src=nginx-irp2.conf.j2 dest=/etc/nginx/conf.d/irp2.conf
     - service: name=nginx state=restarted enabled=yes
 
+    - file: path=~/IRP2 state=directory mode=0755
+      become: no
+      tags: code
+
     - name: Deploy application code
-      copy: src=../.. dest=~/ mode=0755
+      copy: src=../../{{ item }} dest=~/IRP2/ mode=0755
+      with_items:
+        - archives
+        - static
+        - templates
+        - dashboard.py
+        - flask_extended.py
+        - irp2_schema.sql
+        - requirements.txt
+      become: no
+      tags: code
+
+    - name: Deploy instance (no overwrite)
+      copy: src=../../{{ item }} dest=~/IRP2/ mode=0755 force=no
+      with_items:
+        - instance
       become: no
       tags: code
 

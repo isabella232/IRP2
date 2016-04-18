@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from archives.collection import Collection
 from lxml import etree
-from textblob import TextBlob
+from urllib.parse import quote_plus
 import re
+import logging
 
 
 def get_inventory():
@@ -12,36 +13,19 @@ def get_inventory():
 
 class BelgiumFindingAid(Collection):
 
-    def keywordResultsCount(self, inputs):
-        self.inputs = inputs
-        nodes = ftext(get_inventory(), inputs.strip())
-        inputs1 = inputs.split(' ', 1)
-        if (len(inputs1) > 1):
-            try:
-                blob = TextBlob(inputs1[1])
-                if (inputs1[0] == 'German'):
-                    inputs_german = blob.translate(to="de")
-                    inputs_german = unicode(inputs_german, "utf-8")
-                    self.results_url = "/adsearch?general="+str(inputs_german)
-                    self.result_search_term = str(inputs_german)
-                    self.result_search_term = self.result_search_term.encode('utf-8')
-                elif (inputs1[0] == 'French'):
-                    inputs_french = blob.translate(to="fr")
-                    inputs_french = unicode(inputs_french, "utf-8")
-                    self.results_url = "/adsearch?general="+str(inputs_french)
-                    self.result_search_term = str(inputs_french)
-                    self.result_search_term = self.result_search_term.encode('utf-8')
+    def keywordResultsCount(self, **kwargs):
+        # keywords = self.add_unsupported_fields_to_keywords(kwargs)
+        nodes = set()
+        for key, value in kwargs.items():
+            if value is not None:
+                if 'translated_terms' == key:
+                    for term in value:
+                        nodes = nodes.union(ftext(get_inventory(), term.strip()))
                 else:
-                    inputs = " "+inputs
-                    inputs = inputs.split(' ', 1)
-                    self.results_url = "/adsearch?general="+inputs[1]
-                    self.result_search_term = str(inputs[1])
-            except:
-                self.results_url = "/adsearch?general="+inputs1[1]
-                self.result_search_term = str(inputs1[1])
-        else:
-            self.results_url = "/adsearch?general="+inputs1[0]
-            self.result_search_term = str(inputs1[0])
+                    nodes = nodes.union(ftext(get_inventory(), value.strip()))
+
+        # FIXME fix URL to accept multiple values, inc. translations, etc..
+        self.results_url = "/adsearch?general=" + quote_plus(kwargs['keywords'])
 
         num = len(nodes)
         if num is not None:
@@ -51,10 +35,10 @@ class BelgiumFindingAid(Collection):
         return self
 
 
-def findresult(inputs):
+def findresult(keywords):
     tree = etree.parse("archives/belgium.xml")
     inventory = tree.getroot()
-    nodes = ftext(inventory, inputs['general'])
+    nodes = ftext(inventory, keywords)
     return getresult(nodes)
 
 
@@ -139,9 +123,11 @@ def ftype(inventory, type):
 
 
 def ftext(inventory, text):
+    logging.debug("ftext called: "+text)
     results = set()
     for node in inventory.iter("item"):
-        if re.match(r'.*'+text+'.*', node.text.replace('\n', ' '), re.I):
+        if text.lower() in node.text.replace('\n', ' ').lower():
+            # if re.match(r'.*' + text + r'.*', node.text.replace('\n', ' '), re.I):
             results.add(node)
     return results
 

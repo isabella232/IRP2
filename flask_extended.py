@@ -4,6 +4,7 @@ from flask import Flask as BaseFlask, Config as BaseConfig
 
 
 class Config(BaseConfig):
+
     """Flask config enhanced with a `from_yaml` method."""
 
     def from_yaml(self, config_file):
@@ -15,6 +16,7 @@ class Config(BaseConfig):
 
 
 class Flask(BaseFlask):
+
     """Extended version of `Flask` that implements custom config class"""
 
     def make_config(self, instance_relative=False):

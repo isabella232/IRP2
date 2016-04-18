@@ -6,8 +6,7 @@ class Dummy(Collection):
     def setClassName(self, classname):
         self.classname = classname
 
-    def keywordResultsCount(self, inputs):
-        self.inputs = inputs
+    def keywordResultsCount(self, **kwargs):
         url = "http://www.example.com/search.html"
         self.results_url = url
         self.results_count = 0
@@ -17,7 +16,6 @@ class Dummy(Collection):
         result = {
             'class': self.classname,
             'results_count': self.results_count,
-            'results_url': self.results_url,
-            'inputs': self.inputs
+            'results_url': self.results_url
         }
         return result

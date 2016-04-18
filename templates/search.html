@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
-    {% if inputs.French or inputs.German %}
-      <p> Translating ...</p>
+    {% if results.translated_terms %}
+      <p>Translations: {% for term in results.translated_terms %}{{ term }}{% endfor %}</p>
     {% endif %}
 
     <!--<h3>Result for <b>"{{ inputs.general }}"</b> :</h3>-->
@@ -15,24 +15,10 @@
           </a>
         </div>
         <p><b>{{ inst.name }}</b></p>
-          <!-- <p>Search terms : <b>{{ inputs.general }}</b></p>-->
-          <!--{% if inputs.French or inputs.German %}
-            <p>Search terms :</p><br /><p>lang="fr-x-mtfrom-en" <b>{{ inputs.general }}</b></p>
-          {% endif %}-->
-
-
-
-
-
-
         {% for coll in inst.collections %}
-        {% if results[coll.class] %}
-          {% if inputs.French or inputs.German %}
-           <p>Search Terms : {{ inputs.general }} , {{results[coll.class].result_search_term}}<br /></p>
-          {% else %}
-            <p>Search Terms : {{ inputs.general }} <br /></p>
-          {% endif %}
-        <p><a href="{{ results[coll.class].results_url }}" target="_blank"> {{ results[coll.class].results_count }} results in {{ coll.name }}</a><br />
+        {% if results.collections[coll.class] %}
+        {% set result = results.collections[coll.class] %}
+        <p><a href="{{ result.results_url }}" target="_blank"> {{ result.results_count }} results in {{ coll.name }}</a><br />
         {% if coll.fields is defined %}fields: {% for field in coll.fields %}{% if field in inputs and inputs[field].strip() != '' %}<span class="active-field">{{ field }}</span> {% else %}<span class="inactive-field">{{ field }}</span> {% endif %} {% endfor %}{% endif %}
         </p>
         {% endif %}

@@ -2,7 +2,8 @@
 from archives.collection import Collection
 import requests
 import json
-from textblob import TextBlob
+import logging
+from urllib.parse import quote_plus
 
 
 class Fold3(Collection):
@@ -12,95 +13,59 @@ class Fold3(Collection):
         'class': 'Fold3',
         'lang': 'en',
         'fields': {
-            'general': 'keyword',
+            'keywords': 'keyword',
             'startYear': 'start',
             'endYear': 'end'
-        } # NOTE: field mapping done locally for Fold3
+        }  # NOTE: field mapping done locally for Fold3
     }
 
-    def keywordResultsCount(self, inputs):
-        self.inputs = inputs['general']
+    def keywordResultsCount(self, **kwargs):
+        keywords = self.add_unsupported_fields_to_keywords(kwargs)
+        # NOTE: keywords are escaped by json.dumps
+        # keywords = quote_plus(keywords) not needed for JSON
         data = {'engine': 'solr'}
-        date_clause = ''
-        if 'startYear' in inputs and inputs['startYear'].strip() != '':
-            date_clause = ',{"type":"date","values":{"name":"year","start":"'+inputs['startYear']+'", "end":"'+inputs['endYear']+'","showMissing":false}}'
+        date_clause = None
+        if kwargs['startYear'] is not None and kwargs['endYear'] is not None:
+            date_clause = {"type": "date", "values":
+                           {"name": "year", "start": kwargs['startYear'], "end": kwargs['endYear'],
+                            "showMissing": False}}
 
-        '''
-        if 'German' in inputs:
-            blob = TextBlob(str(inputs.getlist('general')))
-            inputs['general'] = blob.translate(to="de")
-            self.result_search_term = inputs['general']
-            keywords = inputs['general']+" "+inputs['location']+" "+inputs['artist']
-        if 'French' in inputs:
-            blob = TextBlob(str(inputs.getlist('general')))
-            inputs['general'] = blob.translate(to="fr")
-            self.result_search_term = inputs['general']
-            keywords = inputs['general']+" "+inputs['location']+" "+inputs['artist']
-        '''
-        keywords = inputs['general']+" "+inputs['location']+" "+inputs['artist']
-        try:
-         if 'German' in inputs:
-           try:
-            blob = TextBlob(keywords)
-            keywords = str(blob.translate(to="de"))
-            #keywords = unicode( keywords, "utf-8" )
-            self.result_search_term = keywords
-            #self.result_search_term = self.result_search_term.encode('utf-8')
-           except:
-            blob = TextBlob(keywords)
-            keywords = str(blob.translate(to="de"))
-            keywords = unicode( keywords, "utf-8" )
-            self.result_search_term = keywords
-            self.result_search_term = self.result_search_term.encode('utf-8')
-
-
-         elif 'French' in inputs:
-           try:
-            blob = TextBlob(keywords)
-            keywords = str(blob.translate(to="fr"))
-            #keywords = unicode( keywords, "utf-8" )
-            self.result_search_term = keywords
-            #self.result_search_term = self.result_search_term.encode('utf-8')
-           except:
-            blob = TextBlob(keywords)
-            keywords = str(blob.translate(to="fr"))
-            keywords = unicode( keywords, "utf-8" )
-            self.result_search_term = keywords
-            self.result_search_term = self.result_search_term.encode('utf-8')
-        except:
-            keywords = inputs['general']+" "+inputs['location']+" "+inputs['artist']
-            self.result_search_term = keywords
-            pass
         # NOTE: Holocaust Assets return no results for Berlin or Paris, useless field
         # location_clause = ''
         # if 'location' in inputs and inputs['location'].strip() != '':
-        #     location_clause = ',{"type":"field","values":{"name":"place","value":"'+inputs['location']+'"}}'
+        # location_clause =
+        # ',{"type":"field","values":{"name":"place","value":"'+inputs['location']+'"}}'
 
         # NOTE: category 114 is "Holocaust Collection"
-        q = ('{"terms":['
-             '{"type":"category","values":{"value":114}},'
-             '{"type":"keyword","values":{"value":"' + keywords + '"}}')
-        q += date_clause
-        #q += location_clause
-        q += '],"index":0}'
-        z = json.loads(q)
-
-        data["query_terms"] = q
-
+        q = {"terms":
+             [
+              {"type": "category", "values": {"value": 114}},
+              {"type": "keyword", "values": {"value": keywords}}
+             ],
+             'index': 0
+             }
+        if date_clause is not None:
+            q['terms'].append(date_clause)
+        data["query_terms"] = json.dumps(q)
         url = "http://www.fold3.com/js_getresults.php"
         res = requests.post(url, params=data)
         parsed = res.json()
-        num = parsed["recCount"]
+        num = 0
+        try:
+            num = parsed["recCount"]
+        except:
+            logging.debug("Fold3 returned:\n{0}".format(json.dumps(parsed)))
 
-        self.results_url = "http://www.fold3.com/s.php#cat=114&query="+keywords.replace(' ','+')
-        if 'startYear' in inputs and inputs['startYear'].strip() != '':
-            self.results_url += "&dr_year="+inputs['startYear']+"&dr_year2="+inputs['endYear']
-        if num!= None:
+        self.results_url = "http://www.fold3.com/s.php#cat=114&query={0}" \
+                           .format(quote_plus(keywords))
+        if kwargs['startYear'] is not None and kwargs['endYear'] is not None:
+            self.results_url += "&dr_year={0}&dr_year2={1}" \
+                                .format(kwargs['startYear'], kwargs['endYear'])
+        if num is not None:
             self.results_count = num
         else:
             self.results_count = 0
         return self
-
 
 
 # {"terms":[{"type":"date","values":{"name":"year","start":"1945","end":"1946","showMissing":true}},{"type":"ocr","values":{"value":"true"}},{"type":"category","values":{"value":115}}],"index":0}

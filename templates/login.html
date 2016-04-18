@@ -31,10 +31,10 @@ $.ajax({
 			error: function(error){
 				console.log(error);
 			}
-		});  
+		});
 form.submit();
 });*/
-	
+
 });
 /*$(function(){
 	$('#Sign up').click(function(){
@@ -178,23 +178,23 @@ form.submit();
             line-height: 1em;
             padding: .4em 0em;
     }
-    
+
      h4 {
             font-family: Arial, sans-serif;
             padding-bottom: 0px;
             font-size: 1.3em;
             }
-            
+
         #subscribe, #login{
 	       position: relative;
 	       top: 20px;
-	       width: 100%;	
+	       width: 100%;
 	       padding: 18px 6% 60px 6%;
 	       margin: 0 0 35px 0;
 	       background: rgb(247, 247, 247);
 	       border: 1px solid rgba(147, 184, 189,0.8);
-	       box-shadow:	
-		      0pt 2px 5px rgba(105, 108, 109,  0.7),	
+	       box-shadow:
+		      0pt 2px 5px rgba(105, 108, 109,  0.7),
 		      0px 0px 8px 5px rgba(208, 223, 226, 0.4) inset;
 	       border-radius: 5px;
             }
@@ -211,9 +211,9 @@ form.submit();
 	padding-bottom: 30px;
 }
     #wrapper h4{
-	background: 
-	-webkit-repeating-linear-gradient(-45deg, 
-		rgb(18, 83, 93) , 
+	background:
+	-webkit-repeating-linear-gradient(-45deg,
+		rgb(18, 83, 93) ,
 		rgb(18, 83, 93) 20px,
 		rgb(64, 111, 118) 20px,
 		rgb(64, 111, 118) 40px,
@@ -227,21 +227,21 @@ form.submit();
 	width:100%;
 	height:2px;
 	margin-top:5px;
-	background: 
-		linear-gradient(left,  
+	background:
+		linear-gradient(left,
 			rgba(147,184,189,0) 0%,
 			rgba(147,184,189,0.8) 20%,
 			rgba(147,184,189,1) 53%,
 			rgba(147,184,189,0.8) 79%,
-			rgba(147,184,189,0) 100%); 
+			rgba(147,184,189,0) 100%);
 }
-    
-    ::-webkit-input-placeholder  { 
-	color: rgb(190, 188, 188); 
+
+    ::-webkit-input-placeholder  {
+	color: rgb(190, 188, 188);
 	font-style: italic;
 }
 input:-moz-placeholder,
-textarea:-moz-placeholder{ 
+textarea:-moz-placeholder{
 	color: rgb(190, 188, 188);
 	font-style: italic;
 }
@@ -251,7 +251,7 @@ input {
     #wrapper input:not([type="checkbox"]){
 	width: 92%;
 	margin-top: 2px;
-	padding: 5px 2px 5px 10px;	
+	padding: 5px 2px 5px 10px;
 	border: 1px solid rgb(178, 178, 178);
 	box-sizing : content-box;
 	border-radius: 3px;
@@ -261,9 +261,9 @@ input {
 #wrapper input:not([type="checkbox"]):active,
 #wrapper input:not([type="checkbox"]):focus{
 	border: 1px solid rgba(91, 90, 90, 0.7);
-	background: rgba(238, 236, 240, 0.2);	
+	background: rgba(238, 236, 240, 0.2);
 	box-shadow: 0px 1px 4px 0px rgba(168, 168, 168, 0.9) inset;
-} 
+}
     @font-face {
     font-family: 'FontomasCustomRegular';
     src: url('fonts/fontomas-webfont.eot');
@@ -275,7 +275,7 @@ input {
     font-style: normal;
 }
 
-/** the magic icon trick ! 
+/** the magic icon trick !
 [data-icon]:after {
     content: attr(data-icon);
     font-family: 'FontomasCustomRegular';
@@ -287,16 +287,16 @@ input {
 }**/
 #wrapper p.button input{
 	width: 30%;
-	cursor: pointer;	
+	cursor: pointer;
 	background: rgb(61, 157, 179);
 	padding: 4px 2px;
 	font-family: 'BebasNeueRegular','Arial Narrow',Arial,sans-serif;
 	color: #fff;
-	font-size: 12px;	
-	border: 1px solid rgb(28, 108, 122);	
-	margin-bottom: 3px;	
+	font-size: 12px;
+	border: 1px solid rgb(28, 108, 122);
+	margin-bottom: 3px;
 	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
-	border-radius: 3px;	
+	border-radius: 3px;
 	box-shadow:
 		0px 1px 6px 4px rgba(0, 0, 0, 0.07) inset,
 		0px 0px 0px 3px rgb(254, 254, 254),
@@ -311,7 +311,7 @@ input {
 	background: rgb(40, 137, 154);
 	position: relative;
 	top: 1px;
-	border: 1px solid rgb(12, 76, 87);	
+	border: 1px solid rgb(12, 76, 87);
 	box-shadow: 0px 1px 6px 4px rgba(0, 0, 0, 0.2) inset;
 }
 p.login.button,
@@ -319,12 +319,12 @@ p.signin.button{
 	text-align: right;
 	margin: 5px 0;
 }
-    
+
 
 .keeplogin input,
 .keeplogin label{
 	display: inline-block;
-	font-size: 12px;	
+	font-size: 12px;
 	font-style: italic;
 }
 .keeplogin input#loginkeeping{
@@ -333,7 +333,7 @@ p.signin.button{
 .keeplogin label{
 	width: 70%;
 }
-    
+
     p.change_link{
 	position: relative;
 	color: rgb(127, 124, 124);
@@ -346,11 +346,11 @@ p.signin.button{
 	border-top: 1px solid rgb(219, 229, 232);
 	border-radius: 0 0  3px 3px;
 	background: rgb(225, 234, 235);
-	background: repeating-linear-gradient(-45deg, 
-	rgb(247, 247, 247) , 
-	rgb(247, 247, 247) 10px, 
-	rgb(225, 234, 235) 10px, 
-	rgb(225, 234, 235) 20px, 
+	background: repeating-linear-gradient(-45deg,
+	rgb(247, 247, 247) ,
+	rgb(247, 247, 247) 10px,
+	rgb(225, 234, 235) 10px,
+	rgb(225, 234, 235) 20px,
 	rgb(247, 247, 247) 20px
 	);
 }
@@ -375,7 +375,7 @@ p.signin.button{
 	position: relative;
 	top: 1px;
 }
-#register{	
+#register{
 	z-index: 21;
 	opacity: 0;
 }
@@ -395,7 +395,7 @@ p.signin.button{
 		opacity: 0;
 		transform: translateX(-20px);
 	}
-	
+
 	100% {
 		opacity: 1;
 		transform: translateX(0);
@@ -411,7 +411,7 @@ p.signin.button{
 		opacity: 1;
 		transform: translateX(0);
 	}
-	
+
 	100% {
 		opacity: 0;
 		transform: translateX(-20px);
@@ -441,9 +441,9 @@ p.signin.button{
               <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5004/">Phase 4</a></li>
             </ul>
               </div> <!-- container -->
-            
 
-       
+
+
         <div class="col-xs-8 col-md-8">
             <div style="padding:0em; margin-bottom:0px;  margin-top:-25px; border:1px solid #E4E5E6; border-bottom-color:#C2C3C4; border-left-color:#C2C3C4; border-right-color:#C2C3C4;border-top-color:#C2C3C4; background-color:#F4F6F7; background-image:url(http://www.archives.gov/global-images/layout/boxed-1-bg.gif); background-repeat:repeat-x; padding:.5em; font-size:.7em; float:right; position:relative;">
                 <a href="http://www.archives.gov/research/holocaust/international-resources/">English</a> &nbsp;| &nbsp;
@@ -470,22 +470,22 @@ p.signin.button{
 	<a class="hiddenanchor" id="tologin"></a>
 	<div id="wrapper">
 		<div id="login" class="animate form">
-			<form  method="POST" action="/tologin" autocomplete="on"> 
-				<h4>Log in</h4> 
-				<p> 
+			<form  method="POST" action="/tologin" autocomplete="on">
+				<h4>Log in</h4>
+				<p>
 					<label for="username" class="uname"  > Your email or username </label>
 					<input id="username" name="username" required="required" type="text" placeholder="myusername or mymail@mail.com"/>
 				</p>
 				<p> 
 					<label for="password" class="youpasswd" > Your password </label>
-					<input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" /> 
+					<input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" />
 				</p>
-				<p class="keeplogin"> 
-					<input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" /> 
+				<p class="keeplogin">
+					<input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" />
 					<label for="loginkeeping">Keep me logged in</label>
 				</p>
-				<p class="login button"> 
-					<input type="submit" value="Login" /> 
+				<p class="login button">
+					<input type="submit" value="Login" />
 				</p>
 				<p class="change_link">	Not a member yet ?<a href="#toregister" class="to_register">Join us</a>
 				</p>
@@ -493,25 +493,25 @@ p.signin.button{
 		</div>
 
 		<div id="register" class="animate form">
-			<form  id="register-form" method="POST" action="/toregister" autocomplete="on"> 
-				<h4> Sign up </h4> 
-				<p> 
+			<form  id="register-form" method="POST" action="/toregister" autocomplete="on">
+				<h4> Sign up </h4>
+				<p>
 					<label for="usernamesignup" class="uname" >Your username</label>
 					<input id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="mysuperusername690" />
 				</p>
-				<p> 
+				<p>
 					<label for="emailsignup" class="youmail" > Your email</label>
-					<input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="mysupermail@mail.com"/> 
+					<input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="mysupermail@mail.com"/>
 				</p>
-				<p> 
+				<p>
 					<label for="passwordsignup" class="youpasswd" >Your password </label>
 					<input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="eg. X8df!90EO"/>
 				</p>
-				<p> 
+				<p>
 					<label for="passwordsignup_confirm" class="youpasswd" >Please confirm your password </label>
 					<input id="passwordsignup_confirm" name="passwordsignup_confirm" required="required" type="password" placeholder="eg. X8df!90EO"/>
 				</p>
-				<p class="signin button"> 
+				<p class="signin button">
 					<input type="submit" id="Sign up" />
 
 				</p>
@@ -520,7 +520,7 @@ p.signin.button{
 			</form>
 		</div><!--div id -register -->
     </div> <!--id = wrapper-->
-            </div> 
+            </div>
             <br/>
             <table style="width: 100%;">
                 <tbody><tr><th colspan="2"><h1 style="margin-top: 0px; margin-bottom: 0px; color: #fff;">Search Records of Participating Institutions</h1></th></tr>

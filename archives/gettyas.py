@@ -1,27 +1,17 @@
-__author__ = 'gregjan'
 from archives.collection import Collection
 from bs4 import BeautifulSoup
 import requests
-from textblob import TextBlob
+
 
 class GettyAS(Collection):
 
-    def keywordResultsCount(self, inputs):
-        self.inputs = inputs
-        #query = " ".join(inputs.split())
-        query = inputs.split(' ',1)
-        x=len(query)
+    def keywordResultsCount(self, **kwargs):
+        keywords = self.add_unsupported_fields_to_keywords(kwargs)
 
-
-
+        # obtain session values for __websessionID and __sessionNumber
         session = requests.session()
         r = session.get("http://piprod.getty.edu/starweb/pi/servlet.starweb?path=pi/pi.web#?")
-        # obtain input values for __websessionID and __sessionNumber
         soup = BeautifulSoup(r.text, "lxml")
-
-        # Result number
-        #websessionID = soup.find_all("input",name="__websessionID")[0].value
-        #sessionNumber = soup.find_all("input",name="__sessionNumber")[0].value
         websessionID = soup.select('input[name="__websessionID"]')[0]['value']
         sessionNumber = soup.select('input[name="__sessionNumber"]')[0]['value']
 
@@ -33,8 +23,8 @@ class GettyAS(Collection):
         data['__numberstyle'] = 'A'
         data['__dirtyFlag'] = 'Clean'
         data['__action'] = '611'
-        data['Keywords'] = query
-        data['Operators'] = 'AND'
+        data['Keywords'] = keywords
+        data['Operators'] = 'OR'
         data['NameType'] = 'BUYER%2CSELLER'
         data['__jsModel'] = 'New'
 
@@ -42,28 +32,18 @@ class GettyAS(Collection):
         r = session.post(url, data=data)
         soup = BeautifulSoup(r.text, "lxml")
 
-        #Sale Catalog Contents:  69 results from
+        # Sale Catalog Contents:  69 results from
         # <span class="hitcount" name="DatabaseSearched" starweb_type="Conditional">
         # 69
         # </span> records retrieved
         spanList = soup.select('span[name="DatabaseSearched"]')
         num = None
-        if len(spanList)>0:
+        if len(spanList) > 0:
             numTxt = spanList[0].string
             num = int(numTxt)
-        if (x>1)  :
-         if ((str(query[0])=='French')|(str(query[0])=='German')):
-          self.result_search_term = query[1]
-         else:
-            query1 = " "+ inputs
-            query1 = query1.split(' ',1)
-            self.result_search_term = query1[1]
-
-        else:
-          self.result_search_term = query[0]
 
         self.results_url = "http://piprod.getty.edu/starweb/pi/servlet.starweb?path=pi/pi.web"
-        if num!= None:
+        if num is not None:
             self.results_count = num
         else:
             self.results_count = 0

@@ -1,8 +1,7 @@
+lxml
 flask
 requests
-lxml
-libyaml
-BeautifulSoup4
+beautifulsoup4
 TextBlob
 Werkzeug
 PyYAML

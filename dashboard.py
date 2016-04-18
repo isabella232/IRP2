@@ -1,5 +1,8 @@
 import os
+import sys
 import logging
+import logging.config
+import yaml
 import sqlite3
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -7,18 +10,22 @@ from flask_extended import Flask
 from flask import request, session, g, redirect, url_for, render_template, flash
 from archives.core import searchAll
 from archives.core import archivesList
+from archives.core import get_translations
 from lxml import etree
 from archives import belgium
 
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.logger.setLevel(logging.DEBUG)
-handler = logging.handlers.RotatingFileHandler(
-    os.path.join(app.instance_path, 'irp2.log'),
-    maxBytes=1024 * 1024 * 100,
-    backupCount=20)
-app.logger.addHandler(handler)
+logConfig = yaml.load(open(os.path.join(app.instance_path, 'logging.conf')))
+logging.config.dictConfig(logConfig)
+# app.logger.setLevel(logging.DEBUG)
+# handler = handlers.RotatingFileHandler(
+#     os.path.join(app.instance_path, 'irp2.log'),
+#     maxBytes=1024 * 1024 * 100,
+#     backupCount=20)
+# app.logger.addHandler(handler)
+
 app.config.update(dict(
     DATABASE=os.path.join(app.instance_path, 'irp2.db'),
     # DATABASE=os.path.join('postgresql://postgres:karishma@localhost', 'postgres'),
@@ -49,13 +56,12 @@ def get_db():
 
 
 def init_db():
-    db = get_db()
+    db = connect_db()
     with app.open_resource('irp2_schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
     db.commit()
 
 
-@app.cli.command('initdb')
 def initdb_command():
     """Initializes the database."""
     init_db()
@@ -90,7 +96,7 @@ def login():
     if _name and _email and _password:
         cur = db.execute("""SELECT username FROM user_profile
                         WHERE email_id = ?;""", [_email])
-        if len(cur.fetchall) > 0:
+        if len(cur.fetchall()) > 0:
             flash('This Email is already a user')
             return redirect(url_for('showLogin'))
         else:
@@ -105,18 +111,22 @@ def login():
         return json.dumps({'html': '<span>Enter the required fields</span>'})
 
 
-@app.route('/tologin', methods=['GET', 'POST'])
+@app.route('/tologin', methods=['POST'])
 def tologin():
     db = get_db()
     _uname = request.form['username']
     _password = request.form['password']
+    _hashedpw = generate_password_hash(_password)
+    logging.debug("u: {0}\np: {1}\nh: {2}".format(_uname, _password, _hashedpw))
     cur = db.execute("""
         SELECT username, password, email_id, registered_on FROM user_profile
         WHERE ( username = ? OR email_id = ? )
-        AND password = ?
-        LIMIT 1;""", [_uname, _uname, _password])
+        LIMIT 1;""", [_uname, _uname])
     row = cur.fetchone()
-    if _uname == row.username and check_password_hash(row.password, _password):
+    if row is None:
+        return json.dumps({'html': '<span>Incorrect credentials. PLease try again.. </span>'})
+    logging.debug("got a user from db")
+    if _uname == row['username'] and check_password_hash(row['password'], _password):
         session['_uname'] = _uname
         return redirect(url_for('profile'))
     else:
@@ -140,12 +150,38 @@ def signout():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
+    languages = []
     if request.method == 'POST':
         inputs = request.form
+        try:
+            languages = request.form.getlist('languages')
+        except Exception as e:
+            logging.exception(e)
+            pass
     if request.method == 'GET':
         inputs = request.args
+        try:
+            languages = request.args.getlist('languages')
+        except Exception as e:
+            logging.exception(e)
+            pass
+    logging.debug("/search with inputs:\n{0}".format(json.dumps(inputs)))
     session["inputs"] = inputs
-    results = searchAll(inputs, asyncSearch=False)
+    myargs = {}
+    myargs['keywords'] = inputs.get('keywords', '')
+    myargs['artist'] = inputs.get('artist', '')
+    myargs['location'] = inputs.get('location', '')
+    myargs['startYear'] = inputs.get('startYear', '')
+    myargs['endYear'] = inputs.get('endYear', '')
+    for key, value in myargs.items():
+        if len(value) == 0 or str(value).strip() == '':
+            myargs[key] = None
+
+    if len(languages) > 0:
+        translated_terms = get_translations(myargs['keywords'], languages)
+        myargs['translated_terms'] = translated_terms
+
+    results = searchAll(**myargs)
     return render_template("search.html", results=results, archivesList=archivesList, inputs=inputs)
 
 
@@ -153,11 +189,10 @@ def search():
 def saveSearch():
     inputs = session["inputs"]
     _uname = session["_uname"]
-    results = searchAll(inputs, asyncSearch=True)
     db = get_db()
-    db.execute("""INSERT INTO save_search(username, searched_on, search_key, search_results)
-                   values(?, date('now'), ?, ?);""",
-               [_uname, json.dumps(inputs), json.dumps(results)])
+    db.execute("""INSERT INTO saved_search(username, searched_on, search_key)
+                   values(?, date('now'), ?);""",
+               [_uname, json.dumps(inputs)])
     db.commit()
     flash('Search saved  successfully !')
     return render_template("searchsaved.html")
@@ -169,7 +204,7 @@ def adsearch():
         session["inputs"] = request.form
     if "inputs" in session:
         inputs = session["inputs"]
-        result = belgium.findresult(inputs)
+        result = belgium.findresult(inputs.get('keywords', ''))
         return render_template('adsearch.html', results=result)
     else:
         return render_template('adsearch.html')
@@ -223,4 +258,7 @@ def detail():
 
 
 if __name__ == '__main__':
-    app.run("0.0.0.0")
+    if len(sys.argv) > 1 and 'initdb' == sys.argv[1]:
+        initdb_command()
+    else:
+        app.run("0.0.0.0")

@@ -149,7 +149,7 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
             line-height: 1em;
             padding: .4em 0em;
     }
-    
+
 	/* Dropdown Button */
 .dropbtn {
     background-color: #F4F6F7;
@@ -195,13 +195,13 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
 
-    
+
 </style>
 </head>
 <body>
 <div class = "container">
     <div class="header"><img src="static/header.png"/></div>
-{%if session%}    
+{%if '_uname' in session %}
 <div class="jumbo">
     <h2><form method = "POST">Profile<h2>
     <h3>This is {{ session['_uname'] }}'s profile page<h3></form>
@@ -226,7 +226,7 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
               <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5003/">Phase 3</a></li>
               <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5004/">Phase 4</a></li>
             </ul>
-	{%if session%}       
+	{%if '_uname' in session%}
  	<h3>Your Recent Saved Searches</h3>
 	<ul>
 	      <li><a href="/">WITHIN  1 WEEK</a></li>
@@ -234,12 +234,12 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
               <li><a href="">WITHIN 3 MONTHS</a></li>
               <li><a href="/">WITHIN 6 MONTHS</a></li>
 	      <li><a href="/">WITHIN A YEAR</a></li>
-	
+
 	</ul>
-	{%endif%}     
-    
+	{%endif%}
+
  </div> <!-- container -->
-{%if not session%}
+{%if not '_uname' in session%}
         <div style="float:right;">
 	&nbsp;| &nbsp;
        <a href="/showLogin">Sign Up</a>&nbsp;| &nbsp;
@@ -253,17 +253,17 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
                 <a href="http://www.archives.gov/research/holocaust/international-resources/french.html"><span lang="fr" xml:lang="fr">Français</span></a> &nbsp;| &nbsp;
                 <!-- TEXT VERSION  <a href="/research/holocaust/international-resources/uk/">Ð£ÐºÑ€Ð°Ñ—Ð½ÑÑŒÐºÐ°</a> -->
                 <a href="http://www.archives.gov/research/holocaust/international-resources/uk.html"><span lang="uk" xml:lang="uk">Українська</span></a>
-{%if session%} 
+{%if '_uname' in session%}
 <div class="dropdown">
   <button onclick="myFunction()" class="dropbtn">Your Account</button>
   <div id="myDropdown" class="dropdown-content">
     <a href="#">Search Cart</a>
     <a href="#">Search History</a>
     <a href="#">Account Settings</a>
-    <a href="/logout">Sign Out</a>	
+    <a href="/logout">Sign Out</a>
   </div>
- </div>               
-{%endif%}                
+ </div>
+{%endif%}
             </div >
             <h1 style="margin-top: 10px;font-family: Arial, sans-serif;padding-bottom: 0px;font-size: 1.7em; margin-top:10px;">International Research Portal for Records<br> Related to Nazi-Era Cultural Property</h1>
             <p>This page provides keyword search across relevant resources of participating institutions. Resources may include descriptions of archival materials and digital images of the records. Results for each institution are displayed separately and can be accessed with a click on the number of results. To read a description of the resources at an institution, please click on the institution’s logo in search results.</p>
@@ -275,29 +275,27 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
             <p>All descriptions within the Portal are provided in English. As you click through the Portal to affiliated websites, the descriptions are written in the national language of each institution, and in some instances, are available in English, as well.</p>
             </div>
             </div><br />
-                <h3><form method="GET" action="{{ url_for('search') }}">
-                Search: <input id="searchbox" type="text" class="text" name="general"{% if inputs is defined %} value="{{ inputs.general }}"{% endif %}/>
-                &nbsp;&nbsp;<input type="submit" value="search"/><br />
-                    Languagaes :  French <input type="checkbox" name="French" value="French" checked="checked">
-                <!--Translate <input type="checkbox" name="translate"{% if inputs is defined %} value="{{ inputs.translate }}"{% endif %} checked="checked">-->
-                German <input type="checkbox" name="German" value="German" checked="checked">
-                    <fieldset><legend>Some collections also support these fields:</legend>
-                Years from <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
-                to <input type="text" class="text" name="endYear" placeholder="E.G. 1955"{% if inputs is defined %} value="{{ inputs.endYear }}"{% endif %}/><br />
-                Artist/Creator <input type="text" class="text" name="artist"{% if inputs is defined %} value="{{ inputs.artist }}"{% endif %}/><br />
-                <!-- Owner <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />-->
-                Location <input type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/><br />
-
-                </fieldset>
-                </form></h3>
-{%if session%}
+    <h3><form method="GET" action="{{ url_for('search') }}">
+    Keywords: <input id="searchbox" type="text" class="text" name="keywords"{% if inputs is defined %} value="{{ inputs.keywords }}"{% endif %}/>
+    &nbsp;&nbsp;<input type="submit" value="Search"/><br />
+    Add Translation:  <input type="checkbox" name="languages" value="fr" checked="checked">French</input>
+    &nbsp;&nbsp;<input type="checkbox" name="languages" value="de" checked="checked">German</input>
+    <fieldset><legend>Some collections support these fields:</legend>
+    <!--Years from <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
+    to <input type="text" class="text" name="endYear" placeholder="E.G. 1955"{% if inputs is defined %} value="{{ inputs.endYear }}"{% endif %}/><br />-->
+    Artist/Creator <input type="text" class="text" name="artist"{% if inputs is defined %} value="{{ inputs.artist }}"{% endif %}/><br />
+    <!-- Owner <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />-->
+    Location <input type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/><br />
+    </fieldset>
+    </form></h3>
+{%if '_uname' in session %}
 <h3><form id = "save_search" method="POST" action="{{ url_for('saveSearch') }}">
 <input id="SaveSearch" float = "right" type="submit" value="Save my search"><!--a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site: http://www.google.com"/>
         <img src="https://simplesharebuttons.com/images/somacro/email.png" alt="Email" />
     </a-->
 
  		<a href="javascript: emailCurrentPage()"/>
-        <img src="https://simplesharebuttons.com/images/somacro/email.png" alt="Email" /></a> 
+        <img src="https://simplesharebuttons.com/images/somacro/email.png" alt="Email" /></a>
 </form></h3>
 
 {%endif%}
@@ -487,7 +485,7 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
 </div>
 </body>
 <script>
-/* When the user clicks on the button, 
+/* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function myFunction() {
     document.getElementById("myDropdown").classList.toggle("show");
