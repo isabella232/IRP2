@@ -10,7 +10,7 @@ from urllib.parse import quote_plus
 class LostArt(Collection):
 
     def keywordResultsCount(self, **kwargs):
-        keywords = self.add_unsupported_fields_to_keywords(kwargs, join_with='~ ')
+        keywords = self.add_unsupported_fields_to_keywords(kwargs, join_with=' ', term_suffix='~')
         keywords = quote_plus(keywords)
 
         url = "http://www.lostart.de/Webs/DE/Datenbank/SucheMeldungSimpel.html?" \

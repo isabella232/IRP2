@@ -117,7 +117,6 @@ def tologin():
     _uname = request.form['username']
     _password = request.form['password']
     _hashedpw = generate_password_hash(_password)
-    logging.debug("u: {0}\np: {1}\nh: {2}".format(_uname, _password, _hashedpw))
     cur = db.execute("""
         SELECT username, password, email_id, registered_on FROM user_profile
         WHERE ( username = ? OR email_id = ? )
@@ -125,7 +124,6 @@ def tologin():
     row = cur.fetchone()
     if row is None:
         return json.dumps({'html': '<span>Incorrect credentials. PLease try again.. </span>'})
-    logging.debug("got a user from db")
     if _uname == row['username'] and check_password_hash(row['password'], _password):
         session['_uname'] = _uname
         return redirect(url_for('profile'))
@@ -177,7 +175,7 @@ def search():
         if len(value) == 0 or str(value).strip() == '':
             myargs[key] = None
 
-    if len(languages) > 0:
+    if len(languages) > 0 and myargs['keywords'] is not None:
         translated_terms = get_translations(myargs['keywords'], languages)
         myargs['translated_terms'] = translated_terms
 
@@ -200,14 +198,12 @@ def saveSearch():
 
 @app.route('/adsearch', methods=['GET', 'POST'])
 def adsearch():
-    if request.form.get("search") != None:
-        session["inputs"] = request.form
-    if "inputs" in session:
-        inputs = session["inputs"]
-        result = belgium.findresult(inputs.get('keywords', ''))
-        return render_template('adsearch.html', results=result)
-    else:
-        return render_template('adsearch.html')
+    if request.method == 'POST':
+        keywords = request.form.getlist('keywords')
+    if request.method == 'GET':
+        keywords = request.args.getlist('keywords')
+    result = belgium.findresult(keywords)
+    return render_template('adsearch.html', results=result)
 
 
 @app.route('/advsearch', methods=['GET', 'POST'])

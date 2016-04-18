@@ -16,16 +16,21 @@ class BelgiumFindingAid(Collection):
     def keywordResultsCount(self, **kwargs):
         # keywords = self.add_unsupported_fields_to_keywords(kwargs)
         nodes = set()
+        urlkeywords = []
         for key, value in kwargs.items():
             if value is not None:
                 if 'translated_terms' == key:
                     for term in value:
+                        urlkeywords.append(term)
                         nodes = nodes.union(ftext(get_inventory(), term.strip()))
                 else:
+                    urlkeywords.append(value)
                     nodes = nodes.union(ftext(get_inventory(), value.strip()))
 
         # FIXME fix URL to accept multiple values, inc. translations, etc..
-        self.results_url = "/adsearch?general=" + quote_plus(kwargs['keywords'])
+        self.results_url = "/adsearch?foo"
+        for k in urlkeywords:
+            self.results_url += "&keywords=" + quote_plus(k)
 
         num = len(nodes)
         if num is not None:
@@ -38,7 +43,13 @@ class BelgiumFindingAid(Collection):
 def findresult(keywords):
     tree = etree.parse("archives/belgium.xml")
     inventory = tree.getroot()
-    nodes = ftext(inventory, keywords)
+    # TODO if keywords is a list, then union of all results
+    nodes = set()
+    if type(keywords) is list:
+        for keyword in keywords:
+            nodes = nodes.union(ftext(inventory, keyword))
+    else:
+        nodes = ftext(inventory, keywords)
     return getresult(nodes)
 
 
