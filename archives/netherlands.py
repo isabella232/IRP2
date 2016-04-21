@@ -25,7 +25,6 @@ class NetherlandsFindingAid(Collection):
             num = int(s)
         except:
             pass
-
         self.results_url = url
         self.results_count = num
         return self

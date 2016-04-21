@@ -25,6 +25,68 @@ function emailCurrentPage(){
 window.location.href="mailto:?subject="+document.title+"&body="+escape(window.location.href)
 }
 </script>
+<script type="text/javascript">
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+   $(function() {
+ var URL_PREFIX = "http://localhost:8983/solr/artist_core/select?q=name:*";
+ var URL_SUFFIX = "&wt=json";
+ $("#artist").autocomplete({
+ source : function(request, response) {
+ var URL = URL_PREFIX + $("#artist").val() +'*'+ URL_SUFFIX;
+
+ $.ajax({
+ url : URL,
+ success : function(data) {
+ var docs = JSON.stringify(data.response.docs);
+ var jsonData = JSON.parse(docs);
+
+ response($.map(jsonData, function(item) {
+ return {
+ value : item.name
+
+ }
+ }));
+ },
+ dataType : 'jsonp',
+ jsonp : 'json.wrf'
+ });
+ },
+ minLength : 1
+
+ })
+ });
+</script>
+<script type="text/javascript">
+  var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+   $(function() {
+ var URL_PREFIX = "http://localhost:8983/solr/location_core/select?q=label:*";
+ var URL_SUFFIX = "&wt=json";
+ $("#location").autocomplete({
+ source : function(request, response) {
+ var URL = URL_PREFIX + $("#location").val() +'*'+ URL_SUFFIX ;
+
+ $.ajax({
+ url : URL,
+ success : function(data) {
+ var docs = JSON.stringify(data.response.docs);
+ var jsonData = JSON.parse(docs);
+
+ response($.map(jsonData, function(item) {
+ return {
+ value : item.name
+
+ }
+ }));
+ },
+ dataType : 'jsonp',
+ jsonp : 'json.wrf'
+ });
+ },
+ minLength : 3
+
+ })
+ });
+</script>
 <style type="text/css">
         body {
             font-family: Arial,Verdana, sans-serif;
@@ -201,6 +263,12 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
 <body>
 <div class = "container">
     <div class="header"><img src="static/header.png"/></div>
+{%if '_uname' in session %}
+<div class="jumbo">
+    <h2><form method = "POST">Profile<h2>
+    <h3>This is {{ session['_uname'] }}'s profile page<h3></form>
+  </div>
+{%endif%}
 
     <div class="row" style="margin:auto;overflow:hidden;height:auto;">
         <div class="col-xs-4 col-md-4">
@@ -211,6 +279,14 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
 	            <li><a href="http://www.archives.gov/research/holocaust/international-resources/whats-new.html">What's New</a></li>
 	            <li><a href="http://www.archives.gov/research/holocaust/international-resources/other-resources.html">Other Resources</a></li>
                 <li><a href="http://www.archives.gov/research/holocaust">Holocaust-Era Assets Main Page</a></li>
+            </ul>
+
+            <h3>Portal Phases</h3>
+            <ul>
+              <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5001/">Phase 1</a></li>
+              <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5002/">Phase 2</a></li>
+              <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5003/">Phase 3</a></li>
+              <li><a href="http://ec2-54-84-35-82.compute-1.amazonaws.com:5004/">Phase 4</a></li>
             </ul>
 	{%if '_uname' in session%}
  	<h3>Your Recent Saved Searches</h3>
@@ -277,9 +353,9 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
     <p><br />Some collections support these fields:<br />
     <!--Years from <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
     to <input type="text" class="text" name="endYear" placeholder="E.G. 1955"{% if inputs is defined %} value="{{ inputs.endYear }}"{% endif %}/><br />-->
-    Artist/Creator <input type="text" class="text" name="artist"{% if inputs is defined %} value="{{ inputs.artist }}"{% endif %}/><br />
+    Artist/Creator <input id="artist" type="text" class="text" name="artist"{% if inputs is defined %} value="{{ inputs.artist }}"{% endif %}/><br />
     <!-- Owner <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />-->
-    Location <input type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/><br />
+    Location <input id="location" type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/><br />
   </p>
   </form>
 {%if results and '_uname' in session %}
