@@ -18,9 +18,18 @@
         {% for coll in inst.collections %}
         {% if results.collections[coll.class] %}
         {% set result = results.collections[coll.class] %}
+        {% if result.results_formdata %}
+        <form action="{{ result.results_url }}" method="POST" target="_blank">{{ result.results_count }} results in {{ coll.name }}
+          {% for key, value in result.results_formdata.items() %}<input type="hidden" name="{{ key|e }}" value="{{ value|e }}"/>{% endfor %}
+          <button type="submit">view results</button>
+        <br />
+        {% if coll.fields is defined %}fields: {% for field in coll.fields %}{% if field in inputs and inputs[field].strip() != '' %}<span class="active-field">{{ field }}</span> {% else %}<span class="inactive-field">{{ field }}</span> {% endif %} {% endfor %}{% endif %}
+        </form>
+        {% else %}
         <p><a href="{{ result.results_url }}" target="_blank"> {{ result.results_count }} results in {{ coll.name }}</a><br />
         {% if coll.fields is defined %}fields: {% for field in coll.fields %}{% if field in inputs and inputs[field].strip() != '' %}<span class="active-field">{{ field }}</span> {% else %}<span class="inactive-field">{{ field }}</span> {% endif %} {% endfor %}{% endif %}
         </p>
+        {% endif %}
         {% endif %}
         {% endfor %}
       </div>

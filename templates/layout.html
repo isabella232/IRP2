@@ -277,9 +277,9 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
             </div><br />
     <h3><form method="GET" action="{{ url_for('search') }}">
     Keywords: <input id="searchbox" type="text" class="text" name="keywords"{% if inputs is defined %} value="{{ inputs.keywords }}"{% endif %}/>
-    &nbsp;&nbsp;<input type="submit" value="Search"/><br />
-    Add Translation:  <input type="checkbox" name="languages" value="fr" checked="checked">French</input>
-    &nbsp;&nbsp;<input type="checkbox" name="languages" value="de" checked="checked">German</input>
+    &nbsp;&nbsp;<input type="submit" value="Search"/> <input type="reset" value="Reset" /><br />
+    Add Translation:  <input type="checkbox" name="languages" value="fr" checked="">French</input>
+    &nbsp;&nbsp;<input type="checkbox" name="languages" value="de" checked="">German</input>
     <fieldset><legend>Some collections support these fields:</legend>
     <!--Years from <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
     to <input type="text" class="text" name="endYear" placeholder="E.G. 1955"{% if inputs is defined %} value="{{ inputs.endYear }}"{% endif %}/><br />-->
@@ -288,7 +288,7 @@ window.location.href="mailto:?subject="+document.title+"&body="+escape(window.lo
     Location <input type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/><br />
     </fieldset>
     </form></h3>
-{%if '_uname' in session %}
+{%if results and '_uname' in session %}
 <h3><form id = "save_search" method="POST" action="{{ url_for('saveSearch') }}">
 <input id="SaveSearch" float = "right" type="submit" value="Save my search"><!--a href="mailto:?subject=I wanted you to see this site&amp;body=Check out this site: http://www.google.com"/>
         <img src="https://simplesharebuttons.com/images/somacro/email.png" alt="Email" />

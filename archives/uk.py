@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from archives.collection import Collection
 import requests
+from requests.adapters import HTTPAdapter
 import logging
 from bs4 import BeautifulSoup
 from urllib.parse import quote_plus
@@ -19,7 +20,9 @@ class UKFindingAid(Collection):
         self.results_url = url
         self.results_count = 0
         try:
-            html = requests.get(url, timeout=8).text
+            s = requests.Session()
+            s.mount('http://discovery.nationalarchives.gov.uk', HTTPAdapter(max_retries=0))
+            html = requests.get(url, timeout=10).text
             soup = BeautifulSoup(html, "lxml")
             recordstxt = soup.find("li", {'id': "records-tab"}).span.string
             logging.debug("got result: ".format(recordstxt))

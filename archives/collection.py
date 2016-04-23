@@ -1,6 +1,7 @@
 class Collection(object):
     results_count = None
     results_url = None
+    results_formdata = None
     result_search_term = None
     message = None
 
@@ -11,6 +12,8 @@ class Collection(object):
             'results_url': self.results_url,
             'message': self.message
         }
+        if self.results_formdata is not None:
+            result['results_formdata'] = self.results_formdata
         return result
 
     def keywordResultsCount(self, **kwargs):

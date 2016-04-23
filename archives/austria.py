@@ -10,12 +10,13 @@ class AustriaFindingAid(Collection):
         session = requests.session()
         data = {}
         data['search'] = keywords
+        data['realaction'] = "/catalogue_detailsearch.html"
         data['FORM_SUBMIT'] = "adb_construct_en"
         data['FORM_DATA'] = "date"
-        data['selfsend'] = "1"
-        data['page'] = "1"
-        data['orderby'] = "1"
-        data['perPage'] = "20"
+        # data['selfsend'] = "1"
+        # data['page'] = "1"
+        # data['orderby'] = "1"
+        # data['perPage'] = "20"
         url = "http://www.kunstrestitution.at/catalogue_detailsearch.html"
         r = session.post(url, data=data)
         soup = BeautifulSoup(r.text, "lxml")
@@ -28,6 +29,7 @@ class AustriaFindingAid(Collection):
             num = int(newString)
 
         self.results_url = url
+        self.results_formdata = data
 
         if num is not None:
             self.results_count = num
