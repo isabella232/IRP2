@@ -137,7 +137,7 @@ def tologin():
 def profile():
     if '_uname' not in session:
         return redirect(url_for('showLogin'))
-    return render_template('layout.html')
+    return render_template('profile.html')
 
 
 @app.route('/logout')
@@ -194,8 +194,8 @@ def saveSearch():
                    values(?, date('now'), ?);""",
                [_uname, json.dumps(inputs)])
     db.commit()
-    flash('Search saved  successfully !')
-    return render_template("searchsaved.html")
+    flash('Your search has been saved.')
+    return redirect(url_for('render_index_page'))
 
 
 @app.route('/adsearch', methods=['GET', 'POST'])
