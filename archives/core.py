@@ -2,7 +2,6 @@ from archives.dummy import Dummy
 from archives.belgium import BelgiumFindingAid
 from archives.fold3 import Fold3
 from archives.gettyas import GettyAS
-from archives.gettyri import GettyRI
 from archives.nara import NARACatalog
 from archives.ushmm import USHMM
 from archives.austria import AustriaFindingAid
@@ -38,11 +37,6 @@ archivesList = [
                 'name': 'German Art Sales Catalogs',
                 'class': GettyAS.__name__,
                 'lang': 'de'
-            },
-            {
-                'name': 'Getty Catalog',
-                'class': GettyRI.__name__,
-                'lang': 'en'
             }
         ]
     },
