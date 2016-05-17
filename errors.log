@@ -862,3 +862,229 @@ multiprocessing.context.TimeoutError
 2016-04-21 18:04:46,651 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 18:04:46] "GET /tologin?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
 2016-04-21 18:04:47,090 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 18:04:47] "GET /tologin?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
 2016-04-21 18:04:47,401 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 18:04:47] "GET /tologin?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+2016-04-21 22:32:55,213 - root - DEBUG - /search with inputs:
+{"artist": "", "keywords": "painting", "location": "", "languages": "fr"}
+2016-04-21 22:32:57,883 - root - DEBUG - searchAll called:
+{"startYear": null, "keywords": "painting", "artist": null, "location": null, "endYear": null, "translated_terms": ["peinture"]}
+2016-04-21 22:32:57,951 - root - DEBUG - NL URL:
+http://www.archieven.nl/nl/zoeken?mizig=0&miview=lst&milang=nl&micols=1&mires=0&mizk_of=painting+peinture
+2016-04-21 22:32:57,984 - root - DEBUG - ftext called: painting
+2016-04-21 22:32:58,008 - root - DEBUG - ftext called: peinture
+2016-04-21 22:33:12,303 - root - DEBUG - got result: 
+2016-04-21 22:33:12,902 - root - ERROR - 
+Traceback (most recent call last):
+  File "/Users/Sohini/PycharmProjects/IRP2/archives/core.py", line 168, in searchAll
+    resultcoll = res.get(timeout=15)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/multiprocessing/pool.py", line 595, in get
+    raise TimeoutError
+multiprocessing.context.TimeoutError
+2016-04-21 22:33:19,066 - root - ERROR - ('Connection aborted.', BadStatusLine("''",))
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/packages/urllib3/connectionpool.py", line 376, in _make_request
+    httplib_response = conn.getresponse(buffering=True)
+TypeError: getresponse() got an unexpected keyword argument 'buffering'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/packages/urllib3/connectionpool.py", line 559, in urlopen
+    body=body, headers=headers)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/packages/urllib3/connectionpool.py", line 378, in _make_request
+    httplib_response = conn.getresponse()
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/http/client.py", line 1171, in getresponse
+    response.begin()
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/http/client.py", line 351, in begin
+    version, status, reason = self._read_status()
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/http/client.py", line 321, in _read_status
+    raise BadStatusLine(line)
+http.client.BadStatusLine: ''
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/adapters.py", line 376, in send
+    timeout=timeout
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/packages/urllib3/connectionpool.py", line 609, in urlopen
+    _stacktrace=sys.exc_info()[2])
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/packages/urllib3/util/retry.py", line 247, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/packages/urllib3/packages/six.py", line 309, in reraise
+    raise value.with_traceback(tb)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/packages/urllib3/connectionpool.py", line 559, in urlopen
+    body=body, headers=headers)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/packages/urllib3/connectionpool.py", line 378, in _make_request
+    httplib_response = conn.getresponse()
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/http/client.py", line 1171, in getresponse
+    response.begin()
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/http/client.py", line 351, in begin
+    version, status, reason = self._read_status()
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/http/client.py", line 321, in _read_status
+    raise BadStatusLine(line)
+requests.packages.urllib3.exceptions.ProtocolError: ('Connection aborted.', BadStatusLine("''",))
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/Sohini/PycharmProjects/IRP2/archives/core.py", line 168, in searchAll
+    resultcoll = res.get(timeout=15)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/multiprocessing/pool.py", line 599, in get
+    raise self._value
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/multiprocessing/pool.py", line 119, in worker
+    result = (True, func(*args, **kwds))
+  File "/Users/Sohini/PycharmProjects/IRP2/archives/gettyas.py", line 32, in keywordResultsCount
+    r = session.post(url, data=data)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/sessions.py", line 511, in post
+    return self.request('POST', url, data=data, json=json, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/sessions.py", line 468, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/sessions.py", line 576, in send
+    r = adapter.send(request, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/site-packages/requests/adapters.py", line 426, in send
+    raise ConnectionError(err, request=request)
+requests.exceptions.ConnectionError: ('Connection aborted.', BadStatusLine("''",))
+2016-04-21 22:33:35,961 - root - ERROR - 
+Traceback (most recent call last):
+  File "/Users/Sohini/PycharmProjects/IRP2/archives/core.py", line 168, in searchAll
+    resultcoll = res.get(timeout=15)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/multiprocessing/pool.py", line 595, in get
+    raise TimeoutError
+multiprocessing.context.TimeoutError
+2016-04-21 22:33:40,895 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:40] "GET /search?keywords=painting&languages=fr&artist=&location= HTTP/1.1" 200 -
+2016-04-21 22:33:41,424 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:41] "GET /lib/translate.js HTTP/1.1" 404 -
+2016-04-21 22:33:41,429 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:41] "GET /lib/languages.js HTTP/1.1" 404 -
+2016-04-21 22:33:43,975 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:43] "GET /static/header.png HTTP/1.1" 304 -
+2016-04-21 22:33:43,987 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:43] "GET /static/logo-bundesarchiv.png HTTP/1.1" 304 -
+2016-04-21 22:33:44,000 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/getty.jpg HTTP/1.1" 304 -
+2016-04-21 22:33:44,012 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/austria.png HTTP/1.1" 304 -
+2016-04-21 22:33:44,027 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/logo-state-archives-belgium.png HTTP/1.1" 304 -
+2016-04-21 22:33:44,046 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/logo-dhm.png HTTP/1.1" 304 -
+2016-04-21 22:33:44,063 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/logo-ushmm.png HTTP/1.1" 304 -
+2016-04-21 22:33:44,082 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/logo-nara.png HTTP/1.1" 304 -
+2016-04-21 22:33:44,090 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/icon-blogs.gif HTTP/1.1" 304 -
+2016-04-21 22:33:44,106 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/icon-facebook.gif HTTP/1.1" 304 -
+2016-04-21 22:33:44,131 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/icon-flickr.gif HTTP/1.1" 304 -
+2016-04-21 22:33:44,143 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/icon-rss-feeds.gif HTTP/1.1" 304 -
+2016-04-21 22:33:44,156 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/icon-twitter-2.gif HTTP/1.1" 304 -
+2016-04-21 22:33:44,167 - werkzeug - INFO - 127.0.0.1 - - [21/Apr/2016 22:33:44] "GET /static/icon-youtube.gif HTTP/1.1" 304 -
+2016-04-24 04:59:56,056 - werkzeug - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2016-04-24 04:59:56,059 - werkzeug - INFO -  * Restarting with stat
+2016-04-24 04:59:56,982 - werkzeug - WARNING -  * Debugger is active!
+2016-04-24 04:59:57,020 - werkzeug - INFO -  * Debugger pin code: 204-908-765
+2016-04-24 05:00:01,502 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:01] "GET / HTTP/1.1" 200 -
+2016-04-24 05:00:02,012 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /lib/translate.js HTTP/1.1" 404 -
+2016-04-24 05:00:02,057 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /lib/languages.js HTTP/1.1" 404 -
+2016-04-24 05:00:02,100 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/header.png HTTP/1.1" 200 -
+2016-04-24 05:00:02,121 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/logo-nara.png HTTP/1.1" 200 -
+2016-04-24 05:00:02,151 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/logo-state-archives-belgium.png HTTP/1.1" 200 -
+2016-04-24 05:00:02,231 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/logo-ushmm.png HTTP/1.1" 200 -
+2016-04-24 05:00:02,264 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/getty.jpg HTTP/1.1" 200 -
+2016-04-24 05:00:02,340 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/austria.png HTTP/1.1" 200 -
+2016-04-24 05:00:02,382 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/logo-bundesarchiv.png HTTP/1.1" 200 -
+2016-04-24 05:00:02,454 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/logo-dhm.png HTTP/1.1" 200 -
+2016-04-24 05:00:02,473 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/icon-blogs.gif HTTP/1.1" 200 -
+2016-04-24 05:00:02,489 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/icon-facebook.gif HTTP/1.1" 200 -
+2016-04-24 05:00:02,508 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/icon-flickr.gif HTTP/1.1" 200 -
+2016-04-24 05:00:02,527 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/icon-rss-feeds.gif HTTP/1.1" 200 -
+2016-04-24 05:00:02,542 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/icon-twitter-2.gif HTTP/1.1" 200 -
+2016-04-24 05:00:02,561 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:02] "GET /static/icon-youtube.gif HTTP/1.1" 200 -
+2016-04-24 05:00:14,615 - root - DEBUG - /search with inputs:
+{"keywords": "Violin", "location": "", "artist": "", "languages": "fr"}
+2016-04-24 05:00:15,344 - root - DEBUG - searchAll called:
+{"keywords": "Violin", "endYear": null, "artist": null, "startYear": null, "location": null, "translated_terms": ["Violon", "Geige"]}
+2016-04-24 05:00:15,372 - root - DEBUG - NL URL:
+http://www.archieven.nl/nl/zoeken?mizig=0&miview=lst&milang=nl&micols=1&mires=0&mizk_of=Violin+Violon+Geige
+2016-04-24 05:00:15,386 - root - DEBUG - ftext called: Violin
+2016-04-24 05:00:15,401 - root - DEBUG - ftext called: Violon
+2016-04-24 05:00:15,412 - root - DEBUG - ftext called: Geige
+2016-04-24 05:00:18,392 - root - DEBUG - got result: 
+2016-04-24 05:00:26,627 - root - ERROR - list index out of range
+Traceback (most recent call last):
+  File "/Users/Sohini/PycharmProjects/IRP2/archives/core.py", line 168, in searchAll
+    resultcoll = res.get(timeout=15)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/multiprocessing/pool.py", line 599, in get
+    raise self._value
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/multiprocessing/pool.py", line 119, in worker
+    result = (True, func(*args, **kwds))
+  File "/Users/Sohini/PycharmProjects/IRP2/archives/gettyas.py", line 15, in keywordResultsCount
+    websessionID = soup.select('input[name="__websessionID"]')[0]['value']
+IndexError: list index out of range
+2016-04-24 05:00:28,551 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:28] "GET /search?keywords=Violin&languages=fr&languages=de&artist=&location= HTTP/1.1" 200 -
+2016-04-24 05:00:28,809 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:28] "GET /lib/translate.js HTTP/1.1" 404 -
+2016-04-24 05:00:28,817 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:00:28] "GET /lib/languages.js HTTP/1.1" 404 -
+2016-04-24 05:14:26,889 - root - DEBUG - /search with inputs:
+{"keywords": "\"portrait of king\"", "location": "", "artist": "", "languages": "fr"}
+2016-04-24 05:14:27,153 - root - DEBUG - searchAll called:
+{"keywords": "\"portrait of king\"", "endYear": null, "artist": null, "startYear": null, "location": null, "translated_terms": ["\"Portrait du roi\"", "\"Portr\u00e4t des K\u00f6nigs\""]}
+2016-04-24 05:14:27,181 - root - DEBUG - NL URL:
+http://www.archieven.nl/nl/zoeken?mizig=0&miview=lst&milang=nl&micols=1&mires=0&mizk_of=%22portrait+of+king%22+%22Portrait+du+roi%22+%22Portr%C3%A4t+des+K%C3%B6nigs%22
+2016-04-24 05:14:27,198 - root - DEBUG - ftext called: "portrait of king"
+2016-04-24 05:14:27,208 - root - DEBUG - ftext called: "Portrait du roi"
+2016-04-24 05:14:27,217 - root - DEBUG - ftext called: "Porträt des Königs"
+2016-04-24 05:14:28,921 - root - DEBUG - got result: 
+2016-04-24 05:14:29,339 - root - ERROR - list index out of range
+Traceback (most recent call last):
+  File "/Users/Sohini/PycharmProjects/IRP2/archives/core.py", line 168, in searchAll
+    resultcoll = res.get(timeout=15)
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/multiprocessing/pool.py", line 599, in get
+    raise self._value
+  File "/Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/multiprocessing/pool.py", line 119, in worker
+    result = (True, func(*args, **kwds))
+  File "/Users/Sohini/PycharmProjects/IRP2/archives/gettyas.py", line 15, in keywordResultsCount
+    websessionID = soup.select('input[name="__websessionID"]')[0]['value']
+IndexError: list index out of range
+2016-04-24 05:14:41,826 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:14:41] "GET /search?keywords=%22portrait+of+king%22&languages=fr&languages=de&artist=&location= HTTP/1.1" 200 -
+2016-04-24 05:14:42,113 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:14:42] "GET /lib/translate.js HTTP/1.1" 404 -
+2016-04-24 05:14:42,117 - werkzeug - INFO - 127.0.0.1 - - [24/Apr/2016 05:14:42] "GET /lib/languages.js HTTP/1.1" 404 -
+2016-04-28 17:09:10,491 - werkzeug - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2016-04-28 17:09:10,494 - werkzeug - INFO -  * Restarting with stat
+2016-04-28 17:09:11,302 - werkzeug - WARNING -  * Debugger is active!
+2016-04-28 17:09:11,341 - werkzeug - INFO -  * Debugger pin code: 204-908-765
+2016-04-28 17:09:27,329 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:27] "GET / HTTP/1.1" 200 -
+2016-04-28 17:09:27,989 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:27] "GET /lib/translate.js HTTP/1.1" 404 -
+2016-04-28 17:09:27,994 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:27] "GET /lib/languages.js HTTP/1.1" 404 -
+2016-04-28 17:09:28,453 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/header.png HTTP/1.1" 200 -
+2016-04-28 17:09:28,462 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/logo-nara.png HTTP/1.1" 200 -
+2016-04-28 17:09:28,467 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/logo-state-archives-belgium.png HTTP/1.1" 200 -
+2016-04-28 17:09:28,480 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/logo-ushmm.png HTTP/1.1" 200 -
+2016-04-28 17:09:28,501 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/getty.jpg HTTP/1.1" 200 -
+2016-04-28 17:09:28,508 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/austria.png HTTP/1.1" 200 -
+2016-04-28 17:09:28,530 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/logo-bundesarchiv.png HTTP/1.1" 200 -
+2016-04-28 17:09:28,542 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/logo-dhm.png HTTP/1.1" 200 -
+2016-04-28 17:09:28,551 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/icon-blogs.gif HTTP/1.1" 200 -
+2016-04-28 17:09:28,559 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/icon-facebook.gif HTTP/1.1" 200 -
+2016-04-28 17:09:28,569 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/icon-flickr.gif HTTP/1.1" 200 -
+2016-04-28 17:09:28,580 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/icon-rss-feeds.gif HTTP/1.1" 200 -
+2016-04-28 17:09:28,596 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/icon-twitter-2.gif HTTP/1.1" 200 -
+2016-04-28 17:09:28,601 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:09:28] "GET /static/icon-youtube.gif HTTP/1.1" 200 -
+2016-04-28 17:10:01,991 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:10:01] "GET / HTTP/1.1" 200 -
+2016-04-28 17:10:02,489 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:10:02] "GET /lib/translate.js HTTP/1.1" 404 -
+2016-04-28 17:10:02,496 - werkzeug - INFO - 127.0.0.1 - - [28/Apr/2016 17:10:02] "GET /lib/languages.js HTTP/1.1" 404 -
+2016-05-12 16:50:28,219 - werkzeug - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2016-05-12 16:50:28,223 - werkzeug - INFO -  * Restarting with stat
+2016-05-12 16:50:29,111 - werkzeug - WARNING -  * Debugger is active!
+2016-05-12 16:50:29,153 - werkzeug - INFO -  * Debugger pin code: 204-908-765
+2016-05-12 16:50:33,194 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET / HTTP/1.1" 200 -
+2016-05-12 16:50:33,679 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /lib/translate.js HTTP/1.1" 404 -
+2016-05-12 16:50:33,688 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /lib/languages.js HTTP/1.1" 404 -
+2016-05-12 16:50:33,705 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/header.png HTTP/1.1" 200 -
+2016-05-12 16:50:33,728 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/logo-nara.png HTTP/1.1" 200 -
+2016-05-12 16:50:33,750 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/logo-state-archives-belgium.png HTTP/1.1" 200 -
+2016-05-12 16:50:33,772 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/logo-ushmm.png HTTP/1.1" 200 -
+2016-05-12 16:50:33,795 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/getty.jpg HTTP/1.1" 200 -
+2016-05-12 16:50:33,854 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/austria.png HTTP/1.1" 200 -
+2016-05-12 16:50:33,906 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/logo-bundesarchiv.png HTTP/1.1" 200 -
+2016-05-12 16:50:33,934 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/logo-dhm.png HTTP/1.1" 200 -
+2016-05-12 16:50:33,937 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/icon-blogs.gif HTTP/1.1" 200 -
+2016-05-12 16:50:33,943 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/icon-facebook.gif HTTP/1.1" 200 -
+2016-05-12 16:50:33,953 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/icon-flickr.gif HTTP/1.1" 200 -
+2016-05-12 16:50:33,968 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:33] "GET /static/icon-rss-feeds.gif HTTP/1.1" 200 -
+2016-05-12 16:50:34,033 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:34] "GET /static/icon-twitter-2.gif HTTP/1.1" 200 -
+2016-05-12 16:50:34,064 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:34] "GET /static/icon-youtube.gif HTTP/1.1" 200 -
+2016-05-12 16:50:34,416 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:50:34] "GET /favicon.ico HTTP/1.1" 404 -
+2016-05-12 16:52:42,613 - werkzeug - INFO -  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+2016-05-12 16:52:42,616 - werkzeug - INFO -  * Restarting with stat
+2016-05-12 16:52:43,696 - werkzeug - WARNING -  * Debugger is active!
+2016-05-12 16:52:43,716 - werkzeug - INFO -  * Debugger pin code: 204-908-765
+2016-05-12 16:53:06,935 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:53:06] "GET / HTTP/1.1" 200 -
+2016-05-12 16:53:07,291 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:53:07] "GET /lib/translate.js HTTP/1.1" 404 -
+2016-05-12 16:53:07,294 - werkzeug - INFO - 127.0.0.1 - - [12/May/2016 16:53:07] "GET /lib/languages.js HTTP/1.1" 404 -
