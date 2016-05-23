@@ -1,0 +1,187 @@
+{
+  "@context": {
+    "@vocab": "http://xmlns.com/foaf/0.1/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "xs": "http://www.w3.org/2001/XMLSchema#",
+    "dc:publisher": {
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "rdfs:label": "State Archives in Belgium",
+      "@id": "BelgiumStateArchives",
+      "@type": "foaf:Organization",
+      "depiction": "logo-state-archives-belgium.png",
+      "page": "http://www.archives.gov/research/holocaust/international-resources/belgium.html",
+      "homepage": "http://arch.arch.be/"
+    },
+    {
+      "rdfs:label": "Holocaust Assets Finding Aid",
+      "dc:description": "Inventory of the Archive of the Department for Economic Recovery (Office de Récupération Economique) and Legal Predecessor, 1940-1968",
+      "@type": "a:FindingAid",
+      "@id": "BelgiumFindingAid",
+      "lang": "en",
+      "dc:publisher": "BelgiumStateArchives",
+      "dc:coverage": [],
+      "dc:date": {
+        "start": "",
+        "end": ""
+      }
+    },
+    {
+      "rdfs:label": "Getty Research Institute",
+      "@id": "GettyResearchInstitute",
+      "@type": "foaf:Organization",
+      "depiction": "getty.jpg",
+      "page": "http://www.archives.gov/research/holocaust/international-resources/getty.html",
+      "homepage": "http://www.getty.edu/research/"
+    },
+    {
+      "rdfs:label": "German Sales Catalogs, 1930-1945",
+      "dc:description": "Art auction sales catalogs from German-speaking countries -- Austria, Germany and Switzerland -- from 1930 to 1945.",
+      "@type": "a:Collection",
+      "@id": "GettyAS",
+      "lang": "en",
+      "dc:publisher": "GettyResearchInstitute",
+      "dc:coverage": [
+        "http://vocab.getty.edu/tgn/1000062"
+        ],
+      "dc:date": {
+        "start": "1930",
+        "end": "1945"
+        }
+    },
+    {
+      "rdfs:label": "United States Holocaust Memorial Museum",
+      "@id": "USHMM",
+      "@type": "foaf:Organization",
+      "depiction": "logo-ushmm.png",
+      "page": "http://www.archives.gov/research/holocaust/international-resources/claims-con-ushmm.html",
+      "homepage": "http://www.ushmm.org/research/research-in-collections/overview"
+    },
+    {
+      "rdfs:label": "Database of Art Objects at Jeu de Paume",
+      "dc:description": "This database brings together for the first time in searchable illustrated form the remaining registration cards and photographs produced by the ERR covering more than 30,000 art objects taken from Jews in German-occupied France and, to a lesser extent, in Belgium.",
+      "@type": "a:Database",
+      "@id": "JeuDePaume",
+      "dc:publisher": "USHMM",
+      "dc:language": "en",
+      "dc:coverage": [
+        "France",
+        "Belgium"
+        ],
+      "dc:date": {
+        "start": "1940",
+        "end": "1944"
+        }
+    },
+    {
+      "rdfs:label": "United States National Archives and Records Administration",
+      "@id": "NARA",
+      "@type": "foaf:Organization",
+      "depiction": "logo-nara.png",
+      "page": "http://www.archives.gov/research/holocaust/international-resources/nara/",
+      "homepage": "http://www.archives.gov/research/"
+    },
+    {
+      "rdfs:label": "Fold3",
+      "@id": "Fold3",
+      "@type": "foaf:Organization",
+      "page": "http://www.archives.gov/research/holocaust/international-resources/nara/",
+      "homepage": "https://go.fold3.com/holocaust_art/"
+    },
+    {
+      "rdfs:label": "Holocaust-Era Assets at Fold3 (Ardelia Hall, etc.)",
+      "dc:description": "The Ardelia Hall is a NARA record collection of recovered items and the work to restore these stolen items to their proper owners.",
+      "@type": "a:Collection",
+      "@id": "ArdeliaHall",
+      "dc:publisher": ["USHMM", "Fold3"],
+      "dc:language": "en",
+      "dc:coverage": [],
+      "dc:date": {
+        "start": "1940",
+        "end": "1944"
+      },
+      "a:hasFieldMapping": {
+        "a:keywords": "keyword",
+        "a:startYear": "start",
+        "a:endYear": "end"
+      }
+    },
+    {
+      "rdfs:label": "National Fund of the Republic of Austria for Victims of National Socialism",
+      "@id": "AustriaNationalFund",
+      "@type": "foaf:Organization",
+      "depiction": "austria.png",
+      "page": "http://www.archives.gov/research/holocaust/international-resources/austria.html",
+      "homepage": "http://nationalfonds.org/home.html"
+    },
+    {
+      "rdfs:label": "Art Database of the National Fund (Austria)",
+      "dc:description": "The Art Database of the National Fund provides information on art and cultural objects presently located in museums and collections of the Republic of Austria or of the City of Vienna, which, according to latest provenance research, may have been seized under the National Socialist regime.",
+      "@type": "a:Database",
+      "@id": "AustriaArtDB",
+      "dc:publisher": "AustriaNationalFund",
+      "dc:language": "en",
+      "dc:coverage": [],
+      "dc:date": {
+        "start": "1940",
+        "end": "1944"
+      }
+    },
+    {
+      "rdfs:label": "National Archives of the United Kingdom",
+      "@id": "UKNationalArchives",
+      "@type": "foaf:Organization",
+      "page": "http://www.archives.gov/research/holocaust/international-resources/uk.html",
+      "homepage": "http://nationalfonds.org/home.html"
+    },
+    {
+      "rdfs:label": "National Archives of UK",
+      "dc:description": "Records from all UK government departments involved in countering the Nazi spoliation of Europe and in resolving restitution and reparation claims arising after the war. These are records which show the systematic looting of works of art and cultural property throughout Europe by Nazi Germany between 1933 and 1945. They have been identified, described and introduced by the Commission for Looted Art in Europe in partnership with The National Archives.",
+      "@type": "a:Collection",
+      "@id": "UKCollection",
+      "dc:publisher": "UKNationalArchives",
+      "dc:language": "en",
+      "dc:coverage": ["Belgium", "France", "Hungary", "Italy", "Malta", "The Netherlands", "Yugoslavia"],
+      "dc:date": {
+        "start": "1939",
+        "end": "1961"
+      }
+    },
+    {
+      "rdfs:label": "Bundesarchiv (Federal Archives of Germany)",
+      "@id": "GermanyFederalArchives",
+      "@type": "foaf:Organization",
+      "depiction": "logo-bundesarchiv.png",
+      "page": "http://www.archives.gov/research/holocaust/international-resources/bundesarchiv.html",
+      "homepage": "http://www.bundesarchive.de/index.html.de"
+    },
+    {
+      "rdfs:label": "Lost Art Internet Database (Magdeburg)",
+      "dc:description": "The Lost Art Database registers cultural objects which as a result of persecution under the Nazi dictatorship and the Second World War were relocated, moved or seized, especially from Jewish owners.",
+      "@type": "a:Database",
+      "@id": "LostArt",
+      "dc:publisher": "which???",
+      "dc:language": "de",
+      "dc:coverage": [],
+      "dc:date": {
+        "start": "1939",
+        "end": "1961"
+      }
+    },
+    {
+      "rdfs:label": "State Archives of the Netherlands",
+      "@id": "NetherlandsStateArchives",
+      "@type": ["foaf:Organization", "a:GeneralArchives"],
+      "depiction": "logo-dhm.png",
+      "homepage": "http://www.archieven.nl/en/",
+      "dc:description": "The Lost Art Database registers cultural objects which as a result of persecution under the Nazi dictatorship and the Second World War were relocated, moved or seized, especially from Jewish owners.",
+      "dc:publisher": "which???",
+      "dc:language": "de",
+      "dc:coverage": ["The Netherlands"]
+    }
+  ]
+}

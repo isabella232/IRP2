@@ -8,18 +8,6 @@ from urllib.parse import quote_plus
 
 class Fold3(Collection):
 
-    info = {
-        'name': 'Fold3 Holocaust Era Assets',
-        'class': 'Fold3',
-        'lang': 'en',
-        'fields': {
-            'keywords': 'keyword',
-            'startYear': 'start',
-            'endYear': 'end'
-        }  # NOTE: field mapping done locally for Fold3
-    }
-
-
     def keywordResultsCount(self, **kwargs):
         keywords = self.add_unsupported_fields_to_keywords(kwargs)
         # NOTE: keywords are escaped by json.dumps

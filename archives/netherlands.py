@@ -6,7 +6,7 @@ import logging
 from urllib.parse import quote_plus
 
 
-class NetherlandsFindingAid(Collection):
+class NetherlandsStateArchives(Collection):
 
 
     def keywordResultsCount(self, **kwargs):

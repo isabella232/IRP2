@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 
 
-class AustriaFindingAid(Collection):
+class AustriaArtDB(Collection):
 
     def keywordResultsCount(self, **kwargs):
         keywords = self.add_unsupported_fields_to_keywords(kwargs)
