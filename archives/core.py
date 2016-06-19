@@ -4,7 +4,7 @@ from archives.fold3 import Fold3
 from archives.gettyas import GettyAS
 from archives.nara import NARACatalog
 from archives.ushmm import USHMM
-from archives.austria import AustriaFindingAid
+from archives.austria import AustriaArtDB
 from archives.uk import UKFindingAid
 from archives.netherlands import NetherlandsFindingAid
 from archives.lost_art import LostArt
