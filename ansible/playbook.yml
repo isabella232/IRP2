@@ -1,9 +1,11 @@
 ---
 - hosts: irp2
   become: yes
+
+  roles:
+    - ansible-java8-oracle
+
   tasks:
-    - name: Update apt cache
-      apt: update_cache=yes
     - name: Install packages
       apt: pkg={{ item }} state=latest
       with_items:
@@ -12,16 +14,38 @@
         - python-dev
         - python-virtualenv
         - python-pip
-        - libxml2-dev
-        - libxslt-dev
-        - python3-lxml
         - libz-dev
         - git
         - nginx
 
+    - name: Install Python3 LXML dependencies
+      apt: pkg=python3-lxml state=build-dep
+
     - name: Configure Nginx Proxy
       template: src=nginx-irp2.conf.j2 dest=/etc/nginx/conf.d/irp2.conf
     - service: name=nginx state=restarted enabled=yes
+
+    - name: Create Solr user
+      user: name=solr system=yes
+
+    - stat: path=/opt/solr
+      register: s
+
+    - name: Download Solr
+      get_url: url=http://mirrors.ibiblio.org/apache/lucene/solr/6.1.0/solr-6.1.0.tgz dest=/tmp/solr-6.1.0.tgz
+      when: s.stat.isdir is defined and s.stat.isdir
+
+    - name: Extract Solr installer
+      command: tar xzf /tmp/solr-6.1.0.tgz solr-6.1.0/bin/install_solr_service.sh --strip-components=2
+      args:
+        chdir: /tmp/
+        creates: /opt/solr
+
+    - name: Run Solr installer (starts Solr service)
+      command: bash ./install_solr_service.sh solr-6.1.0.tgz -i /opt -d /var/solr -u solr -s solr -p 8983
+      args:
+        chdir: /tmp/
+        creates: /opt/solr
 
     - file: path=~/IRP2 state=directory mode=0755
       become: no
