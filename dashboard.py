@@ -7,8 +7,9 @@ import sqlite3
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_extended import Flask
-from flask import request, session, g, redirect, url_for, render_template, flash
+from flask import jsonify, request, session, g, redirect, url_for, render_template, flash
 from archives.core import searchAll
+from archives.core import search as mysearch
 from archives.core import archivesList
 from archives.core import get_translations
 from lxml import etree
@@ -142,6 +143,33 @@ def signout():
         return redirect(url_for('showLogin'))
     session.pop('_uname', None)
     return render_template('afterlogout.html')
+
+
+@app.route('/searchOne', methods=['GET'])
+def searchOne():
+    inputs = request.args
+    try:
+        languages = request.args.getlist('languages')
+    except Exception as e:
+        logging.exception(e)
+        pass
+    logging.debug("/search with inputs:\n{0}".format(json.dumps(inputs)))
+    session["inputs"] = inputs
+    myargs = {}
+    myargs['keywords'] = inputs.get('keywords', '')
+    myargs['artist'] = inputs.get('artist', '')
+    myargs['collectionid'] = inputs.get('collectionid', '')
+    myargs['location'] = inputs.get('location', '')
+    myargs['startYear'] = inputs.get('startYear', '')
+    myargs['endYear'] = inputs.get('endYear', '')
+    for key, value in myargs.items():
+        if len(value) == 0 or str(value).strip() == '':
+            myargs[key] = None
+    if len(languages) > 0 and myargs['keywords'] is not None:
+        translated_terms = get_translations(myargs['keywords'], languages)
+        myargs['translated_terms'] = translated_terms
+    result = mysearch(**myargs)
+    return jsonify(result)
 
 
 @app.route('/search', methods=['GET', 'POST'])

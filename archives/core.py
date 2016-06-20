@@ -131,6 +131,19 @@ def get_translations(keywords, languages):
     return result
 
 
+def search(**kwargs):
+    """Search a collection for relevant results"""
+    logging.debug('search called:\n{0}'.format(json.dumps(kwargs)))
+    terms = kwargs.get('translated_terms', '')
+    classname = kwargs['collectionid']
+    module = sys.modules[__name__]
+    collClass = getattr(module, classname)
+    collObject = collClass()
+    result = collObject.keywordResultsCount(**kwargs).emit()
+    result['translated_terms'] = str(terms)
+    return result
+
+
 # asyncSearch - Set to False for serial searches and better error reporting
 # dummySearch - Set to True for offline development work w/o searches
 def searchAll(**kwargs):
