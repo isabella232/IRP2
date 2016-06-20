@@ -2,6 +2,10 @@
 - hosts: irp2
   become: yes
 
+  vars:
+    project_path: ~/IRP2
+    virtualenv_path: ~/irp2venv
+
   roles:
     - ansible-java8-oracle
 
@@ -47,12 +51,12 @@
         chdir: /tmp/
         creates: /opt/solr
 
-    - file: path=~/IRP2 state=directory mode=0755
+    - file: path={{ project_path }} state=directory mode=0755
       become: no
       tags: code
 
     - name: Deploy application code
-      copy: src=../../{{ item }} dest=~/IRP2/ mode=0755
+      copy: src=../../{{ item }} dest={{ project_path }} mode=0755
       with_items:
         - archives
         - static
@@ -65,15 +69,26 @@
       tags: code
 
     - name: Deploy instance (no overwrite)
-      copy: src=../../{{ item }} dest=~/IRP2/ mode=0755 force=no
+      copy: src=../../{{ item }} dest={{ project_path }} mode=0755 force=no
       with_items:
         - instance
       become: no
       tags: code
 
     - name: Install Python packages
-      pip: requirements=~/IRP2/requirements.txt virtualenv=~/irp2venv virtualenv_python=python3.4
+      pip: requirements={{ project_path }}/requirements.txt virtualenv={{ virtualenv_path }} virtualenv_python=python3.4
       become: no
+
+    - name: Create the virtualenv postactivate script to set environment variables
+      become: no
+      lineinfile: dest={{ virtualenv_path }}/bin/activate insertafter=EOF line="export FLASK_APP={{ project_path }}/dashboard.py"
+
+    - template: src=venv_exec.j2 dest={{ virtualenv_path }}/bin/exec mode=755
+      become: no
+
+    - name: Initialize DB
+      become: no
+      command: "{{ virtualenv_path }}/bin/exec flask init_db"
 
     - name: Stop existing application
       command: killall python

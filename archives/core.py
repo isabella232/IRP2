@@ -6,7 +6,7 @@ from archives.nara import NARACatalog
 from archives.ushmm import USHMM
 from archives.austria import AustriaArtDB
 from archives.uk import UKFindingAid
-from archives.netherlands import NetherlandsFindingAid
+from archives.netherlands import NetherlandsStateArchives
 from archives.lost_art import LostArt
 import sys
 import json
@@ -69,7 +69,7 @@ archivesList = [
         'collections': [
             {
                 'name': 'Art Database of the National Fund',
-                'class': AustriaFindingAid.__name__,
+                'class': AustriaArtDB.__name__,
                 'lang': 'en'
             },
         ]
@@ -108,7 +108,7 @@ archivesList = [
         'collections': [
             {
                 'name': 'Archives and Collections',
-                'class': NetherlandsFindingAid.__name__,
+                'class': NetherlandsStateArchives.__name__,
                 'lang': 'en'
             },
         ]

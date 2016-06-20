@@ -55,17 +55,13 @@ def get_db():
     return g.dbconn
 
 
+@app.cli.command()
 def init_db():
     db = connect_db()
     with app.open_resource('irp2_schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
     db.commit()
-
-
-def initdb_command():
-    """Initializes the database."""
-    init_db()
-    print('Initialized the database.')
+    logging.warn('Initialized the database.')
 
 
 @app.teardown_appcontext
