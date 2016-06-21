@@ -1,0 +1,11 @@
+server {
+	root /usr/share/nginx/www;
+	index index.html index.htm;
+
+  listen *:80;
+
+  location / {
+    proxy_pass http://localhost:5000;
+  }
+
+}
