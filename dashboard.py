@@ -1,5 +1,4 @@
 import os
-import sys
 import logging
 import logging.config
 import yaml
@@ -10,7 +9,6 @@ from flask_extended import Flask
 from flask import jsonify, request, session, g, redirect, url_for, render_template, flash
 from archives.core import searchAll
 from archives.core import search as mysearch
-from archives.core import archivesList
 from archives.core import get_translations
 from lxml import etree
 from archives import belgium
@@ -47,43 +45,62 @@ def connect_db():
     return rv
 
 
-def get_db():
-    """Opens a new database connection if there is none yet for the
-    current application context.
-    """
-    if not hasattr(g, 'dbconn'):
-        g.dbconn = connect_db()
-    return g.dbconn
-
-
 @app.cli.command()
 def init_db():
-    db = connect_db()
-    with app.open_resource('irp2_schema.sql', mode='r') as f:
+    db = get_db()
+    with app.open_instance_resource('irp2_schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
     db.commit()
     logging.warn('Initialized the database.')
 
 
+def get_db():
+    """Opens a new database connection if there is none yet for the
+    current application context.
+    """
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = connect_db()
+    return db
+
+
 @app.teardown_appcontext
 def close_db(error):
     """Closes the database again at the end of the request."""
-    if hasattr(g, 'dbconn'):
-        g.dbconn.close()
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
+
+#collections = None
+
+
+def getcollections():
+    #global collections
+    #if collections is None:
+    with app.open_resource('static/collections_ld.json', 'r') as data_file:
+        collections = json.load(data_file)
+    return collections
 
 
 @app.route('/')
-def render_index_page():
-    return render_template('layout.html')
+def welcome():
+    return render_template('welcome.html')
 
 
-@app.route('/showLogin')
-def showLogin():
-    return render_template('login.html')
+@app.route('/collections')
+def collections():
+    myjsonld = getcollections()
+    return render_template('collections.html', collections=myjsonld)
 
 
-@app.route('/toregister', methods=['POST', 'GET'])
-def login():
+@app.route('/join', methods=['POST', 'GET'])
+def join():
+    return render_template('join.html')
+
+
+@app.route('/tojoin', methods=['POST', 'GET'])
+def tojoin():
     db = get_db()
     # read the posted values from the UI
     _name = request.form['usernamesignup']
@@ -103,7 +120,7 @@ def login():
                        [_name, _pwhash, _email])
             db.commit()
             flash('User created successfully !')
-            return redirect(url_for('showLogin'))
+            return redirect(url_for('welcome'))
     else:
         return json.dumps({'html': '<span>Enter the required fields</span>'})
 
@@ -123,18 +140,19 @@ def tologin():
         return json.dumps({'html': '<span>Incorrect credentials. PLease try again.. </span>'})
     logging.debug("Got a matching row for login:\n"+str(row))
     if check_password_hash(row['password'], _password):
-        session['_uname'] = _uname
-        flash("Login Succeeded. Welcome {0}.".format(row['username']))
-        return redirect(url_for('profile'))
+        session['_uname'] = row['username']
+        session['_email'] = row['email_id']
+        flash("Sign in succeeded. Welcome, {0}.".format(row['username']))
+        return redirect(url_for('welcome'))
     else:
         return json.dumps({'html': '<span>Incorrect credentials. PLease try again.. </span>'})
 
 
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
+@app.route('/settings', methods=['GET', 'POST'])
+def settings():
     if '_uname' not in session:
-        return redirect(url_for('showLogin'))
-    return render_template('profile.html')
+        return redirect(url_for('welcome'))
+    return render_template('settings.html')
 
 
 @app.route('/logout')
@@ -142,12 +160,19 @@ def signout():
     if '_uname' not in session:
         return redirect(url_for('showLogin'))
     session.pop('_uname', None)
-    return render_template('afterlogout.html')
+    flash("Log out succeeded.")
+    return redirect(url_for('welcome'))
 
 
-@app.route('/searchOne', methods=['GET'])
-def searchOne():
-    inputs = request.args
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    myjsonld = getcollections()
+    return render_template('ajaxsearch.html', collections=myjsonld)
+
+
+@app.route('/searchAJAX', methods=['POST'])
+def searchAJAX():
+    inputs = request.form
     try:
         languages = request.args.getlist('languages')
     except Exception as e:
@@ -172,8 +197,8 @@ def searchOne():
     return jsonify(result)
 
 
-@app.route('/search', methods=['GET', 'POST'])
-def search():
+@app.route('/searchAll', methods=['GET', 'POST'])
+def searchAllPage():
     languages = []
     if request.method == 'POST':
         inputs = request.form
@@ -206,12 +231,18 @@ def search():
         myargs['translated_terms'] = translated_terms
 
     results = searchAll(**myargs)
-    return render_template("search.html", results=results, archivesList=archivesList, inputs=inputs)
+    return render_template("search.html", results=results, collections=collections, inputs=inputs)
 
 
 @app.route('/saveSearch', methods=['GET', 'POST'])
 def saveSearch():
-    inputs = session["inputs"]
+    inputs = None
+    if request.method == 'POST':
+        inputs = request.form
+    if request.method == 'GET':
+        inputs = request.args
+    if inputs is None or len(inputs.items()) == 0:
+        inputs = session['inputs']
     _uname = session["_uname"]
     db = get_db()
     db.execute("""INSERT INTO saved_search(username, searched_on, search_key)
@@ -219,7 +250,7 @@ def saveSearch():
                [_uname, json.dumps(inputs)])
     db.commit()
     flash('Your search has been saved.')
-    return redirect(url_for('render_index_page'))
+    return redirect(url_for('search'))
 
 
 @app.route('/adsearch', methods=['GET', 'POST'])
@@ -236,7 +267,7 @@ def adsearch():
 def advsearch():
     tree = etree.parse("archives/belgium.xml")
     inventory = tree.getroot()
-    session.clear()
+    session.clear()  # FIXME this is extreme
     # initial
     result = set(inventory.iter())
     title = request.form.get("title")
@@ -280,7 +311,4 @@ def detail():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1 and 'initdb' == sys.argv[1]:
-        initdb_command()
-    else:
-        app.run("0.0.0.0")
+    app.run("0.0.0.0")

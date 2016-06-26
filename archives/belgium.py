@@ -63,7 +63,10 @@ def getresult(nodes):
         result["date_range1"] = node.get("date_range1")
         result["date_range2"] = node.get("date_range2")
         result["date"] = xstr(result["date_range1"]) + " " + xstr(result["date_range2"])
-        result["detail"] = " ".join(node.text.strip().replace("\n", "").split()[1:])
+        if node.text is not None:
+            result["detail"] = " ".join(node.text.strip().replace("\n", "").split()[1:])
+        else:
+            result['detail'] = ""
         series = []
         lnote = node.xpath("../note")
         if len(lnote) > 0:
@@ -136,10 +139,11 @@ def ftype(inventory, type):
 def ftext(inventory, text):
     logging.debug("ftext called: "+text)
     results = set()
-    for node in inventory.iter("item"):
-        if text.lower() in node.text.replace('\n', ' ').lower():
-            # if re.match(r'.*' + text + r'.*', node.text.replace('\n', ' '), re.I):
-            results.add(node)
+    if text.strip() != '':
+        for node in inventory.iter("item"):
+            if text.lower() in node.text.replace('\n', ' ').lower():
+                # if re.match(r'.*' + text + r'.*', node.text.replace('\n', ' '), re.I):
+                results.add(node)
     return results
 
 

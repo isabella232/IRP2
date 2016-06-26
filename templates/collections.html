@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container">
+<h3>Included Collections</h3>
+<p>This is the list of the archival collections, databases, and finding aids that
+are used in the portal search feature.</p>
+<table id="collectionsTable" class="table table-striped">
+  <thead>
+    <tr><th>Collection Name</th><th>Coverage</th><th>Total Records</th></tr>
+  </thead>
+  <tbody>
+{% for node in collections['@graph']|sort(attribute='rdfs:label') %}
+{% if node['@type'] in ["a:Database","a:FindingAid", "a:Collection"] %}
+    <tr id="{{ node['@id'] }}">
+      <td>{{ node['rdfs:label'] }}</td>
+      <td>{{ '%s' % ', '.join(node['dc:coverage']) if node['dc:coverage'] }}</td>
+      <td></td>
+    </tr>
+{% endif %}
+{% endfor %}
+  <tbody>
+</table>
+
+<table style="width: 100%;">
+  <tbody>
+    <tr><th colspan="2"><h1 style="margin-top: 0px; margin-bottom: 0px; color: #fff;">Search Records of Participating Institutions</h1></th></tr>
+    <tr style="border: 1px solid #e6e6e6;">
+      <td><a href="http://www.archives.gov/research/holocaust/international-resources/nara/" target="_blank">The National Archives of the United States</a></td>
+      <td><img src="static/logo-nara.png" alt="NARA logo" style="border:0;"></td>
+    </tr>
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/bundesarchiv.html" target="_blank">Bundesarchiv (The Federal Archives of Germany)</a></td>-->
+    <!--<td><img src="static/logo-bundesarchiv.png" alt="German National Archives logo" style="border:0;"></td></tr>-->
+
+    <tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/archives-uk.html" target="_blank">The National Archives of the United Kingdom</a></td>
+      <td><img src="static/logo-tna.png" alt="United Kingdom National Archives logo" style="border:0;"></td>
+    </tr>
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/france.html" target="_blank">France Diplomatie: Diplomatic Archive Center of the Ministry of Foreign and European Affairs</a></td>-->
+    <!--<td><img src="static/logo-france-diplomatie.png" alt="Diplomatic Archive Center of the Ministry of Foreign and European Affairs logo" style="border:0;"></td></tr>-->
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/tsdavo.html" target="_blank">Central State Archive of Supreme Bodies of Power and Government of Ukraine (TsDAVO)</a></td>-->
+    <!--<td><img src="static/logo-tsdavo.png" alt="TsDAVO of Ukraine logo" style="border:0;"></td></tr>-->
+
+    <tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/belgium.html" target="_blank">State Archives in Belgium</a></td>
+      <td><img src="static/logo-state-archives-belgium.png" alt="State Archives in Belgium logo" style="border:0;"></td>
+    </tr>
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/archives-uk.html" target="_blank">Commission for Looted Art in Europe (CLAE)</a></td>-->
+    <!--<td><img src="static/logo-clae.png" alt="Commission for Looted Art in Europe logo" style="border:0;"></td></tr>-->
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/claims-con-ushmm.html" target="_blank">Claims Conference (Conference on Jewish Material Claims Against Germany)</a></td>-->
+    <!--<td><img src="static/logo-claims-con.png" alt="Claims Conference logo" style="border:0;"></td></tr>-->
+
+    <tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/claims-con-ushmm.html" target="_blank">United States Holocaust Memorial Museum</a></td>
+      <td><img src="static/logo-ushmm.png" alt="United States Holocaust Memorial Musuem logo" style="border:0;"></td>
+    </tr>
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/dhm.html" target="_blank">Deutsches Historisches Museum (German Historical Museum)</a></td>-->
+    <!--<td><img src="static/logo-dhm.png" alt="Deutsches Historisches Museum logo" style="border:0;"></td></tr>-->
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/memorial-shoah.html" target="_blank">Mémorial de la Shoah</a></td>-->
+    <!--<td><img src="static/logo-memorial-shoah.png" alt="Memorial de la Shoah logo" style="border:0;"></td></tr>-->
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/niod.html" target="_blank">NIOD Institute for War, Holocaust and Genocide Studies (Netherlands)</a></td>-->
+    <!--<td><img src="static/niod.jpg" alt="NIOD logo" style="border:0;"></td></tr>-->
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/italy.html" target="_blank">Italian Directorate General of Archives</a></td>-->
+    <!--<td><img src="static/italy.jpg" alt="Italy logo" style="border:0;"></td></tr>-->
+
+    <tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/getty.html" target="_blank">The Getty Research Institute</a></td>
+      <td><img src="static/getty.jpg" alt="Getty logo" style="border:0;"></td>
+    </tr>
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/landesarchiv.html" target="_blank">Landesarchiv Berlin (Berlin State Archive)</a></td>-->
+    <!--<td><img src="static/landesarchiv.jpg" alt="Landesarchiv logo" style="border:0;"></td></tr>-->
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/austria.html">National Fund of the Republic of Austria for Victims of National Socialism and the General Settlement Fund for Victims of National Socialism</a></td>-->
+    <!--<td><img src="static/austria.png" alt="Austria logo" style="border:0;"></td></tr>-->
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/heidelberg.html" target="_blank">Heidelberg University Library</a></td>-->
+    <!--<td><img src="static/heidelberg.png" alt="NIOD logo" style="border:0;"></td></tr>-->
+
+    <!--<tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/gnm.html" target="_blank">Deutsches Kunstarchiv im Germanischen Nationalmuseum</a></td>-->
+    <!--<td><img src="static/gnm-logo.png" alt="Germanisches Nationalmuseum logo" style="border:0;"></td></tr>-->
+
+    <tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/austria.html" target="_blank">State Archives in Austria</a></td>
+      <td><img src="static/austria.png" alt="Austria logo" style="border:0;"></td>
+    </tr>
+
+    <tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/uk.html" target="_blank">State Archives in the UK</a></td>
+      <td><img src="static/austria.png" alt="UK logo" style="border:0;"></td>
+    </tr>
+
+    <tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/berlin.html" target="_blank">State Archives in Berlin</a></td>
+      <td><img src="static/logo-bundesarchiv.png" alt="Berlin logo" style="border:0;"></td>
+    </tr>
+
+    <tr style="border: 1px solid #e6e6e6;"><td><a href="http://www.archives.gov/research/holocaust/international-resources/netherlands.html" target="_blank">State Archives in the Netherlands</a></td>
+      <td><img src="static/logo-dhm.png" alt="Netherlands logo" style="border:0;"></td>
+    </tr>
+  </tbody>
+</table>
+</div>
+{% endblock %}

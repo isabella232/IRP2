@@ -1,4 +1,5 @@
 playbook.retry
+instance/irp2.db
 
 # Python compiled files
 *.pyc

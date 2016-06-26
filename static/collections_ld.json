@@ -18,7 +18,7 @@
       "homepage": "http://arch.arch.be/"
     },
     {
-      "rdfs:label": "Holocaust Assets Finding Aid",
+      "rdfs:label": "Belgium Holocaust Assets Finding Aid",
       "dc:description": "Inventory of the Archive of the Department for Economic Recovery (Office de Récupération Economique) and Legal Predecessor, 1940-1968",
       "@type": "a:FindingAid",
       "@id": "BelgiumFindingAid",

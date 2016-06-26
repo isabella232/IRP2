@@ -10,6 +10,8 @@
     - ansible-java8-oracle
 
   tasks:
+    - name: Add source repository
+      apt_repository: repo="deb-src http://us.archive.ubuntu.com/ubuntu/ xenial main restricted" state=present
     - name: Install packages
       apt: pkg={{ item }} state=latest
       with_items:
@@ -23,7 +25,7 @@
         - nginx
 
     - name: Install Python3 LXML dependencies
-      apt: pkg=python3-lxml state=build-dep
+      apt: pkg=python3-lxml state=build-dep update_cache=yes
 
     - name: Configure Nginx Proxy
       template: src=nginx-irp2.conf.j2 dest=/etc/nginx/conf.d/irp2.conf
@@ -37,7 +39,7 @@
 
     - name: Download Solr
       get_url: url=http://mirrors.ibiblio.org/apache/lucene/solr/6.1.0/solr-6.1.0.tgz dest=/tmp/solr-6.1.0.tgz
-      when: s.stat.isdir is defined and s.stat.isdir
+      when: s.stat.exists is defined and s.stat.exists == False
 
     - name: Extract Solr installer
       command: tar xzf /tmp/solr-6.1.0.tgz solr-6.1.0/bin/install_solr_service.sh --strip-components=2
@@ -63,16 +65,15 @@
         - templates
         - dashboard.py
         - flask_extended.py
-        - irp2_schema.sql
         - requirements.txt
       become: no
+      when: vagrant is not defined
       tags: code
 
     - name: Deploy instance (no overwrite)
-      copy: src=../../{{ item }} dest={{ project_path }} mode=0755 force=no
-      with_items:
-        - instance
+      copy: src=../../instance dest={{ project_path }} mode=0755 force=no
       become: no
+      when: vagrant is not defined
       tags: code
 
     - name: Install Python packages

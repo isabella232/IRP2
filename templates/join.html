@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div id="join">
+  <h2>Create an Account to Join</h2>
+  <p>By joining the portal you gain access to these features:<br/>
+    <ul>
+      <li>Share searches with other researchers on your team.</li>
+      <li>Save your important searches on our site.</li>
+    </ul>
+  </p>
+  <form id="join-form" method="POST" action="/tojoin" autocomplete="on">
+    <p>
+      <label for="usernamesignup" class="uname">Your Name</label>
+      <input id="usernamesignup" name="usernamesignup" required="required" type="text" placeholder="Pat Smith" />
+    </p>
+    <p>
+      <label for="emailsignup" class="youmail">Your email</label>
+      <input id="emailsignup" name="emailsignup" required="required" type="email" placeholder="patsmith@example.com"/>
+    </p>
+    <p>
+      <label for="passwordsignup" class="youpasswd" >Your password</label>
+      <input id="passwordsignup" name="passwordsignup" required="required" type="password" placeholder="eg. X8df!90EO"/>
+    </p>
+    <p>
+      <label for="passwordsignup_confirm" class="youpasswd" >Confirm your password</label>
+      <input id="passwordsignup_confirm" name="passwordsignup_confirm" required="required" type="password" placeholder="eg. X8df!90EO"/>
+    </p>
+    <p>
+      <button type="submit" class="btn btn-success">Join</button>
+    </p>
+    <p>Already a member? Use the login form at the top of the page.</a>
+    </p>
+  </form>
+</div>
+{% endblock %}

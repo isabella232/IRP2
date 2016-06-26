@@ -20,11 +20,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # required for lxml compile
     vb.memory = 1024
   end
+  config.vm.provider "docker" do |vb|
+    vb.image = "library/ubuntu:latest"
+    # required for lxml compile
+    vb.memory = 1024
+  end
 
   config.vm.define "machine"
   config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "ansible/playbook.yml"
-      ansible.groups = { "irp2" => ["machine"] }
+    ansible.extra_vars = {
+      project_path: "/vagrant",
+      vagrant: 1
+    }
+    ansible.playbook = "ansible/playbook.yml"
+    ansible.groups = { "irp2" => ["machine"] }
   end
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
