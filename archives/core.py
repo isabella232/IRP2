@@ -1,11 +1,11 @@
 from archives.dummy import Dummy
 from archives.belgium import BelgiumFindingAid
-from archives.fold3 import Fold3
+from archives.fold3 import ArdeliaHall
 from archives.gettyas import GettyAS
 from archives.nara import NARACatalog
-from archives.ushmm import USHMM
+from archives.ushmm import JeuDePaume
 from archives.austria import AustriaArtDB
-from archives.uk import UKFindingAid
+from archives.uk import UKCollection
 from archives.netherlands import NetherlandsStateArchives
 from archives.lost_art import LostArt
 import sys

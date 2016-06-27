@@ -41,19 +41,48 @@
 {% endif %}
       </div>
     </div>
-    <hr />
-    Advanced Search (not styled yet..)
-    <p><br />Some collections support these fields:<br />
-      <!--Years from <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
-      to <input type="text" class="text" name="endYear" placeholder="E.G. 1955"{% if inputs is defined %} value="{{ inputs.endYear }}"{% endif %}/><br />-->
-      Artist/Creator
-      <input id="artist" type="text" class="text" name="artist"{% if inputs is defined %} value="{{ inputs.artist }}"{% endif %}/>
-      <br />
-      <!-- Owner <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />-->
-      Location
-      <input id="location" type="text" class="text" name="location"{% if inputs is defined %} value="{{ inputs.location }}"{% endif %}/>
-      <br />
-    </p>
+    <div class="panel-group">
+     <div class="panel panel-default">
+       <div class="panel-heading">
+         <h4 class="panel-title">
+           <a data-toggle="collapse" href="#collapse1">Advanced <span class="glyphicon glyphicon-collapse-down"/></a>
+         </h4>
+       </div>
+       <div id="collapse1" class="panel-collapse collapse">
+         <div class="panel-body">
+           <div class="form-group row">
+             <label for="inputArtist" class="col-sm-2 form-control-label">Artist</label>
+             <div class="col-sm-10">
+               <input id="inputArtist" type="text" class="form-control"
+                 placeholder="artist name" name="artist"
+{% if inputs is defined %}
+                 value="{{ inputs.artist }}"
+{% endif %}
+                 />
+             </div>
+           </div>
+           <div class="form-group row">
+             <label for="inputLocation" class="col-sm-2 form-control-label">Location</label>
+             <div class="col-sm-10">
+               <input id="inputLocation" type="text" class="form-control"
+                 placeholder="location" name="location"
+{% if inputs is defined %}
+                 value="{{ inputs.location }}"
+{% endif %}
+                 />
+             </div>
+           </div>
+           <!--Years from
+           <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
+           to
+           <input type="text" class="text" name="endYear" placeholder="E.G. 1955"{% if inputs is defined %} value="{{ inputs.endYear }}"{% endif %}/><br />-->
+           <!-- Owner
+           <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />-->
+         </div>
+         <div class="panel-footer">Only some collections support these additional fields</div>
+       </div>
+     </div>
+   </div>
   </form>
 </div>
 
@@ -68,8 +97,8 @@
 {% if node['@type'] in ["a:Database","a:FindingAid", "a:Collection"] %}
       <tr id="{{ node['@id'] }}">
         <td>{{ node['rdfs:label'] }}</td>
-        <td>{{ '%s' % ', '.join(node['dc:coverage']) if node['dc:coverage'] }}</td>
-        <td></td>
+        <td class="col-sm-3">{{ '%s' % ', '.join(node['dc:coverage']) if node['dc:coverage'] }}</td>
+        <td class="result col-sm-2"></td>
       </tr>
 {% endif %}
 {% endfor %}
@@ -86,10 +115,13 @@
 <script type="text/javascript">
 var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 $( "#searchForm" ).submit( function( event ) {
+  event.preventDefault();
   // for each non-header row in collections, post the form w/colleciton id
   $('#collectionsTable > tbody > tr').each(
     function() {
       // TODO start spinner in hit column
+      //row = this;
+      $(this).find('.result').html('<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>');
       formdata = $( "#searchForm" ).serializeArray();
       formdata.push(  {
         name: "collectionid",
@@ -97,11 +129,9 @@ $( "#searchForm" ).submit( function( event ) {
       });
       $.post( "/searchAJAX", formdata,
         function( data ) {
-          // TODO update hit column
-          alert(data);
+          $('#'+data.class).find('.result').html('<a href="'+data.results_url+'" target="_blank" class="btn btn-primary" role="button"><span class="badge">'+data.results_count+'</span> Hits</a>');
         }, 'json');
     });
-  event.preventDefault();
 });
 </script>
 {% endblock %}

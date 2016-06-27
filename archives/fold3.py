@@ -6,7 +6,7 @@ import logging
 from urllib.parse import quote_plus
 
 
-class Fold3(Collection):
+class ArdeliaHall(Collection):
 
     info = {
         'name': 'Fold3 Holocaust Era Assets',

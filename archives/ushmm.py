@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-class USHMM(Collection):
+class JeuDePaume(Collection):
 
     info = {
         'name': 'Jeu de Paume',

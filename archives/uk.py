@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import quote_plus
 
 
-class UKFindingAid(Collection):
+class UKCollection(Collection):
 
     def keywordResultsCount(self, **kwargs):
         keywords = self.add_unsupported_fields_to_keywords(kwargs, join_with=' OR ')
