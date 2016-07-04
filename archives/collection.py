@@ -51,6 +51,8 @@ class Collection(object):
             fields = self.info['fields']
         for key, value in inputs.items():
             if key not in fields and value is not None:
+                if 'collectionid' == key:
+                    continue
                 if 'translated_terms' == key:
                     for term in value:
                         result += join_with + str(term) + term_suffix

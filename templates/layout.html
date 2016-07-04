@@ -39,40 +39,11 @@ function emailCurrentPage(){
 <script type="text/javascript">
 var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 $(function() {
-  var URL_PREFIX = "http://localhost:8983/solr/artist_core/select?q=name:*";
-  var URL_SUFFIX = "&wt=json";
-  $("#artist").autocomplete({
+  $("#inputLocation").autocomplete({
     source : function(request, response) {
-      var URL = URL_PREFIX + $("#artist").val() +'*'+ URL_SUFFIX;
-      $.ajax({
-        url : URL,
-        success : function(data) {
-          var docs = JSON.stringify(data.response.docs);
-          var jsonData = JSON.parse(docs);
-          response($.map(jsonData, function(item) {
-            return {
-              value : item.name
-            }
-          }));
-        },
-        dataType : 'jsonp',
-        jsonp : 'json.wrf'
-      });
-    },
-    minLength : 1
-  })
-});
-</script>
-
-<!-- Autocomplete location field -->
-<script type="text/javascript">
-var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-$(function() {
-  var URL_PREFIX = "http://localhost:8983/solr/location_core/select?q=label:*";
-  var URL_SUFFIX = "&wt=json";
-  $("#location").autocomplete({
-    source : function(request, response) {
-      var URL = URL_PREFIX + $("#location").val() +'*'+ URL_SUFFIX ;
+      var URL_PREFIX = "http://localhost:8983/solr/location/select?q=";
+      var URL_SUFFIX = "&wt=json";
+      var URL = URL_PREFIX + 'label:*' + $("#inputLocation").val() +'*'+ URL_SUFFIX ;
       $.ajax({
         url : URL,
         success : function(data) {
@@ -87,6 +58,26 @@ $(function() {
       });
     },
     minLength : 3
+  })
+  $("#inputArtist").autocomplete({
+    source : function(request, response) {
+      var URL_PREFIX = "http://localhost:8983/solr/artist/select?q=";
+      var URL_SUFFIX = "&wt=json";
+      var URL = URL_PREFIX + 'label:*' + $("#inputArtist").val() +'*'+ URL_SUFFIX ;
+      $.ajax({
+        url : URL,
+        success : function(data) {
+          var docs = JSON.stringify(data.response.docs);
+          var jsonData = JSON.parse(docs);
+          response(
+            $.map(jsonData, function(item) { return { value : item.name } } )
+          );
+        },
+        dataType : 'jsonp',
+        jsonp : 'json.wrf'
+      });
+    },
+    minLength : 1
   })
 });
 </script>

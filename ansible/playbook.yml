@@ -53,6 +53,67 @@
         chdir: /tmp/
         creates: /opt/solr
 
+    - name: Deploy Solr SystemD Service
+      copy: src=solr.service dest=/etc/systemd/system/solr.service
+
+    - name: Enable Solr service
+      service: name=solr enabled=yes state=restarted
+
+    - name: Create terms Solr core
+      command: sudo -u solr /opt/solr/bin/solr create -c {{ item }}
+      ignore_errors: yes
+      tags: terms
+      with_items:
+        - artist
+        - location
+
+    - uri:
+        url: http://localhost:8983/solr/artist/schema
+        method: POST
+        body: "{ 'add-field': { 'name': '{{item}}', 'type': 'string', 'stored': true }}"
+        status_code: 200
+        body_format: json
+      with_items:
+        - label
+        - name
+      tags: terms
+
+    - uri:
+        url: http://localhost:8983/solr/location/schema
+        method: POST
+        body: "{ 'add-field': { 'name': '{{item}}', 'type': 'string', 'stored': true }}"
+        status_code: 200
+        body_format: json
+      with_items:
+        - label
+        - name
+      tags: terms
+
+    - name: Unpack terminology archives to server
+      unarchive: src={{ item }}.json.tar.gz dest=/tmp
+      with_items:
+        - artist
+        - location
+      tags: terms
+
+    - fetch: src=/tmp/{{ item }}.json dest=/tmp/fetched
+      with_items:
+        - artist
+        - location
+
+    - uri:
+        url: "http://localhost:8983/solr/{{ item }}/update/json/docs?commit=true&f=label:/label/value&f=id:/label/value&f=name:/name/value"
+        method: POST
+        timeout: 300
+        HEADER_Content-type: application/json; charset=utf-8
+        body: "{{ lookup('file', '/tmp/fetched/machine/tmp/' + item + '.json') }}"
+        status_code: 200
+        body_format: json
+      with_items:
+        - artist
+        - location
+      tags: terms
+
     - file: path={{ project_path }} state=directory mode=0755
       become: no
       tags: code
@@ -91,11 +152,18 @@
       become: no
       command: "{{ virtualenv_path }}/bin/exec flask init_db"
 
-    - name: Stop existing application
-      command: killall python
-      become: no
-      ignore_errors: yes
+    - name: Ensure that the application file permissions are set properly
+      file: path={{ virtualenv_path }}
+            recurse=yes
+            owner={{ gunicorn_user }}
+            group={{ gunicorn_group }}
+            state=directory
+      notify: restart application
+      tags: deploy
+
+    - include: setup_nginx.yml
+      tags: nginx
 
   handlers:
     - name: restart Nginx
-      service: name=ntpd state=restarted
+      service: name=nginx state=restarted
