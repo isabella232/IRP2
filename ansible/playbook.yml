@@ -67,7 +67,11 @@
         - artist
         - location
 
-    - uri:
+    - name: Pausing for 30 secs for Solr to finish creating cores..
+      pause: seconds=30
+
+    - name: Creating Artist fields in Solr
+      uri:
         url: http://localhost:8983/solr/artist/schema
         method: POST
         body: "{ 'add-field': { 'name': '{{item}}', 'type': 'string', 'stored': true }}"
@@ -78,7 +82,8 @@
         - name
       tags: terms
 
-    - uri:
+    - name: Creating Location fields in Solr
+      uri:
         url: http://localhost:8983/solr/location/schema
         method: POST
         body: "{ 'add-field': { 'name': '{{item}}', 'type': 'string', 'stored': true }}"
@@ -89,24 +94,26 @@
         - name
       tags: terms
 
-    - name: Unpack terminology archives to server
+    - name: Unpacking terminology archives on server
       unarchive: src={{ item }}.json.tar.gz dest=/tmp
       with_items:
         - artist
         - location
       tags: terms
 
-    - fetch: src=/tmp/{{ item }}.json dest=/tmp/fetched
+    - name: Fetching unpacked terminologies back to deploy machine.
+      fetch: src=/tmp/{{ item }}.json dest=/tmp/fetched
       with_items:
         - artist
         - location
 
-    - uri:
+    - name: POSTing terminologies into the Solr indices
+      uri:
         url: "http://localhost:8983/solr/{{ item }}/update/json/docs?commit=true&f=label:/label/value&f=id:/label/value&f=name:/name/value"
         method: POST
         timeout: 300
         HEADER_Content-type: application/json; charset=utf-8
-        body: "{{ lookup('file', '/tmp/fetched/machine/tmp/' + item + '.json') }}"
+        body: "{{ lookup('file', '/tmp/fetched/' + inventory_hostname + '/tmp/' + item + '.json') }}"
         status_code: 200
         body_format: json
       with_items:
@@ -114,9 +121,11 @@
         - location
       tags: terms
 
-    - file: path={{ project_path }} state=directory mode=0755
+    - name: Creating project folder
+      file: path={{ project_path }} state=directory mode=0755
       become: no
       tags: code
+      when: vagrant is not defined
 
     - name: Deploy application code
       copy: src=../../{{ item }} dest={{ project_path }} mode=0755
@@ -138,7 +147,7 @@
       tags: code
 
     - name: Install Python packages
-      pip: requirements={{ project_path }}/requirements.txt virtualenv={{ virtualenv_path }} virtualenv_python=python3.4
+      pip: requirements={{ project_path }}/requirements.txt virtualenv={{ virtualenv_path }} virtualenv_python=python3
       become: no
 
     - name: Create the virtualenv postactivate script to set environment variables

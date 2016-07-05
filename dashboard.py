@@ -27,7 +27,6 @@ logging.config.dictConfig(logConfig)
 
 app.config.update(dict(
     DATABASE=os.path.join(app.instance_path, 'irp2.db'),
-    # DATABASE=os.path.join('postgresql://postgres:karishma@localhost', 'postgres'),
     DEBUG=True,
     USERNAME='admin',
     PASSWORD='default',
@@ -40,6 +39,7 @@ if os.path.isfile(config_yaml):
 
 def connect_db():
     """Connects to the specific database."""
+    logging.info(str(app.config['DATABASE']))
     rv = sqlite3.connect(app.config['DATABASE'])
     rv.row_factory = sqlite3.Row
     return rv
@@ -51,6 +51,7 @@ def init_db():
     with app.open_instance_resource('irp2_schema.sql', mode='r') as f:
         db.cursor().executescript(f.read())
     db.commit()
+    db.close()
     logging.warn('Initialized the database.')
 
 
@@ -58,13 +59,14 @@ def get_db():
     """Opens a new database connection if there is none yet for the
     current application context.
     """
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = connect_db()
-    return db
+    # db = getattr(g, '_database', None)
+    # if db is None:
+    #    db = g._database = connect_db()
+    # return db
+    return connect_db()
 
 
-@app.teardown_appcontext
+# @app.teardown_appcontext
 def close_db(error):
     """Closes the database again at the end of the request."""
     db = getattr(g, '_database', None)
@@ -72,12 +74,9 @@ def close_db(error):
         db.close()
 
 
-#collections = None
-
-
 def getcollections():
-    #global collections
-    #if collections is None:
+    # global collections
+    # if collections is None:
     with app.open_resource('static/collections_ld.json', 'r') as data_file:
         collections = json.load(data_file)
     return collections
@@ -108,14 +107,14 @@ def tojoin():
     _password = request.form['passwordsignup']
     # validate the received values
     if _name and _email and _password:
-        cur = db.execute("""SELECT username FROM user_profile
+        cur = db.execute("""SELECT username FROM userprofile
                         WHERE email_id = ?;""", [_email])
         if len(cur.fetchall()) > 0:
             flash('This Email is already a user')
             return redirect(url_for('showLogin'))
         else:
             _pwhash = generate_password_hash(_password)
-            db.execute("""INSERT INTO user_profile(username, password, email_id, registered_on)
+            db.execute("""INSERT INTO userprofile(username, password, email_id, registered_on)
                            values(?, ?, ?, date('now'));""",
                        [_name, _pwhash, _email])
             db.commit()
@@ -131,7 +130,7 @@ def tologin():
     _uname = request.form['username'].strip()
     _password = request.form['password']
     cur = db.execute("""
-        SELECT username, password, email_id, registered_on FROM user_profile
+        SELECT username, password, email_id, registered_on FROM userprofile
         WHERE ( username = ? OR email_id = ? )
         LIMIT 1;""", [_uname, _uname])
     row = cur.fetchone()
@@ -151,8 +150,17 @@ def tologin():
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
     if '_uname' not in session:
+        flash("You must login first to access your settings.")
         return redirect(url_for('welcome'))
     return render_template('settings.html')
+
+
+@app.route('/saved', methods=['GET', 'POST'])
+def saved():
+    if '_uname' not in session:
+        flash("You must login first to access your saved searches.")
+        return redirect(url_for('welcome'))
+    return render_template('saved.html')
 
 
 @app.route('/logout')
@@ -174,7 +182,7 @@ def search():
 def searchAJAX():
     inputs = request.form
     try:
-        languages = request.args.getlist('languages')
+        languages = inputs.getlist('languages')
     except Exception as e:
         logging.exception(e)
         pass
