@@ -79,7 +79,7 @@
            <!-- Owner
            <input type="text" class="text" name="owner"{% if inputs is defined %} value="{{ inputs.owner }}"{% endif %}/><br />-->
          </div>
-         <div class="panel-footer">Only some collections support these additional fields</div>
+         <div class="panel-footer">Only some collections support the advanced search fields. Other will use them as keywords.</div>
        </div>
      </div>
    </div>
@@ -87,10 +87,10 @@
 </div>
 
 <div class="container">
-  <h1>Collection Results</h1>
+  <h1>Results</h1>
   <table id="collectionsTable" class="table table-striped">
     <thead>
-      <tr><th>Collection Name</th><th>Coverage</th><th>Hits</th></tr>
+      <tr><th>Collection</th><th>Coverage</th><th>Hits</th></tr>
     </thead>
     <tbody>
 {% for node in collections['@graph']|sort(attribute='rdfs:label') %}
@@ -104,11 +104,6 @@
 {% endfor %}
     <tbody>
   </table>
-
-  <ul>
-    <li>On search submit, fire AJAX queries for each collection</li>
-    <li>As results arrive, render in collection row</li>
-  </ul>
 </div>
 
 <!-- AJAX search script -->
