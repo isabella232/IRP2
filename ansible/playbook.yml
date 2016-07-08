@@ -25,101 +25,18 @@
         - nginx
 
     - name: Install Python3 LXML dependencies
-      apt: pkg=python3-lxml state=build-dep update_cache=yes
+      apt: pkg=python3-lxml state=build-dep
 
     - name: Configure Nginx Proxy
       template: src=nginx-irp2.conf.j2 dest=/etc/nginx/conf.d/irp2.conf
     - service: name=nginx state=restarted enabled=yes
 
-    - name: Create Solr user
-      user: name=solr system=yes
+    - name: Check if Solr already configured (expensive steps)
+      uri: url="http://localhost:8983/solr/location/admin/luke?show=index&wt=json" return_content=yes
+      register: solr_response
 
-    - stat: path=/opt/solr
-      register: s
-
-    - name: Download Solr
-      get_url: url=http://mirrors.ibiblio.org/apache/lucene/solr/6.1.0/solr-6.1.0.tgz dest=/tmp/solr-6.1.0.tgz
-      when: s.stat.exists is defined and s.stat.exists == False
-
-    - name: Extract Solr installer
-      command: tar xzf /tmp/solr-6.1.0.tgz solr-6.1.0/bin/install_solr_service.sh --strip-components=2
-      args:
-        chdir: /tmp/
-        creates: /opt/solr
-
-    - name: Run Solr installer (starts Solr service)
-      command: bash ./install_solr_service.sh solr-6.1.0.tgz -i /opt -d /var/solr -u solr -s solr -p 8983
-      args:
-        chdir: /tmp/
-        creates: /opt/solr
-
-    - name: Deploy Solr SystemD Service
-      copy: src=solr.service dest=/etc/systemd/system/solr.service
-
-    - name: Enable Solr service
-      service: name=solr enabled=yes state=restarted
-
-    - name: Create terms Solr core
-      command: sudo -u solr /opt/solr/bin/solr create -c {{ item }}
-      ignore_errors: yes
-      tags: terms
-      with_items:
-        - artist
-        - location
-
-    - name: Pausing for 30 secs for Solr to finish creating cores..
-      pause: seconds=30
-
-    - name: Creating Artist fields in Solr
-      uri:
-        url: http://localhost:8983/solr/artist/schema
-        method: POST
-        body: "{ 'add-field': { 'name': '{{item}}', 'type': 'string', 'stored': true }}"
-        status_code: 200
-        body_format: json
-      with_items:
-        - label
-        - name
-      tags: terms
-
-    - name: Creating Location fields in Solr
-      uri:
-        url: http://localhost:8983/solr/location/schema
-        method: POST
-        body: "{ 'add-field': { 'name': '{{item}}', 'type': 'string', 'stored': true }}"
-        status_code: 200
-        body_format: json
-      with_items:
-        - label
-        - name
-      tags: terms
-
-    - name: Unpacking terminology archives on server
-      unarchive: src={{ item }}.json.tar.gz dest=/tmp
-      with_items:
-        - artist
-        - location
-      tags: terms
-
-    - name: Fetching unpacked terminologies back to deploy machine.
-      fetch: src=/tmp/{{ item }}.json dest=/tmp/fetched
-      with_items:
-        - artist
-        - location
-
-    - name: POSTing terminologies into the Solr indices
-      uri:
-        url: "http://localhost:8983/solr/{{ item }}/update/json/docs?commit=true&f=label:/label/value&f=id:/label/value&f=name:/name/value"
-        method: POST
-        timeout: 300
-        HEADER_Content-type: application/json; charset=utf-8
-        body: "{{ lookup('file', '/tmp/fetched/' + inventory_hostname + '/tmp/' + item + '.json') }}"
-        status_code: 200
-        body_format: json
-      with_items:
-        - artist
-        - location
-      tags: terms
+    - include: solr.yml
+      when:  (json_response.content|from_json)['index']['numDocs']  is defined
 
     - name: Creating project folder
       file: path={{ project_path }} state=directory mode=0755
@@ -161,18 +78,18 @@
       become: no
       command: "{{ virtualenv_path }}/bin/exec flask init_db"
 
-    - name: Ensure that the application file permissions are set properly
-      file: path={{ virtualenv_path }}
-            recurse=yes
-            owner={{ gunicorn_user }}
-            group={{ gunicorn_group }}
-            state=directory
-      notify: restart application
-      tags: deploy
+    # - name: Ensure that the application file permissions are set properly
+    #   file: path={{ virtualenv_path }}
+    #         recurse=yes
+    #         owner={{ gunicorn_user }}
+    #         group={{ gunicorn_group }}
+    #         state=directory
+    #   notify: restart application
+    #   tags: deploy
+    #
+    # - include: setup_nginx.yml
+    #   tags: nginx
 
-    - include: setup_nginx.yml
-      tags: nginx
-
-  handlers:
-    - name: restart Nginx
-      service: name=nginx state=restarted
+  # handlers:
+  #   - name: restart Nginx
+  #     service: name=nginx state=restarted

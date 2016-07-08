@@ -13,17 +13,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider "virtualbox" do |vb|
     config.vm.box = "trusty64"
     # required for lxml compile
-    vb.memory = 1024
+    vb.memory = 2048
   end
   config.vm.provider "libvirt" do |vb|
     config.vm.box = "naelyn/ubuntu-trusty64-libvirt"
     # required for lxml compile
-    vb.memory = 1024
+    vb.memory = 2048
   end
   config.vm.provider "docker" do |vb|
     vb.image = "library/ubuntu:latest"
     # required for lxml compile
-    vb.memory = 1024
+    vb.memory = 2048
   end
 
   config.vm.define "machine"
