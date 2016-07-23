@@ -11,7 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.provider "virtualbox" do |vb|
-    config.vm.box = "trusty64"
+    config.vm.box = "ubuntu/trusty64"
     # required for lxml compile
     vb.memory = 2048
   end

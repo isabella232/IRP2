@@ -33,10 +33,12 @@
 
     - name: Check if Solr already configured (expensive steps)
       uri: url="http://localhost:8983/solr/location/admin/luke?show=index&wt=json" return_content=yes
+      ignore_errors: yes
       register: solr_response
 
     - include: solr.yml
-      when:  (json_response.content|from_json)['index']['numDocs']  is defined
+      when: solr_response.status == -1 
+      #(solr_response.content|from_json)['index']['numDocs'] is defined
 
     - name: Creating project folder
       file: path={{ project_path }} state=directory mode=0755
@@ -87,8 +89,8 @@
     #   notify: restart application
     #   tags: deploy
     #
-    # - include: setup_nginx.yml
-    #   tags: nginx
+    - include: setup_nginx.yml
+      tags: nginx
 
   # handlers:
   #   - name: restart Nginx
