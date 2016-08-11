@@ -37,7 +37,7 @@
       register: solr_response
 
     - include: solr.yml
-      when: solr_response.status == -1 
+      when: solr_response.status == -1
       #(solr_response.content|from_json)['index']['numDocs'] is defined
 
     - name: Creating project folder
@@ -92,6 +92,6 @@
     - include: setup_nginx.yml
       tags: nginx
 
-  # handlers:
-  #   - name: restart Nginx
-  #     service: name=nginx state=restarted
+  handlers:
+    - name: restart Nginx
+      service: name=nginx state=restarted

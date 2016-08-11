@@ -9,25 +9,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
+  config.vm.box = "ubuntu/trusty64"
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.provider "virtualbox" do |vb|
-    config.vm.box = "ubuntu/trusty64"
     # required for lxml compile
     vb.memory = 2048
   end
-  config.vm.provider "libvirt" do |vb|
-    config.vm.box = "naelyn/ubuntu-trusty64-libvirt"
+  config.vm.provider "libvirt" do |vb, override_libvirt|
+    override_libvirt.vm.box = "naelyn/ubuntu-trusty64-libvirt"
     # required for lxml compile
     vb.memory = 2048
   end
-  config.vm.provider "docker" do |vb|
+  config.vm.provider "docker" do |vb, override_docker|
     vb.image = "library/ubuntu:latest"
     # required for lxml compile
     vb.memory = 2048
   end
 
   config.vm.define "machine"
-  config.vm.provision "ansible" do |ansible|
+  config.vm.provision "ansible_local" do |ansible|
     ansible.extra_vars = {
       project_path: "/vagrant",
       vagrant: 1

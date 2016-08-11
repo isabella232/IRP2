@@ -15,7 +15,7 @@
         creates: /opt/solr
 
     - name: Run Solr installer (starts Solr service)
-      command: bash ./install_solr_service.sh solr-6.1.0.tgz -i /opt -d /var/solr -u solr -s solr -p 8983
+      command: bash ./install_solr_service.sh solr-6.1.0.tgz -f -i /opt -d /var/solr -u solr -s solr -p 8983
       args:
         chdir: /tmp/
         creates: /opt/solr
@@ -35,38 +35,105 @@
         - location
 
     - name: Pausing for 30 secs for Solr to finish creating cores..
-      pause: seconds=30
+      pause: seconds=60
 
     - name: Creating Artist fields in Solr
       uri:
         url: http://localhost:8983/solr/artist/schema
         method: POST
-        body: "{ 'add-field': { 'name': '{{item}}', 'type': 'string', 'stored': true }}"
+        body:
+          add-field:
+            name: "{{ item }}"
+            type: string
+            stored: true
         status_code: 200
         body_format: json
       with_items:
         - label
         - name
-      tags: terms
 
     - name: Creating Location fields in Solr
       uri:
         url: http://localhost:8983/solr/location/schema
         method: POST
-        body: "{ 'add-field': { 'name': '{{item}}', 'type': 'string', 'stored': true }}"
+        body:
+          add-field:
+            name: "{{item}}"
+            type: string
+            stored: true
         status_code: 200
         body_format: json
       with_items:
         - label
         - name
-      tags: terms
+
+    - name: Add Ngram-text field type
+      uri:
+        url: http://localhost:8983/solr/{{ item }}/schema
+        method: POST
+        body:
+          add-field-type:
+            name: text_ngram
+            class: solr.TextField
+            positionIncrementGap: 100
+            indexAnalyzer:
+              tokenizer:
+                class: solr.NGramTokenizerFactory
+                minGramSize: 2
+                maxGramSize: 10
+              filter:
+                class: solr.LowerCaseFilterFactory
+            queryAnalyzer:
+              tokenizer:
+                class: solr.EdgeNGramTokenizerFactory
+                minGramSize: 2
+                maxGramSize: 10
+              filter:
+                class: solr.LowerCaseFilterFactory
+        status_code: 200
+        body_format: json
+      with_items:
+        - artist
+        - location
+
+    - name: Creating Label NGram field in Solr
+      uri:
+        url: http://localhost:8983/solr/{{ item }}/schema
+        method: POST
+        body:
+          add-field:
+            name: label_ngram
+            type: text_ngram
+            stored: true
+        status_code: 200
+        body_format: json
+      with_items:
+        - artist
+        - location
+
+    - name: Pausing for 10 secs for Solr to catch up..
+      pause: seconds=10
+
+    - name: Add Copy Field for label NGram index
+      uri:
+        url: http://localhost:8983/solr/{{ item }}/schema
+        method: POST
+        body:
+          add-copy-field:
+            source: label
+            dest:
+              - label_ngram
+        status_code: 200
+        body_format: json
+      with_items:
+        - artist
+        - location
 
     - name: Unpacking terminology archives on server
       unarchive: src={{ item }}.json.tar.gz dest=/tmp
       with_items:
         - artist
         - location
-      tags: terms
 
     - name: Fetching unpacked terminologies back to deploy machine.
       fetch: src=/tmp/{{ item }}.json dest=/tmp/fetched
@@ -76,7 +143,7 @@
 
     - name: POSTing terminologies into the Solr indices
       uri:
-        url: "http://localhost:8983/solr/{{ item }}/update/json/docs?commit=true&f=label:/label/value&f=id:/label/value&f=name:/name/value"
+        url: "http://localhost:8983/solr/{{ item }}/update/json/docs?commit=true&f=label:/label/value&f=name:/name/value"
         method: POST
         timeout: 300
         HEADER_Content-type: application/json; charset=utf-8
@@ -86,4 +153,3 @@
       with_items:
         - artist
         - location
-      tags: terms

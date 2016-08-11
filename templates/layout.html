@@ -35,53 +35,6 @@ function emailCurrentPage(){
 }
 </script>
 
-<!-- Autocomplete artist name field -->
-<script type="text/javascript">
-var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-$(function() {
-  $("#inputLocation").autocomplete({
-    source : function(request, response) {
-      var URL_PREFIX = "http://localhost:8983/solr/location/select?q=";
-      var URL_SUFFIX = "&wt=json";
-      var URL = URL_PREFIX + 'label:*' + $("#inputLocation").val() +'*'+ URL_SUFFIX ;
-      $.ajax({
-        url : URL,
-        success : function(data) {
-          var docs = JSON.stringify(data.response.docs);
-          var jsonData = JSON.parse(docs);
-          response(
-            $.map(jsonData, function(item) { return { value : item.name } } )
-          );
-        },
-        dataType : 'jsonp',
-        jsonp : 'json.wrf'
-      });
-    },
-    minLength : 3
-  })
-  $("#inputArtist").autocomplete({
-    source : function(request, response) {
-      var URL_PREFIX = "http://localhost:8983/solr/artist/select?q=";
-      var URL_SUFFIX = "&wt=json";
-      var URL = URL_PREFIX + 'label:*' + $("#inputArtist").val() +'*'+ URL_SUFFIX ;
-      $.ajax({
-        url : URL,
-        success : function(data) {
-          var docs = JSON.stringify(data.response.docs);
-          var jsonData = JSON.parse(docs);
-          response(
-            $.map(jsonData, function(item) { return { value : item.name } } )
-          );
-        },
-        dataType : 'jsonp',
-        jsonp : 'json.wrf'
-      });
-    },
-    minLength : 1
-  })
-});
-</script>
-
 <style type="text/css">
   body {
     padding-top: 50px;
