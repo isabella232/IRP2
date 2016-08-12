@@ -136,9 +136,9 @@ var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 $(function() {
   $("#inputLocation").autocomplete({
     source : function(request, response) {
-      var URL_PREFIX = "/solr/location/select?rows=20q=label:";
-      var URL_MIDDLE = "OR label_ngram:";
-      var URL_SUFFIX = "&wt=json";
+      var URL_PREFIX = "/solr/location/select?q=label:";
+      var URL_MIDDLE = " OR label_ngram:";
+      var URL_SUFFIX = "&wt=json&rows=20";
       var searchString = "\"" + $("#inputLocation").val() + "\"";
       var URL = URL_PREFIX + searchString + URL_MIDDLE + searchString + URL_SUFFIX;
       $.ajax({
@@ -147,7 +147,7 @@ $(function() {
           var docs = JSON.stringify(data.response.docs);
           var jsonData = JSON.parse(docs);
           response(
-            $.map(jsonData, function(item) { return { label: item.id, value : item.name } } )
+            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : item.name } } )
           );
         },
         dataType : 'jsonp',
@@ -158,10 +158,10 @@ $(function() {
   })
   $("#inputArtist").autocomplete({
     source : function(request, response) {
-      var URL_PREFIX = "/solr/artist/select?rows=20q=label:";
-      var URL_MIDDLE = "OR label_ngram:";
-      var URL_SUFFIX = "&wt=json";
-      var searchString = "\"" + $("#inputLocation").val() + "\"";
+      var URL_PREFIX = "/solr/artist/select?q=label:";
+      var URL_MIDDLE = " OR label_ngram:";
+      var URL_SUFFIX = "&wt=json&rows=20";
+      var searchString = "\"" + $("#inputArtist").val() + "\"";
       var URL = URL_PREFIX + searchString + URL_MIDDLE + searchString + URL_SUFFIX;
       $.ajax({
         url : URL,
@@ -169,7 +169,7 @@ $(function() {
           var docs = JSON.stringify(data.response.docs);
           var jsonData = JSON.parse(docs);
           response(
-            $.map(jsonData, function(item) { return { label: item.id, value : item.name } } )
+            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : item.name } } )
           );
         },
         dataType : 'jsonp',

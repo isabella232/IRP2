@@ -41,7 +41,7 @@
     {
       "rdfs:label": "German Sales Catalogs, 1930-1945",
       "dc:description": "Art auction sales catalogs from German-speaking countries -- Austria, Germany and Switzerland -- from 1930 to 1945.",
-      "@type": "a:Collection",
+      "@type": "a:Database",
       "@id": "GettyAS",
       "lang": "en",
       "dc:publisher": "GettyResearchInstitute",

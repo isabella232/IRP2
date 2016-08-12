@@ -42,6 +42,42 @@ and the HTTP request handler code that uses Flask.
 
 Collections will vary in how they deliver search results, from JSON APIs to HTML replies that require "screen scrape" treatment. Some collections even require multiple requests within a session to obtain results, for an example see gettyri.py. The archives.core module also includes a list of archival institutions as dictionaries with metadata. This information is passed into the web templates and is the starting point for rendering the results.
 
+## Updating Solr Indexes
+
+* Download Artist SPARQL query results as CSV by entering your query at http://vocab.getty.edu/sparql:
+```
+select ?label ?name ?bio ?id {
+   ?id a gvp:PersonConcept;
+       gvp:agentTypePreferred|(gvp:agentTypePreferred/gvp:broaderExtended) aat:300025103;
+       gvp:prefLabelGVP [xl:literalForm ?name];
+       gvp:prefLabelGVP|xl:altLabel [xl:literalForm ?label];
+       foaf:focus/gvp:biographyPreferred [
+           schema:description ?bio;
+	   gvp:estStart ?birth]
+   filter (?birth <= "1933"^^xsd:gYear)
+}
+```
+* As of this writing, paging the results with ORDER BY, LIMIT, and OFFSET does not work. Have a very fast Internet connection to download all results before server timeout (1min).
+* You can the results into artist.csv w/o their first line:
+```
+$ tail -n +2 sparql.csv >> artist.csv
+```
+* If you want to verify results are complete do a line count and compare it with same query but count only: ```select (count(*) as ?c) { ...```
+* Package resulting file as artist.csv, inside of ./ansible/files/artist.csv.tar.gz
+
+* Do the same with the locations query:
+```
+select distinct ?label ?name ?hint ?id {
+  ?id skos:inScheme tgn: ;
+    gvp:placeType|(gvp:placeType/gvp:broaderGenericExtended) aat:300008347;
+    gvp:broaderPartitiveExtended [rdfs:label "Europe"@en];
+    gvp:prefLabelGVP [xl:literalForm ?name];
+    gvp:prefLabelGVP|xl:altLabel [xl:literalForm ?label];
+    gvp:parentString ?hint
+}
+```
+
+
 ## Tasks Ahead
 
 + Initial technical improvements (Greg 9/4)

@@ -130,26 +130,17 @@
         - location
 
     - name: Unpacking terminology archives on server
-      unarchive: src={{ item }}.json.tar.gz dest=/tmp
+      unarchive: src={{ item }}.csv.tar.gz dest=/tmp
       with_items:
         - artist
         - location
 
-    - name: Fetching unpacked terminologies back to deploy machine.
-      fetch: src=/tmp/{{ item }}.json dest=/tmp/fetched
-      with_items:
-        - artist
-        - location
-
-    - name: POSTing terminologies into the Solr indices
+    - name: Loading terminologies into the Solr indices
       uri:
-        url: "http://localhost:8983/solr/{{ item }}/update/json/docs?commit=true&f=label:/label/value&f=name:/name/value"
-        method: POST
-        timeout: 300
-        HEADER_Content-type: application/json; charset=utf-8
-        body: "{{ lookup('file', '/tmp/fetched/' + inventory_hostname + '/tmp/' + item + '.json') }}"
+        url: "http://localhost:8983/solr/{{ item }}/update/csv?stream.file=/tmp/{{ item }}.csv&commit=true&fieldnames=label,name,hint,uri"
+        method: GET
+        timeout: 1000
         status_code: 200
-        body_format: json
       with_items:
         - artist
         - location
