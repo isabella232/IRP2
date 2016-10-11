@@ -6,6 +6,10 @@ import re
 import json
 from urllib.parse import quote_plus
 
+# TODO: switch to site's adv search
+# TODO: use "mattech" parameter for technique
+# TODO: person = artist
+# TODO: ort = place
 
 class LostArt(Collection):
 

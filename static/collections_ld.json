@@ -22,7 +22,7 @@
       "dc:description": "Inventory of the Archive of the Department for Economic Recovery (Office de Récupération Economique) and Legal Predecessor, 1940-1968",
       "@type": "a:FindingAid",
       "@id": "BelgiumFindingAid",
-      "lang": "en",
+      "dc:language": "en",
       "dc:publisher": "BelgiumStateArchives",
       "dc:coverage": [],
       "dc:date": {
@@ -43,7 +43,8 @@
       "dc:description": "Art auction sales catalogs from German-speaking countries -- Austria, Germany and Switzerland -- from 1930 to 1945.",
       "@type": "a:Database",
       "@id": "GettyAS",
-      "lang": "en",
+      "dc:language": "en",
+      "digitized-images": true,
       "dc:publisher": "GettyResearchInstitute",
       "dc:coverage": [
         "http://vocab.getty.edu/tgn/1000062"
@@ -68,6 +69,7 @@
       "@id": "JeuDePaume",
       "dc:publisher": "USHMM",
       "dc:language": "en",
+      "digitized-images": true,
       "dc:coverage": [
         "France",
         "Belgium"
@@ -99,6 +101,7 @@
       "@id": "ArdeliaHall",
       "dc:publisher": ["USHMM", "Fold3"],
       "dc:language": "en",
+      "digitized-images": true,
       "dc:coverage": [],
       "dc:date": {
         "start": "1940",
@@ -125,6 +128,7 @@
       "@id": "AustriaArtDB",
       "dc:publisher": "AustriaNationalFund",
       "dc:language": "en",
+      "digitized-images": true,
       "dc:coverage": [],
       "dc:date": {
         "start": "1940",

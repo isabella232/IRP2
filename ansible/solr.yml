@@ -33,8 +33,9 @@
       with_items:
         - artist
         - location
+        - technique
 
-    - name: Pausing for 30 secs for Solr to finish creating cores..
+    - name: Pausing for Solr to finish creating cores..
       pause: seconds=60
 
     - name: Creating Artist fields in Solr
@@ -51,6 +52,7 @@
       with_items:
         - label
         - name
+        - hint
 
     - name: Creating Location fields in Solr
       uri:
@@ -66,6 +68,53 @@
       with_items:
         - label
         - name
+        - hint
+
+    - name: Creating Technique fields in Solr
+      uri:
+        url: http://localhost:8983/solr/technique/schema
+        method: POST
+        body:
+          add-field:
+            name: "{{item}}"
+            type: string
+            stored: true
+        status_code: 200
+        body_format: json
+      with_items:
+        - label
+        - name
+        - hint
+
+    - name: Add text_lower field type
+      uri:
+        url: http://localhost:8983/solr/{{ item }}/schema
+        method: POST
+        body:
+          add-field-type:
+            name: text_lower
+            class: solr.TextField
+            positionIncrementGap: 100
+            indexAnalyzer:
+              tokenizer:
+                class: solr.NGramTokenizerFactory
+                minGramSize: 2
+                maxGramSize: 10
+              filters:
+                - class: solr.LowerCaseFilterFactory
+            queryAnalyzer:
+              tokenizer:
+                class: solr.EdgeNGramTokenizerFactory
+                minGramSize: 2
+                maxGramSize: 10
+              filters:
+                - class: solr.LowerCaseFilterFactory
+        status_code: 200
+        body_format: json
+      with_items:
+        - artist
+        - location
+        - technique
 
     - name: Add Ngram-text field type
       uri:
@@ -81,20 +130,21 @@
                 class: solr.NGramTokenizerFactory
                 minGramSize: 2
                 maxGramSize: 10
-              filter:
-                class: solr.LowerCaseFilterFactory
+              filters:
+                - class: solr.LowerCaseFilterFactory
             queryAnalyzer:
               tokenizer:
                 class: solr.EdgeNGramTokenizerFactory
                 minGramSize: 2
                 maxGramSize: 10
-              filter:
-                class: solr.LowerCaseFilterFactory
+              filters:
+                - class: solr.LowerCaseFilterFactory
         status_code: 200
         body_format: json
       with_items:
         - artist
         - location
+        - technique
 
     - name: Creating Label NGram field in Solr
       uri:
@@ -110,8 +160,9 @@
       with_items:
         - artist
         - location
+        - technique
 
-    - name: Pausing for 10 secs for Solr to catch up..
+    - name: Pausing for Solr to catch up..
       pause: seconds=10
 
     - name: Add Copy Field for label NGram index
@@ -128,19 +179,22 @@
       with_items:
         - artist
         - location
+        - technique
 
     - name: Unpacking terminology archives on server
-      unarchive: src={{ item }}.csv.tar.gz dest=/tmp
+      unarchive: src={{ item }}.csv.tar.gz dest=/opt/solr/server owner=solr group=solr
       with_items:
         - artist
         - location
+        - technique
 
     - name: Loading terminologies into the Solr indices
       uri:
-        url: "http://localhost:8983/solr/{{ item }}/update/csv?stream.file=/tmp/{{ item }}.csv&commit=true&fieldnames=label,name,hint,uri"
+        url: "http://localhost:8983/solr/{{ item }}/update/csv?stream.file={{ item }}.csv&charset=utf-8&commit=true&fieldnames=label,name,hint,uri"
         method: GET
         timeout: 1000
         status_code: 200
       with_items:
         - artist
         - location
+        - technique

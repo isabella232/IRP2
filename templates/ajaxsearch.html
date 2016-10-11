@@ -45,7 +45,7 @@
      <div class="panel panel-default">
        <div class="panel-heading">
          <h4 class="panel-title">
-           <a data-toggle="collapse" href="#collapse1">Advanced <span class="glyphicon glyphicon-collapse-down"/></a>
+           <a data-toggle="collapse" href="#collapse1">Show Advanced Fields <span class="glyphicon glyphicon-collapse-down"/></a>
          </h4>
        </div>
        <div id="collapse1" class="panel-collapse collapse">
@@ -72,6 +72,17 @@
                  />
              </div>
            </div>
+           <div class="form-group row">
+             <label for="inputTechnique" class="col-sm-2 form-control-label">Technique</label>
+             <div class="col-sm-10">
+               <input id="inputTechnique" type="text" class="form-control"
+                 placeholder="technique" name="technique"
+{% if inputs is defined %}
+                 value="{{ inputs.technique }}"
+{% endif %}
+                 />
+             </div>
+           </div>
            <!--Years from
            <input type="text" class="text" name="startYear" placeholder="E.G. 1933"{% if inputs is defined %} value="{{ inputs.startYear }}"{% endif %}</input>
            to
@@ -90,7 +101,7 @@
   <h1>Results</h1>
   <table id="collectionsTable" class="table table-striped">
     <thead>
-      <tr><th>Collection</th><th>Coverage</th><th>Hits</th></tr>
+      <tr><th>Collection</th><th>Coverage</th><th>Features</th><th>Hits</th></tr>
     </thead>
     <tbody>
 {% for node in collections['@graph']|sort(attribute='rdfs:label') %}
@@ -98,6 +109,9 @@
       <tr id="{{ node['@id'] }}">
         <td>{{ node['rdfs:label'] }}</td>
         <td class="col-sm-3">{{ '%s' % ', '.join(node['dc:coverage']) if node['dc:coverage'] }}</td>
+        <td class="col-sm-3">
+          {% if node['digitized-images'] %}<span class="glyphicon glyphicon-picture" data-toggle="tooltip" title="digitized images"></span>{% endif %}
+        </td>
         <td class="result col-sm-2"></td>
       </tr>
 {% endif %}
@@ -108,7 +122,10 @@
 
 <!-- AJAX search script -->
 <script type="text/javascript">
+$('[data-toggle="tooltip"]').tooltip();
+
 var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
 $( "#searchForm" ).submit( function( event ) {
   event.preventDefault();
   // for each non-header row in collections, post the form w/colleciton id
@@ -124,7 +141,13 @@ $( "#searchForm" ).submit( function( event ) {
       });
       $.post( "/searchAJAX", formdata,
         function( data ) {
-          $('#'+data.class).find('.result').html('<a href="'+data.results_url+'" target="_blank" class="btn btn-primary" role="button"><span class="badge">'+data.results_count+'</span> Hits</a>');
+          $('#'+data.class).find('.result').html(
+            data.results_count > 0 ?
+              '<a href="'+data.results_url+'" target="_blank" class="btn btn-success" role="button">'+
+              '<span class="badge">'+data.results_count+'</span> Hits</a>' :
+              '<a href="'+data.results_url+'" target="_blank" class="btn btn-default" role="button">'+
+              '<span class="badge">'+data.results_count+'</span> Hits</a>'
+          );
         }, 'json');
     });
 });
@@ -147,7 +170,7 @@ $(function() {
           var docs = JSON.stringify(data.response.docs);
           var jsonData = JSON.parse(docs);
           response(
-            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : item.name } } )
+            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : '"'+item.name+'"' } } )
           );
         },
         dataType : 'jsonp',
@@ -155,7 +178,7 @@ $(function() {
       });
     },
     minLength : 3
-  })
+  });
   $("#inputArtist").autocomplete({
     source : function(request, response) {
       var URL_PREFIX = "/solr/artist/select?q=label:";
@@ -169,7 +192,7 @@ $(function() {
           var docs = JSON.stringify(data.response.docs);
           var jsonData = JSON.parse(docs);
           response(
-            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : item.name } } )
+            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : '"'+item.name+'"' } } )
           );
         },
         dataType : 'jsonp',
@@ -177,7 +200,29 @@ $(function() {
       });
     },
     minLength : 3
-  })
+  });
+  $("#inputTechnique").autocomplete({
+    source : function(request, response) {
+      var URL_PREFIX = "/solr/technique/select?q=label:";
+      var URL_MIDDLE = " OR label_ngram:";
+      var URL_SUFFIX = "&wt=json&rows=20";
+      var searchString = "\"" + $("#inputTechnique").val() + "\"";
+      var URL = URL_PREFIX + searchString + URL_MIDDLE + searchString + URL_SUFFIX;
+      $.ajax({
+        url : URL,
+        success : function(data) {
+          var docs = JSON.stringify(data.response.docs);
+          var jsonData = JSON.parse(docs);
+          response(
+            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : '"'+item.name+'"' } } )
+          );
+        },
+        dataType : 'jsonp',
+        jsonp : 'json.wrf'
+      });
+    },
+    minLength : 3
+  });
 });
 </script>
 {% endblock %}

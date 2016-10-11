@@ -84,7 +84,8 @@ def getcollections():
 
 @app.route('/')
 def welcome():
-    return render_template('welcome.html')
+    myjsonld = getcollections()
+    return render_template('welcome.html', collections=myjsonld)
 
 
 @app.route('/collections')
@@ -193,6 +194,7 @@ def searchAJAX():
     myargs['artist'] = inputs.get('artist', '')
     myargs['collectionid'] = inputs.get('collectionid', '')
     myargs['location'] = inputs.get('location', '')
+    myargs['technique'] = inputs.get('technique', '')
     myargs['startYear'] = inputs.get('startYear', '')
     myargs['endYear'] = inputs.get('endYear', '')
     for key, value in myargs.items():
@@ -319,4 +321,4 @@ def detail():
 
 
 if __name__ == '__main__':
-    app.run("0.0.0.0")
+    app.run("0.0.0.0", processes=5)

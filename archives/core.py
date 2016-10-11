@@ -35,7 +35,18 @@ def search(**kwargs):
     module = sys.modules[__name__]
     collClass = getattr(module, classname)
     collObject = collClass()
-    result = collObject.keywordResultsCount(**kwargs).emit()
+    from multiprocessing.pool import ThreadPool
+    pool = ThreadPool(processes=1)
+    handle = pool.apply_async(collObject.keywordResultsCount, (), kwargs)
+    try:
+        resultcoll = handle.get(timeout=20)
+    except Exception as e:
+        logging.exception(e)
+        result = {'error': "Site not responding"}
+        pass
+    if resultcoll is not None:
+        result = resultcoll.emit()
+
     result['translated_terms'] = str(terms)
     return result
 

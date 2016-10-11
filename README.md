@@ -77,6 +77,17 @@ select distinct ?label ?name ?hint ?id {
 }
 ```
 
+* Here is the materials/techniques query:
+```
+select distinct ?label ?name ?hint ?id {
+  ?id skos:inScheme aat: ;
+    gvp:broaderPreferred|(gvp:broaderPreferred/gvp:broaderGenericExtended) aat:300053001;
+    gvp:prefLabelGVP [xl:literalForm ?name];
+    gvp:prefLabelGVP|xl:altLabel [xl:literalForm ?label];
+    gvp:parentStringAbbrev ?hint
+}
+```
+
 
 ## Tasks Ahead
 
