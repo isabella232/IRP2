@@ -5,7 +5,9 @@ server {
   listen *:80;
 
   location / {
-    proxy_pass http://localhost:5000;
+    include proxy_params;
+    proxy_pass http://unix:{{ virtualenv_path }}/irp2.sock;
+    # proxy_pass http://localhost:5000;
   }
 
   location /solr/artist/select {

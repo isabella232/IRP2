@@ -24,10 +24,11 @@
       "@id": "BelgiumFindingAid",
       "dc:language": "en",
       "dc:publisher": "BelgiumStateArchives",
-      "dc:coverage": [],
+      "features": ["finding aids"],
+      "dc:coverage": ["Belgium"],
       "dc:date": {
-        "start": "",
-        "end": ""
+        "start": "1940",
+        "end": "1968"
       }
     },
     {
@@ -44,11 +45,10 @@
       "@type": "a:Database",
       "@id": "GettyAS",
       "dc:language": "en",
-      "digitized-images": true,
+      "description-languages": ["de"],
+      "features": ["digitized images", "artifact documentation"],
       "dc:publisher": "GettyResearchInstitute",
-      "dc:coverage": [
-        "http://vocab.getty.edu/tgn/1000062"
-        ],
+      "dc:coverage": ["Austria", "Germany", "Switzerland"],
       "dc:date": {
         "start": "1930",
         "end": "1945"
@@ -69,11 +69,9 @@
       "@id": "JeuDePaume",
       "dc:publisher": "USHMM",
       "dc:language": "en",
-      "digitized-images": true,
-      "dc:coverage": [
-        "France",
-        "Belgium"
-        ],
+      "description-languages": ["de"],
+      "features": ["digitized images", "artifact documentation"],
+      "dc:coverage": ["France", "Belgium"],
       "dc:date": {
         "start": "1940",
         "end": "1944"
@@ -101,8 +99,9 @@
       "@id": "ArdeliaHall",
       "dc:publisher": ["USHMM", "Fold3"],
       "dc:language": "en",
-      "digitized-images": true,
-      "dc:coverage": [],
+      "description-languages": ["de", "en"],
+      "features": ["digitized images", "artifact documentation"],
+      "dc:coverage": ["Europe"],
       "dc:date": {
         "start": "1940",
         "end": "1944"
@@ -127,9 +126,9 @@
       "@type": "a:Database",
       "@id": "AustriaArtDB",
       "dc:publisher": "AustriaNationalFund",
-      "dc:language": "en",
-      "digitized-images": true,
-      "dc:coverage": [],
+      "dc:language": ["en", "de"],
+      "features": ["digitized images", "finding aids", "artifact documentation"],
+      "dc:coverage": ["Austria"],
       "dc:date": {
         "start": "1940",
         "end": "1944"

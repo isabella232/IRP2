@@ -1,3 +1,14 @@
+---
+- hosts: irp2
+  become: yes
+
+  vars:
+    solr_version: 6.2.1
+
+  roles:
+    - ansible-java8-oracle
+
+  tasks:
     - name: Create Solr user
       user: name=solr system=yes
 
@@ -5,26 +16,37 @@
       register: s
 
     - name: Download Solr
-      get_url: url=http://mirrors.ibiblio.org/apache/lucene/solr/6.1.0/solr-6.1.0.tgz dest=/tmp/solr-6.1.0.tgz
+      get_url:
+        url: http://mirrors.ibiblio.org/apache/lucene/solr/{{solr_version}}/solr-{{solr_version}}.tgz
+        dest: /tmp/solr-{{solr_version}}.tgz
       when: s.stat.exists is defined and s.stat.exists == False
 
     - name: Extract Solr installer
-      command: tar xzf /tmp/solr-6.1.0.tgz solr-6.1.0/bin/install_solr_service.sh --strip-components=2
+      command: tar xzf /tmp/solr-{{solr_version}}.tgz solr-{{solr_version}}/bin/install_solr_service.sh --strip-components=2
       args:
         chdir: /tmp/
         creates: /opt/solr
 
+#    - name: Solr ownership and permissions
+#      file: state=directory owner=solr recurse=yes path=/opt/solr-{{solr_version}}
+
     - name: Run Solr installer (starts Solr service)
-      command: bash ./install_solr_service.sh solr-6.1.0.tgz -f -i /opt -d /var/solr -u solr -s solr -p 8983
+      command: bash ./install_solr_service.sh solr-{{solr_version}}.tgz -f -i /opt -d /var/solr -u solr -s solr -p 8983
       args:
         chdir: /tmp/
         creates: /opt/solr
+
+    - name: Wait for Solr install to complete
+      pause: seconds=30
 
     - name: Deploy Solr SystemD Service
       copy: src=solr.service dest=/etc/systemd/system/solr.service
 
     - name: Enable Solr service
       service: name=solr enabled=yes state=restarted
+
+    - name: Wait for Solr to restart
+      pause: seconds=30
 
     - name: Create terms Solr core
       command: sudo -u solr /opt/solr/bin/solr create -c {{ item }}
@@ -192,7 +214,7 @@
       uri:
         url: "http://localhost:8983/solr/{{ item }}/update/csv?stream.file={{ item }}.csv&charset=utf-8&commit=true&fieldnames=label,name,hint,uri"
         method: GET
-        timeout: 1000
+        timeout: 5000
         status_code: 200
       with_items:
         - artist

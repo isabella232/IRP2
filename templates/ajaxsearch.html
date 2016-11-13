@@ -16,28 +16,25 @@
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-sm-2 form-control-label">Keyword Translation</label>
+      <label class="col-sm-2 form-control-label">Translate Keywords</label>
       <div class="col-sm-10">
-          <label class="checkbox-inline">
-            <input type="checkbox" name="languages" value="fr"/>
-            French
-          </label>
-          <label class="checkbox-inline">
-            <input type="checkbox" name="languages" value="de"/>
-            German
-          </label>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" data-id="fr" class="translate btn btn-secondary">French</button>
+          <button type="button" data-id="de" class="translate btn btn-secondary">German</button>
+        </div>
       </div>
     </div>
-    <div class="form-group row">
+    <div class="mybuttonrow form-group row">
       <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-success">Search</button>
-        <button type="reset" class="btn btn-secondary">Reset</button>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="submit" class="btn btn-success">Start Search</button>
+          <button type="reset" class="btn btn-secondary">Reset</button>
+        </div>
 {% if '_uname' in session %}
-        <button id="SaveSearch" type="submit"
-          formaction="/saveSearch" class="btn btn-primary">Save Search</button>
-        <a href="javascript: emailCurrentPage()"/>
-          <img src="https://simplesharebuttons.com/images/somacro/email.png" alt="Email" />
-        </a>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button id="SaveSearch" type="button" class="btn btn-primary">Save Search</button>
+          <button id="getLink" type="button" class="btn btn-primary">Get Link</button>
+        </div>
 {% endif %}
       </div>
     </div>
@@ -98,21 +95,23 @@
 </div>
 
 <div class="container">
-  <h1>Results</h1>
+  <!--h1>Results</h1-->
   <table id="collectionsTable" class="table table-striped">
     <thead>
-      <tr><th>Collection</th><th>Coverage</th><th>Features</th><th>Hits</th></tr>
+      <tr><th>Collection</th><th>Features</th><th>Dates</th><th>Coverage</th><th>Hits</th></tr>
     </thead>
     <tbody>
 {% for node in collections['@graph']|sort(attribute='rdfs:label') %}
 {% if node['@type'] in ["a:Database","a:FindingAid", "a:Collection"] %}
-      <tr id="{{ node['@id'] }}">
-        <td>{{ node['rdfs:label'] }}</td>
-        <td class="col-sm-3">{{ '%s' % ', '.join(node['dc:coverage']) if node['dc:coverage'] }}</td>
-        <td class="col-sm-3">
-          {% if node['digitized-images'] %}<span class="glyphicon glyphicon-picture" data-toggle="tooltip" title="digitized images"></span>{% endif %}
+      <tr data-id="{{ node['@id'] }}">
+        <td class="coll_label"><h4 class="collection-modal"><a>{{ node['rdfs:label'] }}</a></h4></td>
+        <td class="features mycol-sm-1">
         </td>
-        <td class="result col-sm-2"></td>
+        <td class="dates mycol-sm-3">
+        </td>
+        <td class="coverage mycol-sm-3">
+        </td>
+        <td class="result col-sm-1"></td>
       </tr>
 {% endif %}
 {% endfor %}
@@ -120,9 +119,165 @@
   </table>
 </div>
 
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 id="myModel-title" class="modal-title">Modal Header</h4>
+      </div>
+      <div id="myModel-body" class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- AJAX search script -->
 <script type="text/javascript">
+var collection_idx = new Map();
+var organization_idx = new Map();
+var term_idx = new Map();
+var icon_idx = new Map([
+  ["digitized images", "picture"],
+  ["finding aids", "folder-open"],
+  ["artifact documentation", "tag"],
+]);
+
+$("button.translate").click(function() {
+  var language_code = $(this).attr('data-id');
+  var text = $('#inputKeywords').val();
+  $(this).parent().after(`
+    <div class="alert alert-danger fade in col-sm-offset-2 col-sm-10">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Sorry</strong> We need to find a replacement for the Google Translate API. (no longer free)
+      Normally the keywords above will be translated in place, into the chosen language.
+    </div>
+    `);
+  $('#inputKeywords').load('/translate', {'language': language_code, 'text': text});
+});
+
+$('#getLink').click(function() {
+  var link = $(location).attr('href');
+  var data = $( "#searchForm" ).serializeArray();
+  data = data.filter(isNotEmpty);
+  if(link.indexOf('?') > 0) {
+    link = link.substring(0, link.indexOf('?')+1);
+  }
+  link += $.param(data)
+  $(this).parents('.mybuttonrow').after(`
+    <div class="form-group row">
+    <div class="alert alert-info fade in col-sm-offset-2 col-sm-10">
+      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+      <strong>Link</strong> <a href='`+link+"'>"+link+"</div></div>");
+});
+function isNotEmpty(value) {
+  return value['value'].length > 0;
+}
+
+$.when( $.getJSON( "static/collections_ld.json"),
+        $.getJSON( "static/getty_vocab_subset_ld.json") )
+  .done( function( coll_data, term_data ) {
+    var graph = coll_data[0]['@graph'];
+    for( var idx = 0; idx < graph.length; idx++ ) {
+      if( graph[idx]['@type'] == "foaf:Organization" ) {
+        organization_idx.set(graph[idx]['@id'], graph[idx]);
+      } else {
+        collection_idx.set(graph[idx]['@id'], graph[idx]);
+      }
+    }
+    term_data[0].forEach( function( node ) {
+      term_idx.set(node['@id'], node);
+    });
+    $("td.coll_label").children().append( function() {
+      var result = "";
+      id = $(this).parents('tr').attr('data-id');
+      coll = collection_idx.get(id);
+      var pubs = coll['dc:publisher'];
+      if(pubs.constructor === Array) {
+        // nothing
+      } else {
+        pubs = [pubs];
+      }
+      for( var idx = 0; idx < pubs.length; idx++ ) {
+        var pub = organization_idx.get(pubs[idx]);
+        if((typeof(pub) !== 'undefined') && (pub !== null)) {
+          result += "<br /><small>"+pub['rdfs:label']+"</small>";
+        }
+      }
+      return result;
+    });
+    $("td.coverage").append( function() {
+      return makeLDFacetBadges("dc:coverage", $(this).parents('tr').attr('data-id'));
+    });
+    $("td.features").append( function() {
+      return makeLDFacetBadges("features", $(this).parents('tr').attr('data-id'));
+    });
+    $("td.dates").append( function() {
+      var id = $(this).parents('tr').attr('data-id');
+      var coll = collection_idx.get(id);
+      return coll['dc:date']['start']+" - "+coll['dc:date']['end'];
+    });
+    // click that highlights any instance of same facet
+    $("span.facet").click(function() {
+      var facet_id = $(this).attr('data-id');
+      $("span.facet").each( function( node ) {
+        if( $(this).attr('data-id') == facet_id ) {
+          $(this).parent().addClass("btn-success");
+        } else {
+          $(this).parent().removeClass("btn-success");
+        }
+      });
+    });
+});
+
+function makeLDFacetBadges(pred, coll_id) {
+  var result = "";
+  var coll = collection_idx.get(coll_id);
+  var terms = coll[pred];
+
+  if((typeof(terms) === 'undefined') || (terms === null)) return result;
+  for( var i = 0; i < terms.length; i++ ) {
+    var termid = terms[i];
+    var label = termid;
+    // now we have an id of a tarm listed under this key
+    // TODO add label sorting (build a map and array)
+    var term = term_idx.get(termid);
+    if( term != null) {
+      label = term['http://www.w3.org/2004/02/skos/core#prefLabel']
+        .find( function(node) { return node['@language'] == 'en' })['@value'];
+    }
+    var icon = icon_idx.get(termid);
+    if( icon != null ) {
+      result += '<a class="btn btn-lg" role="button">';
+      result += '<span data-id="'+termid+'" class="facet glyphicon glyphicon-'+icon+'" data-toggle="tooltip" title="'+label+'"></span>';
+    } else {
+      result += '<a class="btn btn" role="button">';
+      result += '<span data-id="'+termid+'" class="facet badge">'+label+'</span>';
+    }
+    result += '</a>';
+  }
+  return result;
+}
+
+// Turn on tooltips
 $('[data-toggle="tooltip"]').tooltip();
+
+// Enable modals for collection pages
+$(function() {
+  $(".collection-modal").click(function() {
+    var row_id = $(this).parents('tr').attr('data-id');
+    $('#myModel-title').html($(this).html())
+    $('#myModel-body').html('<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>');
+    $('#myModal').modal({show:true});
+    $('#myModel-body').load( "/static/"+row_id+".html #container");
+  });
+});
 
 var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 
@@ -137,11 +292,12 @@ $( "#searchForm" ).submit( function( event ) {
       formdata = $( "#searchForm" ).serializeArray();
       formdata.push(  {
         name: "collectionid",
-        value: this.id
+        value: $(this).data('id')
       });
       $.post( "/searchAJAX", formdata,
         function( data ) {
-          $('#'+data.class).find('.result').html(
+          $('#collectionsTable > tbody > tr').find()
+          $('[data-id="'+data.class+'"]').find('.result').html(
             data.results_count > 0 ?
               '<a href="'+data.results_url+'" target="_blank" class="btn btn-success" role="button">'+
               '<span class="badge">'+data.results_count+'</span> Hits</a>' :
@@ -151,7 +307,31 @@ $( "#searchForm" ).submit( function( event ) {
         }, 'json');
     });
 });
+
+$('#SaveSearch').click(function() {
+  formdata = $( "#searchForm" ).serializeArray();
+  $.post('/saveSearch', {
+        savedata: JSON.stringify(formdata)
+      }, function(data) {
+        if( data['result'] == 'yes') {
+          $("div.mybuttonrow").after(
+            `<div class="mybuttonrow form-group row">
+            <div class="alert alert-success fade in col-sm-offset-2 col-sm-10">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Saved</strong> Your search parameters have been saved.
+            </div></div>`);
+        } else {
+          $("div.mybuttonrow").after(
+            `<div class="mybuttonrow form-group row">
+            <div class="alert alert-danger fade in col-sm-offset-2 col-sm-10">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              <strong>Error</strong> We failed to save your search.
+            </div></div>`);
+        }
+      }, 'json');
+})
 </script>
+
 
 <!-- Autocomplete artist name field -->
 <script type="text/javascript">

@@ -4,7 +4,38 @@
 <div class="container">
 <div id="join">
   <h2>Saved Searches</h2>
-  <h3>NOT YET IMPLEMENTED</h3>
+    <table id="searchesTable" class="table table-striped">
+      <thead>
+        <tr><th>Date Saved</th><th>Form Values</th><th>Links</th></tr>
+      </thead>
+      <tbody>
+  {% for search in searches %}
+        <tr>
+          <td>{{ search[1] }}</td>
+          <td>
+            {% for field in search[2] %}
+            {% if not((field.value is undefined) or (field.value is none) or (field.value|trim == '')) %}
+            {{ field['name'] }}: {{ field['value'] }}<br />
+            {% endif %}{% endfor %}
+          </td>
+          <td>
+            <a class="btn btn-lg sharelink" role="button"
+            {% for field in search[2] %}
+            {% if not((field.value is undefined) or (field.value is none) or (field.value|trim == '')) %}
+            data-{{ field['name'] }}="{{ field['value'] }}"
+            {% endif %}{% endfor %}>
+            <span class="glyphicon glyphicon-search"></span> Search</a>
+          </td>
+        </tr>
+  {% endfor %}
+      </tbody>
+    </table>
 </div>
 </div>
+<script type="text/javascript">
+$(".sharelink").attr("href", function() {
+  var dataset = $(this).data();
+  return "/search?"+$.param(dataset);
+});
+</script>
 {% endblock %}

@@ -6,3 +6,4 @@ TextBlob
 Werkzeug
 PyYAML
 PyLD
+gunicorn

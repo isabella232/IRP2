@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve IRP2
+After=network.target
+
+[Service]
+User={{ user }}
+Group=www-data
+WorkingDirectory={{ project_path }}
+Environment="PATH={{ virtualenv_path }}/bin"
+ExecStart={{ virtualenv_path }}/bin/gunicorn --workers 3 --bind unix:{{ virtualenv_path }}/irp2.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

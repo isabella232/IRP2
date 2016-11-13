@@ -1,0 +1,86 @@
+[
+  {
+    "@id" : "http://vocab.getty.edu/tgn/1000062",
+    "@type" : [ "http://vocab.getty.edu/ontology#Subject", "http://www.w3.org/2004/02/skos/core#Concept", "http://vocab.getty.edu/ontology#AdminPlaceConcept" ],
+    "http://creativecommons.org/ns#license" : [ {
+      "@id" : "http://opendatacommons.org/licenses/by/1.0/"
+    } ],
+    "http://purl.org/dc/elements/1.1/identifier" : [ {
+      "@value" : "1000062"
+    } ],
+    "http://purl.org/iso25964/skos-thes#broaderPartitive" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/1000003"
+    } ],
+    "http://rdfs.org/ns/void#inDataset" : [ {
+      "@id" : "http://vocab.getty.edu/dataset/tgn"
+    } ],
+    "http://vocab.getty.edu/ontology#broader" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/1000003"
+    } ],
+    "http://vocab.getty.edu/ontology#broaderExtended" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/1000003"
+    }, {
+      "@id" : "http://vocab.getty.edu/tgn/7029392"
+    } ],
+    "http://vocab.getty.edu/ontology#broaderPartitive" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/1000003"
+    } ],
+    "http://vocab.getty.edu/ontology#broaderPartitiveExtended" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/1000003"
+    }, {
+      "@id" : "http://vocab.getty.edu/tgn/7029392"
+    } ],
+    "http://vocab.getty.edu/ontology#broaderPreferred" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/1000003"
+    } ],
+    "http://vocab.getty.edu/ontology#broaderPreferredExtended" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/1000003"
+    }, {
+      "@id" : "http://vocab.getty.edu/tgn/7029392"
+    } ],
+    "http://vocab.getty.edu/ontology#displayOrder" : [ {
+      "@type" : "http://www.w3.org/2001/XMLSchema#positiveInteger",
+      "@value" : "333"
+    } ],
+    "http://vocab.getty.edu/ontology#parentString" : [ {
+      "@value" : "Europe, World"
+    } ],
+    "http://vocab.getty.edu/ontology#parentStringAbbrev" : [ {
+      "@value" : "Europe, World"
+    } ],
+    "http://www.w3.org/2004/02/skos/core#broader" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/1000003"
+    } ],
+    "http://www.w3.org/2004/02/skos/core#broaderTransitive" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/1000003"
+    } ],
+    "http://www.w3.org/2004/02/skos/core#inScheme" : [ {
+      "@id" : "http://vocab.getty.edu/tgn/"
+    } ],
+    "http://www.w3.org/2004/02/skos/core#prefLabel" : [ {
+      "@language" : "de",
+      "@value" : "Österreich"
+    }, {
+      "@language" : "es",
+      "@value" : "Austria"
+    }, {
+      "@language" : "en",
+      "@value" : "Austria"
+    }, {
+      "@language" : "fr",
+      "@value" : "Autriche"
+    }, {
+      "@language" : "nl",
+      "@value" : "Oostenrijk"
+    }, {
+      "@language" : "ru",
+      "@value" : "Австрия"
+    }, {
+      "@language" : "zh",
+      "@value" : "奥地利"
+    }, {
+      "@language" : "ar",
+      "@value" : "ا نٍمسا"
+    } ]
+  }
+]

@@ -1,6 +1,7 @@
 import os
 import logging
 import logging.config
+from logging import handlers
 import yaml
 import sqlite3
 import json
@@ -16,21 +17,22 @@ from archives import belgium
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-logConfig = yaml.load(open(os.path.join(app.instance_path, 'logging.conf')))
-logging.config.dictConfig(logConfig)
-# app.logger.setLevel(logging.DEBUG)
-# handler = handlers.RotatingFileHandler(
-#     os.path.join(app.instance_path, 'irp2.log'),
-#     maxBytes=1024 * 1024 * 100,
-#     backupCount=20)
-# app.logger.addHandler(handler)
+# logConfig = yaml.load(open(os.path.join(app.instance_path, 'logging.conf')))
+# logging.config.dictConfig(logConfig)
+app.logger.setLevel(logging.DEBUG)
+handler = handlers.RotatingFileHandler(
+  os.path.join(app.instance_path, 'irp2.log'),
+  maxBytes=1024 * 1024 * 100,
+  backupCount=20)
+app.logger.addHandler(handler)
 
 app.config.update(dict(
     DATABASE=os.path.join(app.instance_path, 'irp2.db'),
     DEBUG=True,
     USERNAME='admin',
     PASSWORD='default',
-    SECRET_KEY='INSECURE_DEVELOPMENT_KEY'
+    SECRET_KEY='INSECURE_DEVELOPMENT_KEY',
+    PROPAGATE_EXCEPTIONS=True
 ))
 config_yaml = os.path.join(app.instance_path, 'config.yaml')
 if os.path.isfile(config_yaml):
@@ -161,7 +163,20 @@ def saved():
     if '_uname' not in session:
         flash("You must login first to access your saved searches.")
         return redirect(url_for('welcome'))
-    return render_template('saved.html')
+    _uname = session["_uname"]
+    savedata = []
+    try:
+        db = get_db()
+        cur = db.execute("""SELECT username, searched_on, search_key FROM saved_search
+                      WHERE username = ?
+                      ORDER BY searched_on DESC;""", (_uname,))
+        for row in cur:
+            jsonstr = row[2]
+            d = json.loads(jsonstr)
+            savedata.append([row[0], row[1], d])
+    except Exception as e:
+        logging.error(str(e))
+    return render_template('saved.html', searches=savedata)
 
 
 @app.route('/logout')
@@ -176,7 +191,7 @@ def signout():
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     myjsonld = getcollections()
-    return render_template('ajaxsearch.html', collections=myjsonld)
+    return render_template('ajaxsearch.html', collections=myjsonld, inputs=request.args)
 
 
 @app.route('/searchAJAX', methods=['POST'])
@@ -205,6 +220,16 @@ def searchAJAX():
         myargs['translated_terms'] = translated_terms
     result = mysearch(**myargs)
     return jsonify(result)
+
+
+@app.route('/translate', methods=['POST'])
+def translate():
+    mylanguage = request.form.get('language')
+    text = request.form.get('text')
+    logging.info("/translate requesting '{0}' into {1}".format(text, mylanguage))
+    mytranslation = get_translations(text, [mylanguage])
+    logging.info("/translate got back '{0}'".format(mytranslation))
+    return mytranslation
 
 
 @app.route('/searchAll', methods=['GET', 'POST'])
@@ -244,23 +269,21 @@ def searchAllPage():
     return render_template("search.html", results=results, collections=collections, inputs=inputs)
 
 
-@app.route('/saveSearch', methods=['GET', 'POST'])
+@app.route('/saveSearch', methods=['POST'])
 def saveSearch():
     inputs = None
-    if request.method == 'POST':
-        inputs = request.form
-    if request.method == 'GET':
-        inputs = request.args
-    if inputs is None or len(inputs.items()) == 0:
-        inputs = session['inputs']
-    _uname = session["_uname"]
-    db = get_db()
-    db.execute("""INSERT INTO saved_search(username, searched_on, search_key)
-                   values(?, date('now'), ?);""",
-               [_uname, json.dumps(inputs)])
-    db.commit()
-    flash('Your search has been saved.')
-    return redirect(url_for('search'))
+    try:
+        inputs = request.form['savedata']
+        _uname = session["_uname"]
+        db = get_db()
+        db.execute("""INSERT INTO saved_search(username, searched_on, search_key)
+                       values(?, date('now'), ?);""",
+                   (_uname, inputs))
+        db.commit()
+        return jsonify({'result': 'yes'})
+    except Exception as e:
+        logging.error(e)
+        return jsonify({'result': 'no', 'message': str(e)})
 
 
 @app.route('/adsearch', methods=['GET', 'POST'])

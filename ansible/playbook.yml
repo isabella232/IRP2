@@ -3,11 +3,9 @@
   become: yes
 
   vars:
-    project_path: ~/IRP2
-    virtualenv_path: ~/irp2venv
-
-  roles:
-    - ansible-java8-oracle
+    user: irp2demo
+    project_path: /opt/IRP2
+    virtualenv_path: /opt/irp2venv
 
   tasks:
     - name: Add source repository
@@ -17,9 +15,9 @@
       with_items:
         - python3
         - python3-dev
-        - python-dev
+        - python3-lxml
         - python-virtualenv
-        - python-pip
+        - python3-pip
         - libz-dev
         - git
         - nginx
@@ -27,22 +25,17 @@
     - name: Install Python3 LXML dependencies
       apt: pkg=python3-lxml state=build-dep
 
-    - name: Configure Nginx Proxy
-      template: src=nginx-irp2.conf.j2 dest=/etc/nginx/conf.d/irp2.conf
-    - service: name=nginx state=restarted enabled=yes
-
     - name: Check if Solr already configured (expensive steps)
       uri: url="http://localhost:8983/solr/location/admin/luke?show=index&wt=json" return_content=yes
       ignore_errors: yes
       register: solr_response
 
-    - include: solr.yml
+    - fail: msg="Solr is not responding, please address Solr first"
       when: solr_response.status == -1
       #(solr_response.content|from_json)['index']['numDocs'] is defined
 
     - name: Creating project folder
-      file: path={{ project_path }} state=directory mode=0755
-      become: no
+      file: path="{{ project_path }}" state=directory mode=0755 owner="{{ user }}" group=www-data
       tags: code
       when: vagrant is not defined
 
@@ -53,6 +46,7 @@
         - static
         - templates
         - dashboard.py
+        - wsgi.py
         - flask_extended.py
         - requirements.txt
       become: no
@@ -65,8 +59,12 @@
       when: vagrant is not defined
       tags: code
 
-    - name: Install Python packages
-      pip: requirements={{ project_path }}/requirements.txt virtualenv={{ virtualenv_path }} virtualenv_python=python3
+    - name: Create virtualenv
+      command: virtualenv --python=/usr/bin/python3 {{ virtualenv_path }}
+      become: no
+
+    - name: Install Python package dependencies
+      command: "{{ virtualenv_path }}/bin/pip3 install -r {{ project_path }}/requirements.txt"
       become: no
 
     - name: Create the virtualenv postactivate script to set environment variables
@@ -80,17 +78,14 @@
       become: no
       command: "{{ virtualenv_path }}/bin/exec flask init_db"
 
-    # - name: Ensure that the application file permissions are set properly
-    #   file: path={{ virtualenv_path }}
-    #         recurse=yes
-    #         owner={{ gunicorn_user }}
-    #         group={{ gunicorn_group }}
-    #         state=directory
-    #   notify: restart application
-    #   tags: deploy
-    #
     - include: setup_nginx.yml
       tags: nginx
+
+    - name: Deploy IRP2 (Gunicorn) SystemD Service
+      template: src=irp2.service.j2 dest=/etc/systemd/system/irp2.service
+
+    - name: Enable IRP2 (Gunicorn) service
+      service: name=irp2.service enabled=yes state=restarted
 
   handlers:
     - name: restart Nginx

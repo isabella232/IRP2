@@ -22,8 +22,8 @@ def get_translations(keywords, languages):
         for lang in languages:
             try:
                 result.append(str(blob.translate(to=lang)))
-            except NotTranslated:
-                pass
+            except Exception as e:  # NotTranslated
+                logging.warn(e)
     return result
 
 
