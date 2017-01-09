@@ -97,7 +97,7 @@
       "dc:description": "The Ardelia Hall is a NARA record collection of recovered items and the work to restore these stolen items to their proper owners.",
       "@type": "a:Collection",
       "@id": "ArdeliaHall",
-      "dc:publisher": ["USHMM", "Fold3"],
+      "dc:publisher": ["NARA", "Fold3"],
       "dc:language": "en",
       "description-languages": ["de", "en"],
       "features": ["digitized images", "artifact documentation"],
