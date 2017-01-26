@@ -28,10 +28,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.define "machine"
+  # config.vm.provision "ansible_local" do |ansible|
+  #   ansible.extra_vars = {
+  #     project_path: "/vagrant",
+  #     virtualenv_path: "/home/ubuntu/venv",
+  #     vagrant: 1
+  #   }
+  #   ansible.version = "latest"
+  #   ansible.playbook = "ansible/solr.yml"
+  #   ansible.groups = { "irp2" => ["machine"] }
+  # end
   config.vm.provision "ansible_local" do |ansible|
     ansible.extra_vars = {
       project_path: "/vagrant",
-      virtualenv_path: "/home/vagrant/venv",
+      virtualenv_path: "/home/ubuntu/venv",
       vagrant: 1
     }
     ansible.version = "latest"

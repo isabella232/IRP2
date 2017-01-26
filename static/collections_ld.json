@@ -148,6 +148,7 @@
       "@id": "UKCollection",
       "dc:publisher": "UKNationalArchives",
       "dc:language": "en",
+      "features": ["finding aids"],
       "dc:coverage": ["Belgium", "France", "Hungary", "Italy", "Malta", "The Netherlands", "Yugoslavia"],
       "dc:date": {
         "start": "1939",
@@ -185,6 +186,71 @@
       "dc:publisher": "which???",
       "dc:language": "de",
       "dc:coverage": ["The Netherlands"]
+    },
+    {
+      "rdfs:label": "Deutsches Historisches Museum",
+      "@id": "DHM",
+      "@type": "foaf:Organization",
+      "page": "https://www.archives.gov/research/holocaust/international-resources/dhm.html",
+      "homepage": "http://www.dhm.de/"
+    },
+    {
+      "rdfs:label": "Central Collecting Point München",
+      "dc:description": "Joint project of the Deutsche Historische Museum and the German Office for Central Services and Unresolved Property Issues (BADV)",
+      "@type": "a:Database",
+      "@id": "DHMMunich",
+      "dc:publisher": "DHM",
+      "features": ["digitized images", "artifact documentation"],
+      "dc:language": "de",
+      "dc:coverage": ["Belgium", "France", "Germany", "Poland", "Luxembourg", "Denmark",
+                      "Yugoslavia", "Greece", "Norway", "The Netherlands"],
+      "dc:date": {
+        "start": "1933",
+        "end": "1945"
+      }
+    },
+    {
+      "rdfs:label": "Memorial de la SHOAH",
+      "@id": "MemorialSHOAHORG",
+      "@type": "foaf:Organization",
+      "page": "https://www.archives.gov/research/holocaust/international-resources/memorial-shoah.html",
+      "homepage": "http://www.memorialdelashoah.org/"
+    },
+    {
+      "rdfs:label": "Memorial de la SHOAH Archives",
+      "dc:description": "The documentation center’s archives have over 30 million documents, including many originals bearing the signatures of Nazi leaders and those responsible for deporting Jews from France. List of the Shoah Memorial’s archival collections.",
+      "@type": "a:Collection",
+      "@id": "MemorialSHOAH",
+      "dc:publisher": "MemorialSHOAHORG",
+      "dc:language": "fr",
+      "features": ["digitized images"],
+      "dc:coverage": ["France", "Germany"],
+      "dc:date": {
+        "start": "1924",
+        "end": "1947"
+      }
+    },
+    {
+      "rdfs:label": "Das Bundesarchiv",
+      "@id": "Bundesarchiv",
+      "@type": "foaf:Organization",
+      "page": "https://www.archives.gov/research/holocaust/international-resources/bundesarchiv.html",
+      "homepage": "http://www.bundesarchiv.de/index.html.en"
+    },
+    {
+      "rdfs:label": "Kanzlei Rosenberg (Rosenberg Chancellery)",
+      "dc:description": "The U.S. Army collected files of Alfred Rosenberg from various sources for use at the Nuremberg trials. These records were subsequently taken to Alexandria, Virginia, USA, and were partly microfilmed. These files, which were known as the U.S. Army Departmental Records Branch Record Group 1008, Reich Ministry for the Occupied Eastern Territories, arrived at the Bundesarchiv in March 1963 in the course of the repatriation of records from the USA. In the fall of 1963 the records were split into several groups according to their provenance.<br />Those files that were part of this repatriation and originated from the Rosenberg Chancellery represent the main body of Record Group NS 8 (Kanzlei Rosenberg). Some files that had made their way to the State Archives of Nuremberg and were handed over to the Bundesarchiv in 1955 were also added to this Record Group, as were several volumes from various other American records repatriations. Further additions included one volume from the Central Archives of the German Democratic Republic (GDR, Zentrales Staatsarchiv der DDR - 62 Ka 2/1) and one volume from the so-called NS-archives of the Ministry of State Security of the GDR (NS-Archiv des Ministeriums fur Staatssicherheit der DDR - ZA VI 6322).",
+      "@type": "a:Collection",
+      "@id": "KanzleiRosenberg",
+      "password": "IRP2irp2IRP2",
+      "dc:publisher": "Bundesarchiv",
+      "dc:language": "de",
+      "features": ["digitized images"],
+      "dc:coverage": ["Europe"],
+      "dc:date": {
+        "start": "1924",
+        "end": "1947"
+      }
     }
   ]
 }

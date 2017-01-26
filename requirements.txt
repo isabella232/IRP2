@@ -2,7 +2,7 @@ lxml
 flask
 requests
 beautifulsoup4
-TextBlob
+google-cloud-translate
 Werkzeug
 PyYAML
 PyLD

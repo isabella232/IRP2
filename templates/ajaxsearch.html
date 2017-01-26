@@ -98,7 +98,7 @@
   <!--h1>Results</h1-->
   <table id="collectionsTable" class="table table-striped">
     <thead>
-      <tr><th>Collection</th><th>Features</th><th>Dates</th><th>Coverage</th><th>Hits</th></tr>
+      <tr><th>Collection</th><th>Features</th><th>Dates</th><th>Locations</th><th>Hits</th></tr>
     </thead>
     <tbody>
 {% for node in collections['@graph']|sort(attribute='rdfs:label') %}
@@ -152,14 +152,10 @@ var icon_idx = new Map([
 $("button.translate").click(function() {
   var language_code = $(this).attr('data-id');
   var text = $('#inputKeywords').val();
-  $(this).parent().after(`
-    <div class="alert alert-danger fade in col-sm-offset-2 col-sm-10">
-      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      <strong>Sorry</strong> We need to find a replacement for the Google Translate API. (no longer free)
-      Normally the keywords above will be translated in place, into the chosen language.
-    </div>
-    `);
-  $('#inputKeywords').load('/translate', {'language': language_code, 'text': text});
+  $.post('/translate', {'language': language_code, 'text': text}, function(data) {
+    mydata = $('<textarea />').html(data).text();
+    $('#inputKeywords').val(mydata)
+  }, 'text');
 });
 
 $('#getLink').click(function() {

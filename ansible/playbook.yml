@@ -3,7 +3,6 @@
   become: yes
 
   vars:
-    user: irp2demo
     project_path: /opt/IRP2
     virtualenv_path: /opt/irp2venv
 
@@ -60,18 +59,32 @@
       tags: code
 
     - name: Create virtualenv
-      command: virtualenv --python=/usr/bin/python3 {{ virtualenv_path }}
+      file: path={{ virtualenv_path }} owner={{ user }} group={{ user }} state=directory
+    - command: virtualenv --python=/usr/bin/python3 {{ virtualenv_path }}
       become: no
 
     - name: Install Python package dependencies
       command: "{{ virtualenv_path }}/bin/pip3 install -r {{ project_path }}/requirements.txt"
       become: no
 
-    - name: Create the virtualenv postactivate script to set environment variables
+    - name: Edit the virtualenv activate script to set environment variables
       become: no
-      lineinfile: dest={{ virtualenv_path }}/bin/activate insertafter=EOF line="export FLASK_APP={{ project_path }}/dashboard.py"
+      lineinfile:
+        dest: "{{ virtualenv_path }}/bin/activate"
+        insertafter: EOF
+        line: "export FLASK_APP={{ project_path }}/dashboard.py"
+
+    - name: Edit the virtualenv activate script to set environment variables
+      become: no
+      lineinfile:
+        dest: "{{ virtualenv_path }}/bin/activate"
+        insertafter: EOF
+        line: "export GOOGLE_APPLICATION_CREDENTIALS={{ virtualenv_path }}/gcloud_keyfile.json"
 
     - template: src=venv_exec.j2 dest={{ virtualenv_path }}/bin/exec mode=755
+      become: no
+
+    - copy: src={{ gcloud_keyfile }} dest={{ virtualenv_path }}/gcloud_keyfile.json
       become: no
 
     - name: Initialize DB

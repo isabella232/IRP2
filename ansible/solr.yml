@@ -3,7 +3,7 @@
   become: yes
 
   vars:
-    solr_version: 6.2.1
+    solr_version: 6.4.0
 
   roles:
     - ansible-java8-oracle

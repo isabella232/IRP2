@@ -7,12 +7,13 @@ import sqlite3
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_extended import Flask
-from flask import jsonify, request, session, g, redirect, url_for, render_template, flash
+from flask import jsonify, request, session, g, redirect, url_for, render_template, flash, Response
 from archives.core import searchAll
 from archives.core import search as mysearch
 from archives.core import get_translations
 from lxml import etree
 from archives import belgium
+from contextlib import closing
 
 
 app = Flask(__name__)
@@ -79,7 +80,7 @@ def close_db(error):
 def getcollections():
     # global collections
     # if collections is None:
-    with app.open_resource('static/collections_ld.json', 'r') as data_file:
+    with closing(open('static/collections_ld.json', 'r', encoding='utf-8')) as data_file:
         collections = json.load(data_file)
     return collections
 
@@ -88,6 +89,11 @@ def getcollections():
 def welcome():
     myjsonld = getcollections()
     return render_template('welcome.html', collections=myjsonld)
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 @app.route('/collections')
@@ -229,7 +235,7 @@ def translate():
     logging.info("/translate requesting '{0}' into {1}".format(text, mylanguage))
     mytranslation = get_translations(text, [mylanguage])
     logging.info("/translate got back '{0}'".format(mytranslation))
-    return mytranslation
+    return Response(mytranslation, mimetype='text/plain')
 
 
 @app.route('/searchAll', methods=['GET', 'POST'])
