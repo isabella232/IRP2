@@ -18,18 +18,20 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
   <![endif]-->
+
   <script type="text/javascript"
     src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="/static/jquery.tocify.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="/static/jquery.tocify.css" />
   <link rel="stylesheet" href="/static/lavish-bootstrap.css"></link>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css"/>
   <!-- Custom styles for this template -->
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"/>
   <link href="jumbotron.css" rel="stylesheet"/>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   <link rel="stylesheet" type="text/css" href="css/custom.css">
-  <!--script type="text/javascript" src="./lib/translate.js"></script>
-  <script type="text/javascript" src="./lib/languages.js"></script-->
 
 <script type="text/javascript">
 function emailCurrentPage(){
@@ -39,7 +41,7 @@ function emailCurrentPage(){
 
 <style type="text/css">
   body {
-    padding-top: 50px;
+    padding-top: 60px;
     padding-bottom: 20px;
   }
   input.text {width:200px; margin-left:20px}
@@ -94,9 +96,10 @@ function emailCurrentPage(){
               Collections <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
+              <li><a href="/resources">Browse All Collections</a></li>
               {% for node in collections['@graph']|sort(attribute='rdfs:label') %}
               {% if node['@type'] in ["a:Database","a:FindingAid", "a:Collection"] %}
-              <li><a href="{{ node['@id'] }}">About this Portal Demo</a></li>
+              <li><a href="/resources#{{ node['@id'] }}">{{ node['rdfs:label'] }}</a></li>
               {% endif %}
               {% endfor %}
             </ul>

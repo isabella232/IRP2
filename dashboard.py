@@ -107,6 +107,12 @@ def join():
     return render_template('join.html')
 
 
+@app.route('/resources', methods=['GET'])
+def resources():
+    myjsonld = getcollections()
+    return render_template('resources.html', collections=myjsonld)
+
+
 @app.route('/tojoin', methods=['POST', 'GET'])
 def tojoin():
     db = get_db()

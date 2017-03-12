@@ -203,7 +203,7 @@ $.when( $.getJSON( "static/collections_ld.json"),
       for( var idx = 0; idx < pubs.length; idx++ ) {
         var pub = organization_idx.get(pubs[idx]);
         if((typeof(pub) !== 'undefined') && (pub !== null)) {
-          result += "<br /><small>"+pub['rdfs:label']+"</small>";
+          result += "<br /><h5>"+pub['rdfs:label']+"</h5>";
         }
       }
       return result;
@@ -271,7 +271,7 @@ $(function() {
     $('#myModel-title').html($(this).html())
     $('#myModel-body').html('<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>');
     $('#myModal').modal({show:true});
-    $('#myModel-body').load( "/static/"+row_id+".html #container");
+    $('#myModel-body').load( "/static/collections/"+row_id+".html #container");
   });
 });
 

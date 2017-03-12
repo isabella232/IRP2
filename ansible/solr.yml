@@ -59,6 +59,7 @@
 
     - name: Pausing for Solr to finish creating cores..
       pause: seconds=60
+      tags: terms
 
     - name: Creating Artist fields in Solr
       uri:
@@ -75,6 +76,7 @@
         - label
         - name
         - hint
+      tags: terms
 
     - name: Creating Location fields in Solr
       uri:
@@ -91,6 +93,7 @@
         - label
         - name
         - hint
+      tags: terms
 
     - name: Creating Technique fields in Solr
       uri:
@@ -107,6 +110,7 @@
         - label
         - name
         - hint
+      tags: terms
 
     - name: Add text_lower field type
       uri:
@@ -137,6 +141,7 @@
         - artist
         - location
         - technique
+      tags: terms
 
     - name: Add Ngram-text field type
       uri:
@@ -167,6 +172,7 @@
         - artist
         - location
         - technique
+      tags: terms
 
     - name: Creating Label NGram field in Solr
       uri:
@@ -183,9 +189,11 @@
         - artist
         - location
         - technique
+      tags: terms
 
     - name: Pausing for Solr to catch up..
       pause: seconds=10
+      tags: terms
 
     - name: Add Copy Field for label NGram index
       uri:
@@ -202,6 +210,7 @@
         - artist
         - location
         - technique
+      tags: terms
 
     - name: Unpacking terminology archives on server
       unarchive: src={{ item }}.csv.tar.gz dest=/opt/solr/server owner=solr group=solr
@@ -209,6 +218,7 @@
         - artist
         - location
         - technique
+      tags: terms
 
     - name: Loading terminologies into the Solr indices
       uri:
@@ -220,3 +230,4 @@
         - artist
         - location
         - technique
+      tags: terms
