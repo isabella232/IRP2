@@ -87,30 +87,27 @@ def getcollections():
 
 @app.route('/')
 def welcome():
-    myjsonld = getcollections()
-    return render_template('welcome.html', collections=myjsonld)
+    return render_template('welcome.html', collections=getcollections())
 
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template('about.html', collections=getcollections())
 
 
 @app.route('/collections')
 def collections():
-    myjsonld = getcollections()
-    return render_template('collections.html', collections=myjsonld)
+    return render_template('collections.html', collections=getcollections())
 
 
 @app.route('/join', methods=['POST', 'GET'])
 def join():
-    return render_template('join.html')
+    return render_template('join.html', collections=getcollections())
 
 
 @app.route('/resources', methods=['GET'])
 def resources():
-    myjsonld = getcollections()
-    return render_template('resources.html', collections=myjsonld)
+    return render_template('resources.html', collections=getcollections())
 
 
 @app.route('/tojoin', methods=['POST', 'GET'])
@@ -167,7 +164,8 @@ def settings():
     if '_uname' not in session:
         flash("You must login first to access your settings.")
         return redirect(url_for('welcome'))
-    return render_template('settings.html')
+
+    return render_template('settings.html', collections=getcollections())
 
 
 @app.route('/saved', methods=['GET', 'POST'])
@@ -188,7 +186,7 @@ def saved():
             savedata.append([row[0], row[1], d])
     except Exception as e:
         logging.error(str(e))
-    return render_template('saved.html', searches=savedata)
+    return render_template('saved.html', searches=savedata, collections=getcollections())
 
 
 @app.route('/logout')
@@ -278,7 +276,8 @@ def searchAllPage():
         myargs['translated_terms'] = translated_terms
 
     results = searchAll(**myargs)
-    return render_template("search.html", results=results, collections=collections, inputs=inputs)
+    return render_template("search.html", results=results,
+                           collections=getcollections(), inputs=inputs)
 
 
 @app.route('/saveSearch', methods=['POST'])
@@ -305,7 +304,7 @@ def adsearch():
     if request.method == 'GET':
         keywords = request.args.getlist('keywords')
     result = belgium.findresult(keywords)
-    return render_template('adsearch.html', results=result)
+    return render_template('adsearch.html', results=result, collections=getcollections())
 
 
 @app.route('/advsearch', methods=['GET', 'POST'])
@@ -346,13 +345,13 @@ def advsearch():
         result = result & name_r
 
     ls = belgium.getresult(result)
-    return render_template('adsearch.html', results=ls)
+    return render_template('adsearch.html', results=ls, collections=getcollections())
 
 
 @app.route('/detail', methods=['GET', 'POST'])
 def detail():
     result = request.args.get("detail")
-    return render_template('detail.html', results=result)
+    return render_template('detail.html', results=result, collections=getcollections())
 
 
 if __name__ == '__main__':

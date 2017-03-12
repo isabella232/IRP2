@@ -164,8 +164,10 @@ $('#getLink').click(function() {
   data = data.filter(isNotEmpty);
   if(link.indexOf('?') > 0) {
     link = link.substring(0, link.indexOf('?')+1);
+  } else {
+    link += '?';
   }
-  link += $.param(data)
+  link += $.param(data);
   $(this).parents('.mybuttonrow').after(`
     <div class="form-group row">
     <div class="alert alert-info fade in col-sm-offset-2 col-sm-10">
@@ -268,10 +270,12 @@ $('[data-toggle="tooltip"]').tooltip();
 $(function() {
   $(".collection-modal").click(function() {
     var row_id = $(this).parents('tr').attr('data-id');
-    $('#myModel-title').html($(this).html())
+    var html = $(this).clone();
+    html.append("<p style='font-size: smaller'><a href='/resources'>Click here</a> to browse all collections.</p>");
+    $('#myModel-title').html(html.html());
     $('#myModel-body').html('<i class="fa fa-circle-o-notch fa-spin" style="font-size:24px"></i>');
     $('#myModal').modal({show:true});
-    $('#myModel-body').load( "/static/collections/"+row_id+".html #container");
+    $('#myModel-body').load( "/resources #"+row_id);
   });
 });
 
