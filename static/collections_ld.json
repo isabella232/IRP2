@@ -86,18 +86,11 @@
       "homepage": "http://www.archives.gov/research/"
     },
     {
-      "rdfs:label": "Fold3",
-      "@id": "Fold3",
-      "@type": "foaf:Organization",
-      "page": "http://www.archives.gov/research/holocaust/international-resources/nara/",
-      "homepage": "https://go.fold3.com/holocaust_art/"
-    },
-    {
       "rdfs:label": "Holocaust-Era Assets at Fold3 (Ardelia Hall, etc.)",
       "dc:description": "The Ardelia Hall is a NARA record collection of recovered items and the work to restore these stolen items to their proper owners.",
       "@type": "a:Collection",
       "@id": "ArdeliaHall",
-      "dc:publisher": ["NARA", "Fold3"],
+      "dc:publisher": "NARA",
       "dc:language": "en",
       "description-languages": ["de", "en"],
       "features": ["digitized images", "artifact documentation"],
@@ -117,7 +110,6 @@
       "@id": "AustriaNationalFund",
       "@type": "foaf:Organization",
       "depiction": "austria.png",
-      "page": "http://www.archives.gov/research/holocaust/international-resources/austria.html",
       "homepage": "http://nationalfonds.org/home.html"
     },
     {
@@ -138,8 +130,8 @@
       "rdfs:label": "National Archives of the United Kingdom",
       "@id": "UKNationalArchives",
       "@type": "foaf:Organization",
-      "page": "http://www.archives.gov/research/holocaust/international-resources/uk.html",
-      "homepage": "http://nationalfonds.org/home.html"
+      "depiction": "logo-tnauk.png",
+      "homepage": "http://www.nationalarchives.gov.uk/documentsonline/looted-art.asp"
     },
     {
       "rdfs:label": "National Archives of UK",
@@ -177,21 +169,10 @@
       }
     },
     {
-      "rdfs:label": "State Archives of the Netherlands",
-      "@id": "NetherlandsStateArchives",
-      "@type": ["foaf:Organization", "a:GeneralArchives"],
-      "depiction": "logo-dhm.png",
-      "homepage": "http://www.archieven.nl/en/",
-      "dc:description": "The Lost Art Database registers cultural objects which as a result of persecution under the Nazi dictatorship and the Second World War were relocated, moved or seized, especially from Jewish owners.",
-      "dc:publisher": "which???",
-      "dc:language": "de",
-      "dc:coverage": ["The Netherlands"]
-    },
-    {
       "rdfs:label": "Deutsches Historisches Museum",
       "@id": "DHM",
       "@type": "foaf:Organization",
-      "page": "https://www.archives.gov/research/holocaust/international-resources/dhm.html",
+      "depiction": "logo-dhm.png",
       "homepage": "http://www.dhm.de/"
     },
     {
@@ -211,9 +192,9 @@
     },
     {
       "rdfs:label": "Memorial de la SHOAH",
-      "@id": "MemorialSHOAHORG",
+      "@id": "MemorialSHOAH",
       "@type": "foaf:Organization",
-      "page": "https://www.archives.gov/research/holocaust/international-resources/memorial-shoah.html",
+      "depiction": "logo-memorial-shoah.png",
       "homepage": "http://www.memorialdelashoah.org/"
     },
     {
@@ -234,7 +215,7 @@
       "rdfs:label": "Das Bundesarchiv",
       "@id": "Bundesarchiv",
       "@type": "foaf:Organization",
-      "page": "https://www.archives.gov/research/holocaust/international-resources/bundesarchiv.html",
+      "depiction": "logo-bundesarchiv.png",
       "homepage": "http://www.bundesarchiv.de/index.html.en"
     },
     {
@@ -251,6 +232,69 @@
         "start": "1924",
         "end": "1947"
       }
+    },
+    {
+      "rdfs:label": "France Diplomatie",
+      "@id": "FranceDiplomatie",
+      "@type": "foaf:Organization",
+      "depiction": "logo-france-diplomatie.png",
+      "homepage": "http://www.diplomatie.gouv.fr/fr/ministere_817/archives-patrimoine_3512/index.html"
+    },
+    {
+      "rdfs:label": "Central State Archives of Supreme Bodies of Power and Government of Ukraine (TsDAVO)",
+      "@id": "TsDAVO",
+      "@type": "foaf:Organization",
+      "depiction": "logo-tsdavo.png",
+      "homepage": "http://err.tsdavo.gov.ua/"
+    },
+    {
+      "rdfs:label": "Commission for Looted Art in Europe",
+      "@id": "CLAE",
+      "@type": "foaf:Organization",
+      "depiction": "logo-clae.png",
+      "homepage": "http://www.lootedartcommission.com/"
+    },
+    {
+      "rdfs:label": "Conference on Jewish Material Claims Against Germany",
+      "@id": "ClaimsConference",
+      "@type": "foaf:Organization",
+      "depiction": "logo-claims-con.png",
+      "homepage": "http://www.claimscon.org/"
+    },
+    {
+      "rdfs:label": "NIOD Institute for War, Holocaust, and Genocide Studies",
+      "@id": "NIOD",
+      "@type": "foaf:Organization",
+      "depiction": "logo-niod.jpg",
+      "homepage": "http://www.niod.nl/"
+    },
+    {
+      "rdfs:label": "Italian Directorate General of Archives",
+      "@id": "ItalianArchives",
+      "@type": "foaf:Organization",
+      "depiction": "logo-italy.jpg",
+      "homepage": "http://www.archivi-sias.it"
+    },
+    {
+      "rdfs:label": "Landesarchiv Berlin",
+      "@id": "Landesarchiv",
+      "@type": "foaf:Organization",
+      "depiction": "logo-landesarchiv.jpg",
+      "homepage": "http://www.landesarchiv-berlin.de/"
+    },
+    {
+      "rdfs:label": "Heidelberg University Library",
+      "@id": "heidelberg",
+      "@type": "foaf:Organization",
+      "depiction": "logo-heidelberg.png",
+      "homepage": "http://www.ub.uni-heidelberg.de/"
+    },
+    {
+      "rdfs:label": "Deutsches Kunstarchiv im Germanischen Nationalmuseum",
+      "@id": "Kunstarchiv",
+      "@type": "foaf:Organization",
+      "depiction": "logo-gnm.png",
+      "homepage": "http://www.gnm.de/index.php?id=262"
     }
   ]
 }

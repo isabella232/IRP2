@@ -93,6 +93,19 @@ function emailCurrentPage(){
           <li><a href="/search">Search</a></li>
           <li role="presentation" class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              Institutions <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <li><a href="/resources">Browse All Institutions</a></li>
+              {% for node in collections['@graph']|sort(attribute='rdfs:label') %}
+              {% if node['@type'] in ["foaf:Organization"] %}
+              <li><a href="/resources#{{ node['@id'] }}">{{ node['rdfs:label'] }}</a></li>
+              {% endif %}
+              {% endfor %}
+            </ul>
+          </li>
+          <li role="presentation" class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
               Collections <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
@@ -111,37 +124,10 @@ function emailCurrentPage(){
             <ul class="dropdown-menu">
               <li><a href="/about">About this Portal Demo</a></li>
               <li><a href="/collections">Collections &amp; Institutions</a></li>
-              <li><a href="http://www.archives.gov/research/holocaust/international-resources/glossary-sort.html">Guide to Search Terms</a></li>
-              <li><a href="http://www.archives.gov/research/holocaust/international-resources/whats-new.html">NARA Portal News</a></li>
-              <li><a href="http://www.archives.gov/research/holocaust/international-resources/other-resources.html">NARA Portal Resources</a></li>
-              <li><a href="http://www.archives.gov/research/holocaust">Holocaust-Era Assets at NARA</a></li>
+              <li><a href="/glossary">Glossary of Search Terms</a></li>
             </ul>
           </li>
-{%if '_uname' in session %}
-          <li><a href="/saved">Saved Searches</a></li>
-          <li><a href="/settings">Settings</a></li>
-{%endif%}
         </ul>
-{%if not '_uname' in session%}
-        <form method="POST" action="/tologin" autocomplete="on" class="navbar-form navbar-right">
-          <div class="form-group">
-            <input type="text" name="username" required="required" placeholder="Email" class="form-control">
-          </div>
-          <div class="form-group">
-            <input type="password" name="password" required="required" placeholder="Password" class="form-control">
-          </div>
-          <button type="submit" value="Login" class="btn btn-success">Sign in</button>
-        </form>
-        <form method="POST" action="/join" class="navbar-form navbar-right">
-          <button type="submit" class="btn btn-primary">Join</button>
-        </form>
-{%endif%}
-{%if '_uname' in session %}
-        <form method="GET" action="/logout" class="navbar-form navbar-right">
-          <button type="submit" class="btn btn-primary">Logout</button>
-        </form>
-        <ul class="nav navbar-nav navbar-right"><li><p class="navbar-text">{{ session['_uname'] }}</p></li></ul>
-{%endif%}
       </div>
     </div>
   </nav>

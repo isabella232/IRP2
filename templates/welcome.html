@@ -7,10 +7,12 @@
     <div style="float: left; padding: 15px"><img src="/static/irp2_logo_alpha.png" height="200px"/></div>
     <h1>Welcome</h1>
     <h2>International Research Portal for Records Related to Nazi-Era Cultural Property</h2>
-    <p>Search at once across all the archival collections at participating institutions.
-      Resources may include descriptions of archival materials and digital images.
-      The hit count for each collection is shown with a quick link to the results.</p>
-    <p><a class="btn btn-primary btn-lg" href="/search" role="button">Start searching &raquo;</a></p>
+    <p>Search at once across the publicly searchable archival collections at participating institutions.
+      The hit count for each collection is shown with a quick link to the results. You may also browse
+      our resource guide for descriptions and links to participating institutions.</p>
+    <p><a class="btn btn-primary btn-lg" href="/search" role="button">Start searching &raquo;</a> &nbsp;
+      <a class="btn btn-primary btn-lg" href="/resources" role="button">Start browsing &raquo;</a>
+    </p>
   </div>
 </div>
 <div class="container">
@@ -18,20 +20,17 @@
 <p>The International Research Portal is a collaboration of national and other archival institutions with records that pertain to Nazi-Era cultural property. These archival institutions, along with expert national and international organizations, are working together to extend public access to the widely-dispersed records through this single internet Portal. The Portal enables families to research their losses; provenance researchers to locate important documentation; and historians to study newly accessible materials on the history of this period. This collaborative project was established to fulfill the objectives of the <a href="//www.state.gov/p/eur/rt/hlcst/122038.htm">1998 Washington Conference Principles on Nazi-Confiscated Art</a>, the <a href="//www.lootedart.com/MFV7EE39608">2000 Vilnius Forum Declaration</a> and the <a href="//www.state.gov/p/eur/rls/or/126162.htm">2009 Terezin Declaration</a>, particularly to make all such records publicly accessible.</p>
 <p>The Portal links researchers to archival materials consisting of descriptions of records and, in many cases, digital images of the records that relate to cultural property that was stolen, looted, seized, forcibly sold, or otherwise lost during the Nazi era. These records, which are in many different languages, include Nazi documentation, governmental records from 1933 onwards, inventories of recovered artworks, post-war claims records and auction house and art dealer records. Cultural property documented in these records covers a broad range from artworks to books and libraries, religious objects, antiquities, archival documents, carvings, silver and more.</p>
 <p>All descriptions within the Portal are provided in English. As you click through the Portal to affiliated websites, the descriptions are written in the national language of each institution, and in some instances, are available in English, as well.</p>
-<h1>Included Collections</h1>
-<p>This is the list of the archival collections, databases, and finding aids that
-are used in the portal search feature. For more information about the included collections
-and more resources, please see our <a href="/resources">collection resources page</a>.</p>
+<h1>Included Resources</h1>
+<p>This is the list of the organizations whose archival collections, databases, and finding aids
+are used in the portal's search and browse features. For more information about the included collections
+and more resources, please see the <a href="/resources">resources page</a>.</p>
 <table id="collectionsTable" class="table table-striped">
-  <thead>
-    <tr><th>Collection Name</th><th>Coverage</th></tr>
-  </thead>
   <tbody>
 {% for node in collections['@graph']|sort(attribute='rdfs:label') %}
-{% if node['@type'] in ["a:Database","a:FindingAid", "a:Collection"] %}
+{% if node['@type'] in ["foaf:Organization"] %}
     <tr id="{{ node['@id'] }}">
-      <td>{{ node['rdfs:label'] }}</td>
-      <td>{{ '%s' % ', '.join(node['dc:coverage']) if node['dc:coverage'] }}</td>
+      <td><a href="/resources#{{ node['@id'] }}">{{ node['rdfs:label'] }}</a></td>
+      <td><image src="/static/logos/{{ node['depiction'] }}" /></td>
     </tr>
 {% endif %}
 {% endfor %}

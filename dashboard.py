@@ -100,6 +100,11 @@ def collections():
     return render_template('collections.html', collections=getcollections())
 
 
+@app.route('/glossary')
+def glossary():
+    return render_template('glossary.html', collections=getcollections())
+
+
 @app.route('/join', methods=['POST', 'GET'])
 def join():
     return render_template('join.html', collections=getcollections())
