@@ -15,7 +15,8 @@
       "@type": "foaf:Organization",
       "depiction": "logo-state-archives-belgium.png",
       "page": "http://www.archives.gov/research/holocaust/international-resources/belgium.html",
-      "homepage": "http://arch.arch.be/"
+      "homepage": "http://arch.arch.be/",
+      "searchable": true
     },
     {
       "rdfs:label": "Belgium Holocaust Assets Finding Aid",
@@ -37,7 +38,8 @@
       "@type": "foaf:Organization",
       "depiction": "getty.jpg",
       "page": "http://www.archives.gov/research/holocaust/international-resources/getty.html",
-      "homepage": "http://www.getty.edu/research/"
+      "homepage": "http://www.getty.edu/research/",
+      "searchable": true
     },
     {
       "rdfs:label": "German Sales Catalogs, 1930-1945",
@@ -60,7 +62,8 @@
       "@type": "foaf:Organization",
       "depiction": "logo-ushmm.png",
       "page": "http://www.archives.gov/research/holocaust/international-resources/claims-con-ushmm.html",
-      "homepage": "http://www.ushmm.org/research/research-in-collections/overview"
+      "homepage": "http://www.ushmm.org/research/research-in-collections/overview",
+      "searchable": true
     },
     {
       "rdfs:label": "Database of Art Objects at Jeu de Paume",
@@ -83,10 +86,26 @@
       "@type": "foaf:Organization",
       "depiction": "logo-nara.png",
       "page": "http://www.archives.gov/research/holocaust/international-resources/nara/",
-      "homepage": "http://www.archives.gov/research/"
+      "homepage": "http://www.archives.gov/research/",
+      "searchable": true
     },
     {
-      "rdfs:label": "Holocaust-Era Assets at Fold3 (Ardelia Hall, etc.)",
+      "rdfs:label": "National Archives of the United States Catalog",
+      "dc:description": "The National Archives Online Catalog is the online public portal to our records and information about our records. The catalog currently provides access to over 2 million electronic records currently in the Electronic Records Archives (ERA), which are not available elsewhere online.",
+      "@type": "a:Collection",
+      "@id": "NARACatalog",
+      "dc:publisher": "NARA",
+      "dc:language": "en",
+      "description-languages": ["en"],
+      "features": ["digitized images", "artifact documentation", "finding aids"],
+      "dc:coverage": ["Europe"],
+      "dc:date": {
+        "start": "1940",
+        "end": "1944"
+      }
+    },
+    {
+      "rdfs:label": "National Archives of the United States Holocaust-Era Assets on Fold3 (Ardelia Hall, etc.)",
       "dc:description": "The Ardelia Hall is a NARA record collection of recovered items and the work to restore these stolen items to their proper owners.",
       "@type": "a:Collection",
       "@id": "ArdeliaHall",
@@ -110,7 +129,8 @@
       "@id": "AustriaNationalFund",
       "@type": "foaf:Organization",
       "depiction": "austria.png",
-      "homepage": "http://nationalfonds.org/home.html"
+      "homepage": "http://nationalfonds.org/home.html",
+      "searchable": true
     },
     {
       "rdfs:label": "Art Database of the National Fund (Austria)",
@@ -131,7 +151,8 @@
       "@id": "UKNationalArchives",
       "@type": "foaf:Organization",
       "depiction": "logo-tnauk.png",
-      "homepage": "http://www.nationalarchives.gov.uk/documentsonline/looted-art.asp"
+      "homepage": "http://www.nationalarchives.gov.uk/documentsonline/looted-art.asp",
+      "searchable": true
     },
     {
       "rdfs:label": "National Archives of UK",
@@ -146,14 +167,6 @@
         "start": "1939",
         "end": "1961"
       }
-    },
-    {
-      "rdfs:label": "Bundesarchiv (Federal Archives of Germany)",
-      "@id": "GermanyFederalArchives",
-      "@type": "foaf:Organization",
-      "depiction": "logo-bundesarchiv.png",
-      "page": "http://www.archives.gov/research/holocaust/international-resources/bundesarchiv.html",
-      "homepage": "http://www.bundesarchive.de/index.html.de"
     },
     {
       "rdfs:label": "Lost Art Internet Database (Magdeburg)",
@@ -173,7 +186,8 @@
       "@id": "DHM",
       "@type": "foaf:Organization",
       "depiction": "logo-dhm.png",
-      "homepage": "http://www.dhm.de/"
+      "homepage": "http://www.dhm.de/",
+      "searchable": true
     },
     {
       "rdfs:label": "Central Collecting Point München",
@@ -195,7 +209,8 @@
       "@id": "MemorialSHOAH",
       "@type": "foaf:Organization",
       "depiction": "logo-memorial-shoah.png",
-      "homepage": "http://www.memorialdelashoah.org/"
+      "homepage": "http://www.memorialdelashoah.org/",
+      "searchable": true
     },
     {
       "rdfs:label": "Memorial de la SHOAH Archives",
@@ -212,19 +227,19 @@
       }
     },
     {
-      "rdfs:label": "Das Bundesarchiv",
-      "@id": "Bundesarchiv",
+      "rdfs:label": "Das Bundesarchiv (Germany Federal Archives)",
+      "@id": "GermanyFederalArchives",
       "@type": "foaf:Organization",
       "depiction": "logo-bundesarchiv.png",
-      "homepage": "http://www.bundesarchiv.de/index.html.en"
+      "homepage": "http://www.bundesarchiv.de/index.html.en",
+      "searchable": false
     },
     {
       "rdfs:label": "Kanzlei Rosenberg (Rosenberg Chancellery)",
       "dc:description": "The U.S. Army collected files of Alfred Rosenberg from various sources for use at the Nuremberg trials. These records were subsequently taken to Alexandria, Virginia, USA, and were partly microfilmed. These files, which were known as the U.S. Army Departmental Records Branch Record Group 1008, Reich Ministry for the Occupied Eastern Territories, arrived at the Bundesarchiv in March 1963 in the course of the repatriation of records from the USA. In the fall of 1963 the records were split into several groups according to their provenance.<br />Those files that were part of this repatriation and originated from the Rosenberg Chancellery represent the main body of Record Group NS 8 (Kanzlei Rosenberg). Some files that had made their way to the State Archives of Nuremberg and were handed over to the Bundesarchiv in 1955 were also added to this Record Group, as were several volumes from various other American records repatriations. Further additions included one volume from the Central Archives of the German Democratic Republic (GDR, Zentrales Staatsarchiv der DDR - 62 Ka 2/1) and one volume from the so-called NS-archives of the Ministry of State Security of the GDR (NS-Archiv des Ministeriums fur Staatssicherheit der DDR - ZA VI 6322).",
-      "@type": "a:Collection",
+      "@type": "a:BrokenCollection",
       "@id": "KanzleiRosenberg",
-      "password": "IRP2irp2IRP2",
-      "dc:publisher": "Bundesarchiv",
+      "dc:publisher": "GermanyFederalArchives",
       "dc:language": "de",
       "features": ["digitized images"],
       "dc:coverage": ["Europe"],
@@ -238,63 +253,72 @@
       "@id": "FranceDiplomatie",
       "@type": "foaf:Organization",
       "depiction": "logo-france-diplomatie.png",
-      "homepage": "http://www.diplomatie.gouv.fr/fr/ministere_817/archives-patrimoine_3512/index.html"
+      "homepage": "http://www.diplomatie.gouv.fr/fr/ministere_817/archives-patrimoine_3512/index.html",
+      "searchable": false
     },
     {
       "rdfs:label": "Central State Archives of Supreme Bodies of Power and Government of Ukraine (TsDAVO)",
       "@id": "TsDAVO",
       "@type": "foaf:Organization",
       "depiction": "logo-tsdavo.png",
-      "homepage": "http://err.tsdavo.gov.ua/"
+      "homepage": "http://err.tsdavo.gov.ua/",
+      "searchable": false
     },
     {
       "rdfs:label": "Commission for Looted Art in Europe",
       "@id": "CLAE",
       "@type": "foaf:Organization",
       "depiction": "logo-clae.png",
-      "homepage": "http://www.lootedartcommission.com/"
+      "homepage": "http://www.lootedartcommission.com/",
+      "searchable": false
     },
     {
       "rdfs:label": "Conference on Jewish Material Claims Against Germany",
       "@id": "ClaimsConference",
       "@type": "foaf:Organization",
       "depiction": "logo-claims-con.png",
-      "homepage": "http://www.claimscon.org/"
+      "homepage": "http://www.claimscon.org/",
+      "searchable": false
     },
     {
       "rdfs:label": "NIOD Institute for War, Holocaust, and Genocide Studies",
       "@id": "NIOD",
       "@type": "foaf:Organization",
       "depiction": "logo-niod.jpg",
-      "homepage": "http://www.niod.nl/"
+      "homepage": "http://www.niod.nl/",
+      "searchable": false
     },
     {
       "rdfs:label": "Italian Directorate General of Archives",
       "@id": "ItalianArchives",
       "@type": "foaf:Organization",
       "depiction": "logo-italy.jpg",
-      "homepage": "http://www.archivi-sias.it"
+      "homepage": "http://www.archivi-sias.it",
+      "searchable": false
     },
     {
       "rdfs:label": "Landesarchiv Berlin",
       "@id": "Landesarchiv",
       "@type": "foaf:Organization",
       "depiction": "logo-landesarchiv.jpg",
-      "homepage": "http://www.landesarchiv-berlin.de/"
+      "homepage": "http://www.landesarchiv-berlin.de/",
+      "searchable": false
     },
     {
       "rdfs:label": "Heidelberg University Library",
       "@id": "heidelberg",
       "@type": "foaf:Organization",
       "depiction": "logo-heidelberg.png",
-      "homepage": "http://www.ub.uni-heidelberg.de/"
+      "homepage": "http://www.ub.uni-heidelberg.de/",
+      "searchable": false
     },
     {
       "rdfs:label": "Deutsches Kunstarchiv im Germanischen Nationalmuseum",
       "@id": "Kunstarchiv",
       "@type": "foaf:Organization",
       "depiction": "logo-gnm.png",
-      "homepage": "http://www.gnm.de/index.php?id=262"
+      "homepage": "http://www.gnm.de/index.php?id=262",
+      "searchable": false
     }
   ]
 }

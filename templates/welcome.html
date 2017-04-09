@@ -29,7 +29,8 @@ and more resources, please see the <a href="/resources">resources page</a>.</p>
 {% for node in collections['@graph']|sort(attribute='rdfs:label') %}
 {% if node['@type'] in ["foaf:Organization"] %}
     <tr id="{{ node['@id'] }}">
-      <td><a href="/resources#{{ node['@id'] }}">{{ node['rdfs:label'] }}</a></td>
+      <td><a style="color: darkslategray; font-size: 25px;" href="/resources#{{ node['@id'] }}">{{ node['rdfs:label'] }}</a></td>
+      <td>{% if node['searchable'] %}Included in Portal Search{% endif %}
       <td><image src="/static/logos/{{ node['depiction'] }}" /></td>
     </tr>
 {% endif %}

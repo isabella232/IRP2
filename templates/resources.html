@@ -1,4 +1,5 @@
 {% extends "layout.html" %} {% block body %}
+
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
@@ -8,12 +9,11 @@
     <!--/.well -->
     <!--/span-->
     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-      <div id="all">
+      <div id="all" class="resourcepage">
         <div id="NARA">
-          <h1>NARA: Records of the National Archives and Records Administration
-        Relating to Nazi-Era Cultural Property</h1>
-          <div class="general">
-            <p>The records made available on the Portal from the U.S. National Archives (NARA) include over 2.3 million pages
+          <h1>National Archives and Records Administration of the United States</h1>
+          <div class="general" id="NARACatalog">
+            <p>The records made available on the Portal from the U.S. National Archives and Records Administration (NARA) include over 2.3 million pages
               of documents created or received by the U.S. Government during and after World War II as part of its investigations
               into cultural assets that were looted or otherwise lost during the war. All of the records have been described
               in NARA's online catalog. Many of the records have additionally been digitized and made available for free
@@ -27,7 +27,8 @@
               pamphlet as well as to the digitized records either on Fold3 or in NARA's online catalog.
             </p>
             <p>For more information about the records of the National Archives and Records Administration, please visit
-              <a href="https://www.archives.gov/">the National Archives' website</a>.
+              <a href="https://www.archives.gov/">the National Archives' website</a>. Or search directly on the
+              <a href="https://catalog.archives.gov/">National Archives Online Catalog</a>.
             </p>
           </div>
           <div id="ArdeliaHall">
@@ -401,6 +402,7 @@
           </div>
           <div id="KanzleiRosenberg">
             <h2>Kanzlei Rosenberg (NS 8) (Rosenberg Chancellery)</h2>
+            German descriptions and digitized images available on <a href="https://invenio.bundesarchiv.de/basys2-invenio/direktlink/47f30320-f947-4edd-8049-f3fb8b010675/">Bundesarchiv web site.</a>
             <p>The U.S. Army collected files of Alfred Rosenberg from various sources for use at the Nuremberg trials. These
               records were subsequently taken to Alexandria, Virginia, USA, and were partly microfilmed. These files, which
               were known as the U.S. Army Departmental Records Branch Record Group 1008, Reich Ministry for the Occupied
@@ -417,6 +419,7 @@
           </div>
           <div id="ns30">
             <h2>Einsatzstab Reichsleiter Rosenberg (NS 30) (Rosenberg Operations Staff)</h2>
+            German descriptions and digitized images available on <a href="https://invenio.bundesarchiv.de/basys2-invenio/direktlink/7ac6d63f-7cf5-40b2-a375-dd93c010a349/">Bundesarchiv web site.</a>
             <p>Record Group NS 30 (Einsatzstab Reichsleiter Rosenberg) comprises a collection of dispersed files and single
               documents received from various sources. Most of these records derive from the provisional office of the ERR
               in Ratibor, Silesia. Part of the ERR headquarters (Stabsführung) and staff of the Ostbücherei (a special ERR
@@ -430,6 +433,7 @@
           <div id="b323">
             <h2>Treuhandverwaltung von Kulturgut bei der Oberfinanzdirektion München (B 323)
           (Trusteeship of Cultural Assets, Munich)</h2>
+          German descriptions and digitized images available on <a href="https://invenio.bundesarchiv.de/basys2-invenio/direktlink/354da674-59a2-477f-9c9d-20da7f0840c6/">Bundesarchiv web site.</a>
             <p>Record group B 323 (Treuhandverwaltung für Kulturgut bei der Oberfinanzdirektion München) contains files and
               documents from various sources that contributed to the clarification of the ownership status of looted cultural
               property and its restitution after 1945. This Record Group can be described as a collection of materials, most
@@ -557,15 +561,17 @@
           </div>
           <div>
             <h2>Collection Schloss</h2>
+            <p><a href="http://www.diplomatie.gouv.fr/sites/archives_diplo/schloss/">Link to website</a></p>
             <p>Non-restituted art from the Adolphe Schloss Collection</p>
           </div>
           <div>
             <h2>Catalogue des MNR: Musées Nationaux Récupération</h2>
+            <p><a href="http://www.culture.gouv.fr/documentation/mnr/pres.htm">Link to website</a></p>
             <p>Catalog of the National Museums Recovery Program</p>
           </div>
         </div>
         <div id="TsDAVO">
-          <h1>Ukraine: Central State Archives of Supreme Bodies of Power and Government (TsDAVO)</h1>
+          <h1>Central State Archives of Supreme Bodies of Power and Government of Ukraine (TsDAVO)</h1>
           <div id="general">
             <p>The Einsatzstab Reichsleiter Rosenberg (ERR) was the main Nazi agency engaged in looting cultural valuables in
               Nazi-occupied countries during the Second World War. At the moment, the ERR archives are dispersed in 29 repositories
@@ -586,7 +592,7 @@
             </p>
           </div>
           <div>
-            <h2>Central State Archive of Supreme Bodies of Power and Government of Ukraine</h2>
+            <h2>TsDAVO Website</h2>
             <p><a href="http://err.tsdavo.gov.ua/">http://err.tsdavo.gov.ua/</a></p>
           </div>
         </div>
@@ -644,12 +650,12 @@
           </div>
           <div id="BelgiumFindingAid">
             <h2>Finding Aid: Inventory of the Archive of the Department for Economic Recovery (Office de Récupération Economique) and Legal Predecessor, 1940-1968</h2>
-            <p><a href="https://www.archives.gov/files/research/holocaust/international-resources/belgium-inventory.pdf">https://www.archives.gov/files/research/holocaust/international-resources/belgium-inventory.pdf</a></p>
+            <p><a href="/static/belgium-inventory.pdf">belgium-inventory.pdf</a></p>
             <p>Now also available for search using this <a href="/adsearch">Holocaust Assets Portal</a>.
           </div>
         </div>
         <div id="USHMM">
-          <h1>Claims Conference / USHMM</h1>
+          <h1>U.S. Holocaust Memorial Museum and Claims Conference</h1>
           <div id="ClaimsConference">
             <p>The Einsatzstab Reichsleiter Rosenberg (ERR), the "Special Task Force" headed by Adolf Hitler's leading ideologue
               Alfred Rosenberg, was one of the main Nazi agencies engaged in the plunder of cultural valuables in Nazi-occupied
@@ -682,8 +688,9 @@
           </div>
           <div id="DHMMunich">
             <h2>Datenbank zum "Central Collecting Point München"</h2>
+            <a href="http://www.dhm.de/datenbank/ccp/dhm_ccp.php?seite=9">Website link</a>
             <p>Joint project of the Deutsche Historische Museum and the German Office for Central Services and Unresolved Property
-              Issues (BADV) http://www.dhm.de/datenbank/ccp/dhm_ccp.php?seite=9
+              Issues (BADV)
             </p>
           </div>
           <div>
@@ -717,7 +724,7 @@
           </div>
         </div>
         <div id="ItalianArchives">
-          <h1>The Italian Directorate General of Archives Relating to Nazi-Era Cultural Property</h1>
+          <h1>The Italian Directorate General of Archives</h1>
           <div id="general">
             <p>The Direzione Generale Archivi (DGA: Italian Directorate General of Archives) coordinates and promotes the activities
               of all of the Italian State Archives (one in each province) and of the Soprintendenze archivistiche (Archival
@@ -801,6 +808,7 @@
           <div>
             <div id="GettyAS">
               <h2>German Sales Catalogs, 1930-1945</h2>
+              <p><a href="http://www.getty.edu/research/tools/provenance/german_sales.html">Link to Website</a></p>
               <p>The Getty Provenance Index® Databases provide online access to German Sales Catalogs from German-speaking countries
                 -- Austria, Germany and Switzerland -- from 1930 to 1945. More than 250,000 individual auction sales records
                 for paintings, sculptures and drawings are searchable by a range of parameters including artist name and
@@ -812,6 +820,7 @@
             </div>
             <div>
               <h2>Holocaust-Era Research Resources</h2>
+              <p><a href="http://www.getty.edu/research/tools/guides_bibliographies/holocaust_provenance.html">Link to Website</a></p>
               <p>A guide to archives at the Getty Research Institute that bear on Holocaust-era looting and postwar dissemination
                 of stolen art.</p>
             </div>
@@ -832,6 +841,7 @@
           <div>
             <div>
               <h2>Berlin Restitution Offices B Rep. 025 (Wiedergutmachungsämter von Berlin B Rep. 025), 1949-1990</h2>
+              <p><a href="http://www.wga-datenbank.de/en/home.html">Restitution Offices WGA database</a></p>
               <p>The WGA Database contains information transcribed from index cards for the case files from the Berlin Restitution
                 Offices, listing the claimants, the injured parties, the defendant and the property claimed. The project
                 aims to facilitate provenance research by providing a publicly accessible online database of the more than
@@ -877,6 +887,7 @@
           </div>
           <div>
             <h2>Findbuch for Victims of National Socialism</h2>
+            <a href="https://www.findbuch.at/en/">Website link</a>
             <p>The Findbuch for Victims of National Socialism makes it possible to search the holdings of several Austrian archives
               for material on National Socialist property seizures and Austrian restitution and compensation measures. The
               Findbuch currently contains around 130,000 records on archival material from the Austrian State Archives and
@@ -892,6 +903,7 @@
           </div>
           <div id="AustriaArtDB">
             <h2>Art Database of the National Fund</h2>
+            <a href="http://www.kunstrestitution.at/English.html">Website link</a>
             <p>The Art Database of the National Fund provides information on art and cultural objects presently located in museums
               and collections of the Republic of Austria or of the City of Vienna, which, according to latest provenance
               research, may have been seized under the National Socialist regime. Their publication in this database takes

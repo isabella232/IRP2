@@ -1211,6 +1211,13 @@ h6, .h6 {
 h1, .h1 {
   font-size: 36px; }
 
+.resourcepage h1 {
+  font-size: 40px;
+  /* background-color: white; */
+  font-weight: bold;
+  color: darkslategrey;
+}
+
 h2, .h2 {
   font-size: 30px; }
 
