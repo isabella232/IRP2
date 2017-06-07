@@ -39,7 +39,7 @@
       when: vagrant is not defined
 
     - name: Deploy application code
-      copy: src=../../{{ item }} dest={{ project_path }} mode=0755
+      copy: src=../../{{ item }} dest={{ project_path }} mode=0755 owner="{{ user }}"
       with_items:
         - archives
         - static
@@ -48,7 +48,7 @@
         - wsgi.py
         - flask_extended.py
         - requirements.txt
-      become: no
+      become: yes
       when: vagrant is not defined
       tags: code
 
@@ -59,7 +59,7 @@
       tags: code
 
     - name: Create virtualenv
-      file: path={{ virtualenv_path }} owner={{ user }} group={{ user }} state=directory
+      file: path={{ virtualenv_path }} owner={{ user }} group={{ group }} state=directory
     - command: virtualenv --python=/usr/bin/python3 {{ virtualenv_path }}
       become: no
 
