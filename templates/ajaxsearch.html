@@ -50,7 +50,7 @@
            <div class="form-group row">
              <label for="inputArtist" class="col-sm-2 form-control-label">Artist</label>
              <div class="col-sm-10">
-               <input id="inputArtist" type="text" class="form-control"
+               <input id="inputArtist" type="text" class="form-control adsearch-field"
                  placeholder="artist name" name="artist"
 {% if inputs is defined %}
                  value="{{ inputs.artist }}"
@@ -61,7 +61,7 @@
            <div class="form-group row">
              <label for="inputLocation" class="col-sm-2 form-control-label">Location</label>
              <div class="col-sm-10">
-               <input id="inputLocation" type="text" class="form-control"
+               <input id="inputLocation" type="text" class="form-control adsearch-field"
                  placeholder="location" name="location"
 {% if inputs is defined %}
                  value="{{ inputs.location }}"
@@ -72,7 +72,7 @@
            <div class="form-group row">
              <label for="inputTechnique" class="col-sm-2 form-control-label">Technique</label>
              <div class="col-sm-10">
-               <input id="inputTechnique" type="text" class="form-control"
+               <input id="inputTechnique" type="text" class="form-control adsearch-field"
                  placeholder="technique" name="technique"
 {% if inputs is defined %}
                  value="{{ inputs.technique }}"
@@ -337,72 +337,28 @@ $('#SaveSearch').click(function() {
 <script type="text/javascript">
 var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 $(function() {
-  $("#inputLocation").autocomplete({
-    source : function(request, response) {
-      var URL_PREFIX = "/solr/location/select?q=label:";
-      var URL_MIDDLE = " OR label_ngram:";
-      var URL_SUFFIX = "&wt=json&rows=20";
-      var searchString = "\"" + $("#inputLocation").val() + "\"";
-      var URL = URL_PREFIX + searchString + URL_MIDDLE + searchString + URL_SUFFIX;
-      $.ajax({
-        url : URL,
-        success : function(data) {
-          var docs = JSON.stringify(data.response.docs);
-          var jsonData = JSON.parse(docs);
-          response(
-            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : '"'+item.name+'"' } } )
-          );
-        },
-        dataType : 'jsonp',
-        jsonp : 'json.wrf'
-      });
-    },
-    minLength : 3
-  });
-  $("#inputArtist").autocomplete({
-    source : function(request, response) {
-      var URL_PREFIX = "/solr/artist/select?q=label:";
-      var URL_MIDDLE = " OR label_ngram:";
-      var URL_SUFFIX = "&wt=json&rows=20";
-      var searchString = "\"" + $("#inputArtist").val() + "\"";
-      var URL = URL_PREFIX + searchString + URL_MIDDLE + searchString + URL_SUFFIX;
-      $.ajax({
-        url : URL,
-        success : function(data) {
-          var docs = JSON.stringify(data.response.docs);
-          var jsonData = JSON.parse(docs);
-          response(
-            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : '"'+item.name+'"' } } )
-          );
-        },
-        dataType : 'jsonp',
-        jsonp : 'json.wrf'
-      });
-    },
-    minLength : 3
-  });
-  $("#inputTechnique").autocomplete({
-    source : function(request, response) {
-      var URL_PREFIX = "/solr/technique/select?q=label:";
-      var URL_MIDDLE = " OR label_ngram:";
-      var URL_SUFFIX = "&wt=json&rows=20";
-      var searchString = "\"" + $("#inputTechnique").val() + "\"";
-      var URL = URL_PREFIX + searchString + URL_MIDDLE + searchString + URL_SUFFIX;
-      $.ajax({
-        url : URL,
-        success : function(data) {
-          var docs = JSON.stringify(data.response.docs);
-          var jsonData = JSON.parse(docs);
-          response(
-            $.map(jsonData, function(item) { return { label: item.label+" ("+item.hint+")", value : '"'+item.name+'"' } } )
-          );
-        },
-        dataType : 'jsonp',
-        jsonp : 'json.wrf'
-      });
-    },
-    minLength : 3
-  });
+    $(".adsearch-field").each(function () {
+        let $elem = $(this);
+        $elem.autocomplete({
+            source: function (request, response) {
+                let searchString = ("\"" + $elem.val().replace("*", "") + "*\""),
+                    field = $elem.attr("name");
+
+                $.ajax({
+                    url: '/searchFilter?field=' + field + '&q=' + searchString,
+                    success: function (data) {
+                        response(
+                            $.map(data, function (item) {
+                                return {label: item[0] + " (" + item[2] + ")", value: '"' + item[1] + '"'}
+                            })
+                        );
+                    },
+                    dataType: 'json'
+                });
+            },
+            minLength: 3
+        });
+    });
 });
 </script>
 {% endblock %}

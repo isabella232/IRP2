@@ -20,26 +20,18 @@
         - libz-dev
         - git
         - nginx
+        - sqlite3
 
     - name: Install Python3 LXML dependencies
       apt: pkg=python3-lxml state=build-dep
 
-    - name: Check if Solr already configured (expensive steps)
-      uri: url="http://localhost:8983/solr/location/admin/luke?show=index&wt=json" return_content=yes
-      ignore_errors: yes
-      register: solr_response
-
-    - fail: msg="Solr is not responding, please address Solr first"
-      when: solr_response.status == -1
-      #(solr_response.content|from_json)['index']['numDocs'] is defined
-
     - name: Creating project folder
-      file: path="{{ project_path }}" state=directory mode=0755 owner="{{ user }}" group=www-data
+      file: path="{{ project_path }}" state=directory mode=0755 owner="{{ user }}" group="{{ group }}"
       tags: code
       when: vagrant is not defined
 
     - name: Deploy application code
-      copy: src=../../{{ item }} dest={{ project_path }} mode=0755 owner="{{ user }}"
+      copy: src=../{{ item }} dest={{ project_path }} mode=0755 owner="{{ user }}" group="{{ group }}"
       with_items:
         - archives
         - static
@@ -47,49 +39,61 @@
         - dashboard.py
         - wsgi.py
         - flask_extended.py
+        - initdb.sh
         - requirements.txt
       become: yes
       when: vagrant is not defined
       tags: code
 
     - name: Deploy instance (no overwrite)
-      copy: src=../../instance dest={{ project_path }} mode=0755 force=no
+      copy: src=../instance dest={{ project_path }} mode=0755 force=no
       become: no
       when: vagrant is not defined
       tags: code
 
-    - name: Create virtualenv
+    - name: Create virtualenv dir
       file: path={{ virtualenv_path }} owner={{ user }} group={{ group }} state=directory
-    - command: virtualenv --python=/usr/bin/python3 {{ virtualenv_path }}
-      become: no
+      become: yes
+
+    - name: Create virtualenv
+      command: virtualenv --python=/usr/bin/python3 {{ virtualenv_path }}
+      become: yes
+      become_user: "{{ user }}"
+      #ignore_errors: true
 
     - name: Install Python package dependencies
       command: "{{ virtualenv_path }}/bin/pip3 install -r {{ project_path }}/requirements.txt"
-      become: no
+      become: yes
+      become_user: "{{ user }}"
 
     - name: Edit the virtualenv activate script to set environment variables
-      become: no
+      become: yes
+      become_user: "{{ user }}"
       lineinfile:
         dest: "{{ virtualenv_path }}/bin/activate"
         insertafter: EOF
         line: "export FLASK_APP={{ project_path }}/dashboard.py"
 
     - name: Edit the virtualenv activate script to set environment variables
-      become: no
+      become: yes
+      become_user: "{{ user }}"
       lineinfile:
         dest: "{{ virtualenv_path }}/bin/activate"
         insertafter: EOF
         line: "export GOOGLE_APPLICATION_CREDENTIALS={{ virtualenv_path }}/gcloud_keyfile.json"
 
     - template: src=venv_exec.j2 dest={{ virtualenv_path }}/bin/exec mode=755
-      become: no
+      become: yes
+      become_user: "{{ user }}"
 
-    - copy: src={{ gcloud_keyfile }} dest={{ virtualenv_path }}/gcloud_keyfile.json
-      become: no
+    - copy: src=../gcloud_keyfile.json dest={{ virtualenv_path }}/gcloud_keyfile.json
+      become: yes
+      become_user: "{{ user }}"
 
     - name: Initialize DB
-      become: no
-      command: "{{ virtualenv_path }}/bin/exec flask init_db"
+      become: yes
+      become_user: "{{ user }}"
+      command: "{{ project_path }}/initdb.sh {{ project_path }}/instance/irp2.db {{ project_path }}/instance/artist.csv.tar.gz {{ project_path }}/instance/location.csv.tar.gz {{ project_path }}/instance/technique.csv.tar.gz"
 
     - include: setup_nginx.yml
       tags: nginx

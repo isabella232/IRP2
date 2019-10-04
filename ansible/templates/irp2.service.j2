@@ -4,10 +4,10 @@ After=network.target
 
 [Service]
 User={{ user }}
-Group=www-data
+Group={{ group }}
 WorkingDirectory={{ project_path }}
 Environment="PATH={{ virtualenv_path }}/bin" "GOOGLE_APPLICATION_CREDENTIALS={{ virtualenv_path }}/gcloud_keyfile.json"
-ExecStart={{ virtualenv_path }}/bin/gunicorn --workers 3 --bind unix:{{ virtualenv_path }}/irp2.sock -m 007 wsgi:app
+ExecStart={{ virtualenv_path }}/bin/gunicorn --workers 3 --bind unix:{{ virtualenv_path }}/irp2.sock wsgi:app
 
 [Install]
 WantedBy=multi-user.target

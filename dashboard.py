@@ -48,16 +48,6 @@ def connect_db():
     return rv
 
 
-@app.cli.command()
-def init_db():
-    db = get_db()
-    with app.open_instance_resource('irp2_schema.sql', mode='r') as f:
-        db.cursor().executescript(f.read())
-    db.commit()
-    db.close()
-    logging.warn('Initialized the database.')
-
-
 def get_db():
     """Opens a new database connection if there is none yet for the
     current application context.
@@ -284,6 +274,21 @@ def searchAllPage():
     return render_template("search.html", results=results,
                            collections=getcollections(), inputs=inputs)
 
+@app.route('/searchFilter', methods=['GET'])
+def searchFilter():
+    field = request.args.get("field")
+    q = request.args.get("q")
+    if field in ["artist", "location", "technique"] and q is not None:
+        with get_db() as db:
+            c = db.execute(f"""
+                SELECT * FROM {field} 
+                WHERE {field} MATCH ? 
+                ORDER BY bm25({field}),length(name) 
+                LIMIT 20""", [q.strip().replace("*", "") + '*'])
+            return jsonify([list(r) for r in c.fetchall()])
+    else:
+        return jsonify([])
+
 
 @app.route('/saveSearch', methods=['POST'])
 def saveSearch():
@@ -360,4 +365,4 @@ def detail():
 
 
 if __name__ == '__main__':
-    app.run("0.0.0.0", processes=5)
+    app.run("0.0.0.0", processes=1)
