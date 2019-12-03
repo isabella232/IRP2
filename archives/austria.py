@@ -1,39 +1,53 @@
 from archives.collection import Collection
 from bs4 import BeautifulSoup
 import requests
-
+import logging
+from urllib.parse import quote_plus
 
 class AustriaArtDB(Collection):
 
     def keywordResultsCount(self, **kwargs):
-        keywords = self.add_unsupported_fields_to_keywords(kwargs)
-        session = requests.session()
-        data = {}
-        data['search'] = keywords
-        data['realaction'] = "/catalogue_detailsearch.html"
-        data['FORM_SUBMIT'] = "adb_construct_en"
-        data['FORM_DATA'] = "date"
-        # data['selfsend'] = "1"
-        # data['page'] = "1"
-        # data['orderby'] = "1"
-        # data['perPage'] = "20"
-        url = "http://www.kunstrestitution.at/catalogue_detailsearch.html"
-        r = session.post(url, data=data)
+        keywords = quote_plus(self.add_unsupported_fields_to_keywords(kwargs))
+        url = "https://www.kunstdatenbank.at/search-for-objects/fulltext/{0}".format(keywords)
+        r = requests.get(url, timeout=10)
         soup = BeautifulSoup(r.text, "lxml")
 
-        num = None
-        spanList = soup.select('span.total')
-        s = spanList[0].string
-        newString = s[s.find("(") + 1:s.find(")")]
-        if len(newString) > 0:
-            num = int(newString)
-
-        self.results_url = url
-        self.results_formdata = data
-
-        if num is not None:
-            self.results_count = num
-        else:
+        try:
+            self.results_url = url
             self.results_count = 0
-
+            tag = soup.select_one('.total strong')
+            if tag:
+                try:
+                    self.results_count = int(tag.text)
+                except ValueError:
+                    pass
+        except Exception as e:
+            logging.exception(e)
+            self.message = "Timeout error. Please try again later."
+            pass
         return self
+
+class FindBuch(Collection):
+
+    def keywordResultsCount(self, **kwargs):
+        keywords = quote_plus(self.add_unsupported_fields_to_keywords(kwargs))
+        url = "https://www.findbuch.at/findbuch-search/searchterm/{0}".format(keywords)
+        r = requests.get(url, timeout=10)
+        soup = BeautifulSoup(r.text, "lxml")
+
+        try:
+            self.results_url = url
+            self.results_count = 0
+            tag = soup.select_one('#findbuch-search .ce_metamodel_list p strong')
+            if tag:
+                try:
+                    self.results_count = int(tag.text.split()[0])
+                except (ValueError, IndexError):
+                    pass
+        except Exception as e:
+            logging.exception(e)
+            self.message = "Timeout error. Please try again later."
+            pass
+        return self
+
+

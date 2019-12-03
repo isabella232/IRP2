@@ -147,6 +147,18 @@
       }
     },
     {
+      "rdfs:label": "Findbuch",
+      "dc:description": "The Findbuch makes it possible to search for persons and companies in 202115 records of file holdings relating to National Socialist property seizure and restitution and compensation proceedings which are held at cooperating archives. In addition it is also possible to carry out searches in 25,172 pages of digitized historical address directories and official handbooks on public offices and institutions and in digitized literature.",
+      "@type": "a:Database",
+      "@id": "FindBuch",
+      "dc:language": ["en", "de"],
+      "dc:coverage": ["Austria"],
+      "dc:date": {
+        "start": "1944",
+        "end": "1945"
+      }
+    },
+    {
       "rdfs:label": "National Archives of the United Kingdom",
       "@id": "UKNationalArchives",
       "@type": "foaf:Organization",

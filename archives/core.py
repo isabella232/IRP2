@@ -4,7 +4,7 @@ from archives.fold3 import ArdeliaHall
 from archives.gettyas import GettyAS
 from archives.nara import NARACatalog
 from archives.ushmm import JeuDePaume
-from archives.austria import AustriaArtDB
+from archives.austria import AustriaArtDB, FindBuch
 from archives.uk import UKCollection
 from archives.netherlands import NetherlandsStateArchives
 from archives.lost_art import LostArt
