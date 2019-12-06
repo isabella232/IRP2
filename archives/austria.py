@@ -47,7 +47,6 @@ class FindBuch(Collection):
         except Exception as e:
             logging.exception(e)
             self.message = "Timeout error. Please try again later."
-            pass
         return self
 
 
